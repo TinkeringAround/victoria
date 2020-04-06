@@ -1,17 +1,34 @@
-import React from 'react';
+import React, {FC, useState} from 'react';
 import ReactDOM from 'react-dom';
+import firebase, {User} from "firebase/app";
+
 import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+import {unregisterServiceWorker} from "./services/serviceWorkerService";
+import {initializeFirebaseApp} from "./services/firebaseService";
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+import {LoginPage} from "./pages/Login";
+
+// ===================================================
+initializeFirebaseApp();
+
+// ===================================================
+const App: FC = () => {
+    const [authenticated, setAuthenticated] = useState<boolean>(false);
+
+    firebase.auth().onAuthStateChanged((user: User | null) => {
+        if (user && !authenticated) setAuthenticated(true);
+        else if (!user && authenticated) setAuthenticated(false);
+    });
+
+
+    return (
+        <div>
+            <LoginPage/>
+        </div>
+    )
+};
+
+// ===================================================
+ReactDOM.render(<React.StrictMode><App/></React.StrictMode>, document.getElementById('root'));
+unregisterServiceWorker();

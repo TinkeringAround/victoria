@@ -1,6 +1,8 @@
 ![Victoria Logo](./src/assets/logo/logo.png)
 
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/ea1bd5a2-d19b-4e16-9497-382a500a5174/deploy-status)](https://app.netlify.com/sites/tinkeringaround-victoria/deploys)
+
 ## Available Scripts
 
 In the project directory, you can run:

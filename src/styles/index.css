@@ -1,0 +1,50 @@
+body {
+    margin: 0;
+    font-family: "Cardenio Modern", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Fonts */
+@font-face {
+    font-family: 'Cardenio Modern';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(../assets/fonts/CardenioModern.woff) format('woff');
+}
+
+
+@font-face {
+    font-family: 'Cardenio Modern';
+    font-style: normal;
+    font-weight: bold;
+    font-display: swap;
+    src: url(../assets/fonts/CardenioModernBold.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'Chinese Rocks';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(../assets/fonts/ChineseRocks.woff) format('woff');
+}
+
+/* roboto-regular - latin */
+@font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Roboto'), local('Roboto-Regular'),
+    url('../assets/fonts/roboto-v20-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */ url('../assets/fonts/roboto-v20-latin-regular.woff') format('woff'), /* Modern Browsers */ url('../assets/fonts/roboto-v20-latin-regular.ttf') format('truetype'); /* Safari, Android, iOS */
+}
+
+/* roboto-700 - latin */
+@font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    src: local('Roboto Bold'), local('Roboto-Bold'),
+    url('../assets/fonts/roboto-v20-latin-700.woff2') format('woff2'), /* Super Modern Browsers */ url('../assets/fonts/roboto-v20-latin-700.woff') format('woff'), /* Modern Browsers */ url('../assets/fonts/roboto-v20-latin-700.ttf') format('truetype'); /* Safari, Android, iOS */
+}

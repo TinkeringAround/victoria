@@ -50,7 +50,10 @@ const LoginPage: FC = () => {
                 <Box
                     width="30%"
                     height="30%"
-                    animation={["fadeIn", "slideUp"]}
+                    animation={[{
+                        type: "fadeIn",
+                        delay: 500
+                    }, "slideUp"]}
                 >
                     <LogoComponent/>
                 </Box>

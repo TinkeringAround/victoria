@@ -6,11 +6,12 @@ import {Grommet} from "grommet";
 import './styles/index.css';
 import {theme} from "./styles/theme";
 
-import {unregisterServiceWorker} from "./services/serviceWorkerService";
-import {initializeFirebaseApp} from "./services/firebaseService";
+import {unregisterServiceWorker} from "./services/ServiceWorkerService";
+import {initializeFirebaseApp} from "./services/FirebaseService";
 
 import LoadingScreen from "./pages/LoadingScreen";
 import LoginPage from "./pages/Login";
+import GamePage from "./pages/Game";
 
 import LayoutComponent from "./components/LayoutComponent";
 
@@ -46,7 +47,7 @@ const App: FC = () => {
             <LayoutComponent>
                 {state === "loading" && <LoadingScreen/>}
 
-                {authenticated ? <div/> : <LoginPage/>}
+                {authenticated ? <GamePage/> : <LoginPage/>}
             </LayoutComponent>
         </Grommet>
     )

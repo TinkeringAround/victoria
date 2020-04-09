@@ -6,7 +6,7 @@ import {TResponse, TResponseCode} from "../../../types/TResponse";
 
 import {EMessages} from "../../../assets/messages";
 
-import {loginUserWithEmailAndPassword, registerUserWithEmailAndPassword} from "../../../services/firebaseService";
+import {loginUserWithEmailAndPassword, registerUserWithEmailAndPassword} from "../../../services/FirebaseService";
 
 import InputComponent from "../../../components/InputComponent";
 import ButtonComponent from "../../../components/ButtonComponent";

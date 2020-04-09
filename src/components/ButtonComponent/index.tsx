@@ -3,6 +3,7 @@ import {Button, ButtonType} from "grommet";
 import styled from "styled-components";
 
 import {TColor} from "../../types/TColor";
+
 import {colors} from "../../styles/theme";
 
 const SButton = styled(Button)`
@@ -10,9 +11,7 @@ const SButton = styled(Button)`
     
     width: 100%;
     max-width: 250px;
-    padding: 1.5rem 1rem;
 
-    font-size: 2.5rem;
     font-weight: bold;
     
     background: lightblue;
@@ -32,15 +31,20 @@ interface Props extends ButtonType {
     color: TColor,
     background: TColor,
     hoverColor: TColor;
+
+    padding?: string
+    fontSize?: string
 }
 
-const ButtonComponent: FC<Props> = ({children, onClick, color, background, hoverColor, margin, disabled}) =>
+const ButtonComponent: FC<Props> = ({children, onClick, color, background, hoverColor, margin, padding = "1.5rem 1rem", fontSize = "2.5rem", disabled = false}) =>
     <SButton
         disabled={disabled}
         color={color}
         onClick={onClick} focusIndicator={false}
         margin={margin}
         style={{
+            fontSize: fontSize,
+            padding: padding,
             background: colors[background],
             boxShadow: "0 5px 0 " + colors[hoverColor]
         }}>

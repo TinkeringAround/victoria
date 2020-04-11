@@ -9,6 +9,7 @@ export const colors = {
 
     // Colors
     gold: "#B69D60",
+    goldLight: "rgba(182, 157, 96, 0.2)",
     red: "#EF476F",
     green: "#06D6A0"
 };

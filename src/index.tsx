@@ -11,7 +11,7 @@ import {initializeFirebaseApp} from "./services/FirebaseService";
 
 import LoadingScreen from "./pages/LoadingScreen";
 import LoginPage from "./pages/Login";
-import GamePage from "./pages/Game";
+import DashBoard from "./pages/Dashboard";
 
 import LayoutComponent from "./components/LayoutComponent";
 
@@ -47,7 +47,7 @@ const App: FC = () => {
             <LayoutComponent>
                 {state === "loading" && <LoadingScreen/>}
 
-                {authenticated ? <GamePage/> : <LoginPage/>}
+                {authenticated ? <DashBoard/> : <LoginPage/>}
             </LayoutComponent>
         </Grommet>
     )

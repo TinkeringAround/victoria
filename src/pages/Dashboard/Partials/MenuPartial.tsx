@@ -1,30 +1,34 @@
 import React, {FC} from 'react';
 import {Box, Image} from "grommet";
 
-import logoSmall from "../../../assets/logo/logo_small.png";
-
 import ButtonComponent from "../../../components/ButtonComponent";
+
+import logoSmall from "../../../assets/logo/logo_small.png"
 
 const MENU_ITEMS: Array<string> = ["Fähigkeiten", "Alchemie"];
 
-interface Props {
-}
-
-const MenuPartial: FC<Props> = ({}) => (
+const MenuPartial: FC = () => (
     <Box width="200px"
-         height="100%"
+         height="95%"
          background="gold"
          align="center"
+         style={{
+             position: "absolute",
+             left: "25px",
+             clipPath: "polygon(100% 0, 100% 100%, 50% 95%, 0 100%, 0 0)",
+             boxShadow: "0x 5x 5px 5px white"
+         }}
     >
         {/* Logo */}
-        <Box width="5rem"
-             height="5rem"
+        <Box width="6rem"
+             height="6rem"
              align="center"
              justify="center"
              margin="4rem 0"
         >
             <Image src={logoSmall} fit="contain"/>
         </Box>
+
 
         {/* Menu Items */}
         <Box width="150px" height="50%">

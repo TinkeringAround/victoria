@@ -1,8 +1,7 @@
 import * as BABYLON from 'babylonjs';
 
 import {getFileNameFromAssetImport, getRootUrlFromAssetImport} from '../services/UtilityService';
-
-import {Well} from './Meshes';
+import {Chapter1} from "./Meshes";
 
 export default class LevelMaster {
 
@@ -22,9 +21,9 @@ export default class LevelMaster {
         this._scene.clearColor = new BABYLON.Color4(0.2, 0.22, 0.27, 1);
 
         // TODO: Correct Camera
-        this._camera = new BABYLON.ArcRotateCamera("arcCamera", 0, 0.8, 50, new BABYLON.Vector3(0, 10, 0), this._scene, true);
+        this._camera = new BABYLON.ArcRotateCamera("arcCamera", 3, 1.2, 40, new BABYLON.Vector3(0, 0, 0), this._scene, true);
         this._camera.attachControl(this._canvas, false);
-        // this._camera.wheelPrecision = 100;
+        this._camera.wheelPrecision = 30;
 
         // TODO: Correct Lighting
         this._light = [];
@@ -36,7 +35,7 @@ export default class LevelMaster {
         var whiteLight = new BABYLON.PointLight("PointLight", new BABYLON.Vector3(1, 1, 0), this._scene);
         whiteLight.diffuse = new BABYLON.Color3(1, 1, 1);
         whiteLight.specular = new BABYLON.Color3(1, 1, 1);
-        whiteLight.intensity = 5000;
+        whiteLight.intensity = 2000;
         whiteLight.radius = 25;
         // whiteLight.setDirectionToTarget(new BABYLON.Vector3(0, 7, 0));
         whiteLight.position = new BABYLON.Vector3(15, 20, 15);
@@ -51,10 +50,10 @@ export default class LevelMaster {
         this._light.push(backgroungLight);
         this._light.push(whiteLight);
 
-        // Animations
+        // TODO: Remove Animations
         var alpha = 0;
         this._scene.beforeRender = function () {
-            whiteLight.position = new BABYLON.Vector3(20 * Math.sin(alpha), 25, 20 * Math.cos(alpha));
+            whiteLight.position = new BABYLON.Vector3(10 * Math.sin(alpha), 15, 10 * Math.cos(alpha));
             lightSphere0.position = whiteLight.position;
             alpha += 0.01;
         };
@@ -65,26 +64,20 @@ export default class LevelMaster {
         shadowGenerator.usePoissonSampling = true;
 
         // TODO: Add Correct Mesh
-        BABYLON.SceneLoader.ImportMesh(["Well", "Surface", "Pier Right", "Pier Left", "Lever", "Rope", "Rope Down", "Top", "Front", "Back", "Icosphere.032"], getRootUrlFromAssetImport(Well), getFileNameFromAssetImport(Well), this._scene, (newMesh) => {
+        BABYLON.SceneLoader.ImportMesh("", getRootUrlFromAssetImport(Chapter1), getFileNameFromAssetImport(Chapter1), this._scene, (newMesh) => {
             console.log(newMesh);
 
             newMesh.forEach(mesh => {
+                // TODO: Optimize Mesh Shadow etc.
                 whiteLight.includedOnlyMeshes.push(mesh);
-                if (mesh.name.includes("Surface")) mesh.receiveShadows = true;
+                // if (mesh.name.includes("Island")) mesh.receiveShadows = true;
+                mesh.receiveShadows = true;
                 // shadowGenerator.addShadowCaster(mesh);
                 shadowGenerator?.getShadowMap()?.renderList?.push(mesh);
             });
 
             console.log("Successfully Loaded");
         });
-
-        // SkyBox and Background
-        // var helper = this._scene.createDefaultEnvironment({
-        //     skyboxSize: 50,
-        //     groundShadowLevel: 0,
-        // });
-        //
-        // helper?.setMainColor(new BABYLON.Color3(0.2, 0.22, 0.27));
     }
 
     createScene(): void {

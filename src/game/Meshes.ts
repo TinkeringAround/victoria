@@ -1,4 +1,4 @@
-import well from "../assets/meshes/well.babylon";
+import chapter1 from "../assets/meshes/chapter1.babylon";
 
-export const Well = well;
+export const Chapter1 = chapter1;
 

@@ -17,6 +17,7 @@ export default class LevelMaster {
         this._engine = new BABYLON.Engine(this._canvas, true);
         this._scene = new BABYLON.Scene(this._engine);
 
+        // TODO: General Setup
         // Scene Settings
         this._scene.clearColor = new BABYLON.Color4(0.2, 0.22, 0.27, 1);
 
@@ -32,6 +33,19 @@ export default class LevelMaster {
         backgroungLight.specular = new BABYLON.Color3(1, 1, 1);
         backgroungLight.intensity = 2;
 
+        this._light.push(backgroungLight);
+    }
+
+    createLevel(level: number): void {
+        switch (level) {
+            case 1:
+                this.createLevel1();
+                break;
+        }
+    }
+
+    createLevel1() {
+        // TODO: Chapter 1 Setup
         var whiteLight = new BABYLON.PointLight("PointLight", new BABYLON.Vector3(1, 1, 0), this._scene);
         whiteLight.diffuse = new BABYLON.Color3(1, 1, 1);
         whiteLight.specular = new BABYLON.Color3(1, 1, 1);
@@ -47,7 +61,6 @@ export default class LevelMaster {
         whiteMaterial.emissiveColor = new BABYLON.Color3(1, 1, 1);
         lightSphere0.material = whiteMaterial;
 
-        this._light.push(backgroungLight);
         this._light.push(whiteLight);
 
         // TODO: Remove Animations
@@ -69,32 +82,14 @@ export default class LevelMaster {
 
             newMesh.forEach(mesh => {
                 // TODO: Optimize Mesh Shadow etc.
-                whiteLight.includedOnlyMeshes.push(mesh);
-                // if (mesh.name.includes("Island")) mesh.receiveShadows = true;
-                mesh.receiveShadows = true;
+                this._light[0].includedOnlyMeshes.push(mesh);
+                if (mesh.name.includes("Island")) mesh.receiveShadows = true;
                 // shadowGenerator.addShadowCaster(mesh);
                 shadowGenerator?.getShadowMap()?.renderList?.push(mesh);
             });
 
             console.log("Successfully Loaded");
         });
-    }
-
-    createScene(): void {
-
-        // BABYLON.Mesh.CreateSphere("Sphere", 16, 3, this._scene);
-
-        // const groundMaterial = new BABYLON.StandardMaterial("groundMaterial", this._scene);
-        // groundMaterial.specularColor = BABYLON.Color3.Black();
-        // groundMaterial.diffuseColor = BABYLON.Color3.Gray();
-        // groundMaterial.specularPower = 1;
-        //
-        // const ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 50, height: 50}, this._scene);
-        // ground.overlayColor = new BABYLON.Color3(1, 0, 0);
-        // ground.receiveShadows = true;
-        // ground.material = groundMaterial;
-
-        // this._scene.createDefaultEnvironment();
     }
 
     doRender(): void {

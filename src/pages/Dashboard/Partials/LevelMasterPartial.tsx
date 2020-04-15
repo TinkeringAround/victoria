@@ -6,11 +6,12 @@ const LEVEL_MASTER_ID = "levelMaster";
 
 const LevelMasterPartial: FC = () => {
     const [levelMaster, setLevelMaster] = useState<LevelMaster | null>(null);
+    const [level] = useState<number>(1);
 
     useEffect(() => {
         if (!levelMaster) {
             let newLevelMaster = new LevelMaster(LEVEL_MASTER_ID);
-            newLevelMaster.createScene();
+            newLevelMaster.createLevel(level);
             newLevelMaster.doRender();
             setLevelMaster(newLevelMaster);
         }

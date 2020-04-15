@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useState} from 'react';
+import React, {FC, useState} from 'react';
 import ReactDOM from 'react-dom';
 import firebase, {User} from "firebase/app";
 import {Grommet} from "grommet";
@@ -6,49 +6,49 @@ import {Grommet} from "grommet";
 import './styles/index.css';
 import {theme} from "./styles/theme";
 
+import LoadingContext from "./contexts/LoadingContext";
+
 import {unregisterServiceWorker} from "./services/ServiceWorkerService";
 import {initializeFirebaseApp} from "./services/FirebaseService";
 
 import LoadingScreen from "./pages/LoadingScreen";
 import LoginPage from "./pages/Login";
-import DashBoard from "./pages/Dashboard";
+import GameMaster from "./pages/GameMaster";
 
 import LayoutComponent from "./components/LayoutComponent";
-
-const LOADING_DURATION = 2500;
 
 // ===================================================
 initializeFirebaseApp();
 
 // ===================================================
 const App: FC = () => {
-    const [state, setState] = useState<"idle" | "loading">("idle");
     const [authenticated, setAuthenticated] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
 
     firebase.auth().onAuthStateChanged((user: User | null) => {
-        if (user && !authenticated) {
-            setAuthenticated(true);
-            showLoadingScreen(LOADING_DURATION);
-        }
-
-        if (!user && authenticated) {
-            setAuthenticated(false);
-            showLoadingScreen(LOADING_DURATION);
-        }
+        if (user && !authenticated) setAuthenticated(true);
+        if (!user && authenticated) setAuthenticated(false);
     });
 
-    const showLoadingScreen = useCallback((duration: number) => {
-        setState("loading");
-        setTimeout(() => setState("idle"), duration);
-    }, []);
+    const showLoadingScreen = (duration: number) => {
+        setLoading(true);
+        setTimeout(() => setLoading(false), duration);
+    }
 
     return (
         <Grommet theme={theme} full>
-            <LayoutComponent>
-                {state === "loading" && <LoadingScreen/>}
+            <LoadingContext.Provider value={{
+                showLoadingScreenForDuration: (duration: number) => showLoadingScreen(duration)
+            }}>
+                {/* Loading Screen */}
+                {loading && <LoadingScreen/>}
 
-                {authenticated ? <DashBoard/> : <LoginPage/>}
-            </LayoutComponent>
+                {/* Content */}
+                <LayoutComponent>
+                    {!authenticated && <LoginPage/>}
+                    {authenticated && <GameMaster/>}
+                </LayoutComponent>
+            </LoadingContext.Provider>
         </Grommet>
     )
 };

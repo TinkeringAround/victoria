@@ -13,8 +13,8 @@ const DURATION = 500;
 
 const LoadingScreen: FC = () => (
     <Box
-        height="100%"
-        width="100%"
+        height={window.innerHeight + "px"}
+        width={window.innerWidth + "px"}
         background="dark"
         style={{position: "absolute", zIndex: 500}}
     >

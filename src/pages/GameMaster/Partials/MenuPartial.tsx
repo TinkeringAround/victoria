@@ -7,16 +7,20 @@ import logoSmall from "../../../assets/logo/logo_small.png"
 
 const MENU_ITEMS: Array<string> = ["Fähigkeiten", "Alchemie"];
 
-const MenuPartial: FC = () => (
+interface Props {
+    delay: number
+}
+
+const MenuPartial: FC<Props> = ({delay}) => (
     <Box width="200px"
          height="95%"
          background="gold"
          align="center"
+         animation={{type: "slideDown", size: "large", delay: delay}}
          style={{
              position: "absolute",
              left: "25px",
-             clipPath: "polygon(100% 0, 100% 100%, 50% 95%, 0 100%, 0 0)",
-             boxShadow: "0x 5x 5px 5px white"
+             clipPath: "polygon(100% 0, 100% 100%, 50% 95%, 0 100%, 0 0)"
          }}
     >
         {/* Logo */}

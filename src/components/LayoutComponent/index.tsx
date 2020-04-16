@@ -4,7 +4,7 @@ import {Box} from 'grommet'
 // ===============================================
 const LayoutComponent: FC = ({children}) => (
     <Box
-        background="white"
+        background="dark"
         width={window.innerWidth + 'px'}
         height={window.innerHeight + 'px'}
         margin="0"

@@ -14,7 +14,7 @@ import ChapterMaster from "../../game/ChapterMaster";
 
 const LEVEL_MASTER_ID = "levelMaster";
 const LOADING_DURATION = 5000;
-const ANIMATION_DURATION = 3500;
+const ANIMATION_DURATION = 2000;
 const BANNER_ANIMATION_DURATION = LOADING_DURATION + 750;
 
 const GameMaster: FC = () => {

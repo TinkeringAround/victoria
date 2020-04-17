@@ -1,31 +1,33 @@
 import React, {FC, useContext, useEffect, useState} from 'react';
 import {Box} from "grommet";
 
-import MenuPartial from "./Partials/MenuPartial";
+import {TMenuMode} from "../../types/TMenuMode";
+
+import NavigationBarPartial from "./Partials/NavigationBarPartial";
 import CanvasPartial from "./Partials/CanvasPartial";
 import PlayerStatsPartial from "./Partials/PlayerStatsPartial";
 import CurrentLevelPartial from "./Partials/CurrentLevelPartial";
-import FramePartials from "./Partials/FramePartials";
 
-import LevelMasterContext from "../../contexts/ChapterMasterContext";
+import GameMasterContext from "../../contexts/GameMasterContext";
 import LoadingContext from "../../contexts/LoadingContext";
 
 import ChapterMaster from "../../game/ChapterMaster";
 
-const LEVEL_MASTER_ID = "levelMaster";
+const CHAPTER_MASTER_ID = "levelMaster";
 const LOADING_DURATION = 5000;
 const ANIMATION_DURATION = 2000;
 const BANNER_ANIMATION_DURATION = LOADING_DURATION + 750;
 
-const GameMaster: FC = () => {
+const GameMasterPage: FC = () => {
     const {showLoadingScreenForDuration} = useContext(LoadingContext);
     const [chapterMaster, setChapterMaster] = useState<ChapterMaster | null>(null);
     const [level] = useState<number>(1);
+    const [menuMode, setMenuMode] = useState<TMenuMode>(null);
 
     useEffect(() => {
-        if (chapterMaster == null && document.getElementById(LEVEL_MASTER_ID)) {
-            console.log("Create LevelMaster");
-            const newChapterMaster = new ChapterMaster(LEVEL_MASTER_ID);
+        if (chapterMaster == null && document.getElementById(CHAPTER_MASTER_ID)) {
+            console.log(`Create LevelMaster for Level ${level}`);
+            const newChapterMaster = new ChapterMaster(CHAPTER_MASTER_ID);
             newChapterMaster.createLevel(level);
             newChapterMaster.doRender();
             showLoadingScreenForDuration(LOADING_DURATION);
@@ -34,9 +36,9 @@ const GameMaster: FC = () => {
     }, [])
 
     return (
-        <LevelMasterContext.Provider value={{
-            id: LEVEL_MASTER_ID,
-            levelMaster: chapterMaster
+        <GameMasterContext.Provider value={{
+            id: CHAPTER_MASTER_ID,
+            chapterMaster: chapterMaster
         }}>
             <Box width="100%"
                  height="100%"
@@ -45,8 +47,8 @@ const GameMaster: FC = () => {
                  animation={{type: "fadeIn", duration: ANIMATION_DURATION, delay: LOADING_DURATION}}
                  style={{position: "relative"}}
             >
-                {/* Menu */}
-                <MenuPartial delay={BANNER_ANIMATION_DURATION}/>
+                {/* Navigation Bar */}
+                <NavigationBarPartial delay={BANNER_ANIMATION_DURATION} setMenuMode={setMenuMode}/>
 
                 {/* Current Level */}
                 <CurrentLevelPartial level="Kapitel 1 - Aufbruch nach Kinarg"/>
@@ -57,11 +59,10 @@ const GameMaster: FC = () => {
                 {/* Canvas */}
                 <CanvasPartial/>
 
-                {/* TODO: Frames */}
-                <FramePartials visible/>
+                {/* TODO: Add Menu - Fähigkeiten/Alchemie etc. */}
             </Box>
-        </LevelMasterContext.Provider>
+        </GameMasterContext.Provider>
     );
 }
 
-export default GameMaster;
+export default GameMasterPage;

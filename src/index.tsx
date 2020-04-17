@@ -11,9 +11,9 @@ import LoadingContext from "./contexts/LoadingContext";
 import {unregisterServiceWorker} from "./services/ServiceWorkerService";
 import {initializeFirebaseApp} from "./services/FirebaseService";
 
-import LoadingScreen from "./pages/LoadingScreen";
+import LoadingScreenPage from "./pages/LoadingScreen";
 import LoginPage from "./pages/Login";
-import GameMaster from "./pages/GameMaster";
+import GameMasterPage from "./pages/GameMaster";
 
 import LayoutComponent from "./components/LayoutComponent";
 
@@ -41,12 +41,12 @@ const App: FC = () => {
                 showLoadingScreenForDuration: (duration: number) => showLoadingScreen(duration)
             }}>
                 {/* Loading Screen */}
-                {loading && <LoadingScreen/>}
+                {loading && <LoadingScreenPage/>}
 
                 {/* Content */}
                 <LayoutComponent>
                     {!authenticated && <LoginPage/>}
-                    {authenticated && <GameMaster/>}
+                    {authenticated && <GameMasterPage/>}
                 </LayoutComponent>
             </LoadingContext.Provider>
         </Grommet>

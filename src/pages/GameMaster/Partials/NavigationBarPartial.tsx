@@ -1,17 +1,20 @@
 import React, {FC} from 'react';
 import {Box, Image} from "grommet";
 
+import {TMenuMode} from "../../../types/TMenuMode";
+
 import ButtonComponent from "../../../components/ButtonComponent";
 
 import logoSmall from "../../../assets/logo/logo_small.png"
 
-const MENU_ITEMS: Array<string> = ["Fähigkeiten", "Alchemie"];
+export const MENU_ITEMS: Array<TMenuMode> = ["Fähigkeiten", "Alchemie"];
 
 interface Props {
     delay: number
+    setMenuMode: (newMenuMode: TMenuMode) => void
 }
 
-const MenuPartial: FC<Props> = ({delay}) => (
+const NavigationBarPartial: FC<Props> = ({delay, setMenuMode}) => (
     <Box width="200px"
          height="95%"
          background="gold"
@@ -28,27 +31,27 @@ const MenuPartial: FC<Props> = ({delay}) => (
              height="6rem"
              align="center"
              justify="center"
-             margin="4rem 0"
+             margin="6rem 0"
         >
             <Image src={logoSmall} fit="contain"/>
         </Box>
 
 
-        {/* Menu Items */}
+        {/* Navigation Bar Items */}
         <Box width="150px" height="50%">
-            {MENU_ITEMS.map((item: string) =>
-                <ButtonComponent key={item}
+            {MENU_ITEMS.map((item: TMenuMode) =>
+                <ButtonComponent key={"" + item}
                                  color="white"
                                  background="medium"
                                  hoverColor="dark"
                                  padding="1rem"
                                  fontSize="1.5rem"
-                                 margin="0 0 1.5rem"
+                                 margin="0 0 2rem"
+                                 onClick={() => setMenuMode(item)}
                 >
                     {item}
                 </ButtonComponent>)}
         </Box>
     </Box>
 );
-
-export default MenuPartial;
+export default NavigationBarPartial;

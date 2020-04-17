@@ -11,7 +11,7 @@ const SLoadingText = styled(Typical)`
 
 const DURATION = 500;
 
-const LoadingScreen: FC = () => (
+const LoadingScreenPage: FC = () => (
     <Box
         height={window.innerHeight + "px"}
         width={window.innerWidth + "px"}
@@ -33,4 +33,4 @@ const LoadingScreen: FC = () => (
     </Box>
 );
 
-export default LoadingScreen;
+export default LoadingScreenPage;

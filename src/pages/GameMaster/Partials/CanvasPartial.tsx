@@ -1,9 +1,9 @@
 import React, {FC, useContext} from 'react';
 
-import LevelMasterContext from "../../../contexts/ChapterMasterContext";
+import GameMasterContext from "../../../contexts/GameMasterContext";
 
 const CanvasPartial: FC = () => {
-    const {id} = useContext(LevelMasterContext);
+    const {id} = useContext(GameMasterContext);
 
     return (
         <canvas

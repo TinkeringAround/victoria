@@ -1,6 +1,10 @@
 import React, {FC} from 'react';
 import {Box, Text} from "grommet";
 
+import {colors} from "../../../styles/theme";
+
+import {hexToRgbA} from "../../../services/ColorService";
+
 interface Props {
     playerLevel: number
     playerExperience: number
@@ -38,7 +42,7 @@ const PlayerStatsPartial: FC<Props> = ({playerLevel, playerExperience}) => {
             {/* Player Level */}
             <Box width="15rem"
                  height="0.75rem"
-                 background="goldLight"
+                 background={hexToRgbA(colors.gold, "0.2")}
             >
                 <Box height="0.75rem"
                      width={playerExperience + "%"}

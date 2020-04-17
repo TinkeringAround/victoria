@@ -1,57 +1,55 @@
 import React, {FC} from 'react';
 import {Box, Image} from "grommet";
+import styled from "styled-components";
 
-import {TMenuMode} from "../../../types/TMenuMode";
+import {colors} from "../../../styles/theme";
 
-import ButtonComponent from "../../../components/ButtonComponent";
+import {changeColorBrightness} from "../../../services/ColorService";
 
 import logoSmall from "../../../assets/logo/logo_small.png"
 
-export const MENU_ITEMS: Array<TMenuMode> = ["Fähigkeiten", "Alchemie"];
+const SNavigationbar = styled(Box)`
+    background: ${colors.gold};
+
+    :hover {
+        background: ${changeColorBrightness(colors.gold, 20)};
+    }
+`
 
 interface Props {
     delay: number
-    setMenuMode: (newMenuMode: TMenuMode) => void
+    menuIsOpen: boolean
+    openMenu: () => void
 }
 
-const NavigationBarPartial: FC<Props> = ({delay, setMenuMode}) => (
-    <Box width="200px"
-         height="95%"
-         background="gold"
-         align="center"
-         animation={{type: "slideDown", size: "large", delay: delay}}
-         style={{
-             position: "absolute",
-             left: "25px",
-             clipPath: "polygon(100% 0, 100% 100%, 50% 95%, 0 100%, 0 0)"
-         }}
+const NavigationBarPartial: FC<Props> = ({delay, menuIsOpen, openMenu}) => (
+    <SNavigationbar
+        height="120%"
+        width="12rem"
+        background="gold"
+        align="center"
+        justify="end"
+        onClick={openMenu}
+        style={{
+            position: "absolute",
+            top: menuIsOpen ? -5 : "-95%",
+            left: 50,
+            transition: "top 2s ease-in-out, background 0.25s ease",
+            clipPath: "polygon(100% 0, 100% 100%, 50% 95%, 0 100%, 0 0)",
+            cursor: "pointer",
+            border: "solid white 3px",
+            boxShadow: "inset 0px 0px 53px 20px rgba(255,255,255,0.2)",
+            zIndex: 10
+        }}
     >
         {/* Logo */}
-        <Box width="6rem"
-             height="6rem"
+        <Box width="90%"
              align="center"
              justify="center"
-             margin="6rem 0"
+             margin={{bottom: "5rem"}}
         >
             <Image src={logoSmall} fit="contain"/>
         </Box>
-
-
-        {/* Navigation Bar Items */}
-        <Box width="150px" height="50%">
-            {MENU_ITEMS.map((item: TMenuMode) =>
-                <ButtonComponent key={"" + item}
-                                 color="white"
-                                 background="medium"
-                                 hoverColor="dark"
-                                 padding="1rem"
-                                 fontSize="1.5rem"
-                                 margin="0 0 2rem"
-                                 onClick={() => setMenuMode(item)}
-                >
-                    {item}
-                </ButtonComponent>)}
-        </Box>
-    </Box>
+    </SNavigationbar>
 );
 export default NavigationBarPartial;

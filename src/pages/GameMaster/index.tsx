@@ -1,8 +1,6 @@
 import React, {FC, useContext, useEffect, useState} from 'react';
 import {Box} from "grommet";
 
-import {TMenuMode} from "../../types/TMenuMode";
-
 import NavigationBarPartial from "./Partials/NavigationBarPartial";
 import CanvasPartial from "./Partials/CanvasPartial";
 import PlayerStatsPartial from "./Partials/PlayerStatsPartial";
@@ -12,17 +10,18 @@ import GameMasterContext from "../../contexts/GameMasterContext";
 import LoadingContext from "../../contexts/LoadingContext";
 
 import ChapterMaster from "../../game/ChapterMaster";
+import MenuPartial from "./Partials/MenuPartial";
 
 const CHAPTER_MASTER_ID = "levelMaster";
 const LOADING_DURATION = 5000;
 const ANIMATION_DURATION = 2000;
-const BANNER_ANIMATION_DURATION = LOADING_DURATION + 750;
+const BANNER_ANIMATION_DURATION_INIT = LOADING_DURATION + 750;
 
 const GameMasterPage: FC = () => {
     const {showLoadingScreenForDuration} = useContext(LoadingContext);
     const [chapterMaster, setChapterMaster] = useState<ChapterMaster | null>(null);
     const [level] = useState<number>(1);
-    const [menuMode, setMenuMode] = useState<TMenuMode>(null);
+    const [menuIsOpen, setMenu] = useState<boolean>(false);
 
     useEffect(() => {
         if (chapterMaster == null && document.getElementById(CHAPTER_MASTER_ID)) {
@@ -45,21 +44,31 @@ const GameMasterPage: FC = () => {
                  background="dark"
                  direction="row"
                  animation={{type: "fadeIn", duration: ANIMATION_DURATION, delay: LOADING_DURATION}}
-                 style={{position: "relative"}}
+                 style={{
+                     position: "relative",
+                     overflow: "hidden"
+                 }}
             >
                 {/* Navigation Bar */}
-                <NavigationBarPartial delay={BANNER_ANIMATION_DURATION} setMenuMode={setMenuMode}/>
+                <NavigationBarPartial delay={BANNER_ANIMATION_DURATION_INIT}
+                                      menuIsOpen={menuIsOpen}
+                                      openMenu={() => {
+                                          if (!menuIsOpen) setMenu(true)
+                                      }}/>
 
                 {/* Current Level */}
                 <CurrentLevelPartial level="Kapitel 1 - Aufbruch nach Kinarg"/>
 
                 {/* Player Stats */}
-                <PlayerStatsPartial playerLevel={10} playerExperience={45}/>
+                <PlayerStatsPartial playerLevel={10}
+                                    playerExperience={45}/>
 
                 {/* Canvas */}
                 <CanvasPartial/>
 
-                {/* TODO: Add Menu - Fähigkeiten/Alchemie etc. */}
+                {/* Menu */}
+                <MenuPartial menuIsOpen={menuIsOpen}
+                             closeMenu={() => setMenu(false)}/>
             </Box>
         </GameMasterContext.Provider>
     );

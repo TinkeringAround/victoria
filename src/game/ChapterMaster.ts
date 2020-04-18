@@ -93,7 +93,6 @@ export default class ChapterMaster {
 
         // TODO: Add Correct Mesh
         SceneLoader.ImportMesh("", getRootUrlFromAssetImport(Chapter1), getFileNameFromAssetImport(Chapter1), this._scene, (newMesh) => {
-            console.log(newMesh);
 
             newMesh.forEach(mesh => {
                 // TODO: Optimize Mesh Shadow etc.

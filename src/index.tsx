@@ -6,6 +6,7 @@ import {Grommet} from "grommet";
 import './styles/index.css';
 import {theme} from "./styles/theme";
 
+import UserContext from "./contexts/UserContext";
 import LoadingContext from "./contexts/LoadingContext";
 
 import {unregisterServiceWorker} from "./services/ServiceWorkerService";
@@ -37,18 +38,23 @@ const App: FC = () => {
 
     return (
         <Grommet theme={theme} full>
-            <LoadingContext.Provider value={{
-                showLoadingScreenForDuration: (duration: number) => showLoadingScreen(duration)
+            <UserContext.Provider value={{
+                user: null,
+                logout: () => firebase.auth().signOut()
             }}>
-                {/* Loading Screen */}
-                {loading && <LoadingScreenPage/>}
+                <LoadingContext.Provider value={{
+                    showLoadingScreenForDuration: (duration: number) => showLoadingScreen(duration)
+                }}>
+                    {/* Loading Screen */}
+                    {loading && <LoadingScreenPage/>}
 
-                {/* Content */}
-                <LayoutComponent>
-                    {!authenticated && <LoginPage/>}
-                    {authenticated && <GameMasterPage/>}
-                </LayoutComponent>
-            </LoadingContext.Provider>
+                    {/* Content */}
+                    <LayoutComponent>
+                        {!authenticated && <LoginPage/>}
+                        {authenticated && <GameMasterPage/>}
+                    </LayoutComponent>
+                </LoadingContext.Provider>
+            </UserContext.Provider>
         </Grommet>
     )
 };

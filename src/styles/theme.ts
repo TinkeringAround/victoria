@@ -1,16 +1,16 @@
 // ===============================================
 export const colors = {
     // Neutral Colors
-    white: '#FFF',
+    white: '#FFFFFF',
     light: '#EEF0F4',
     medium: '#757E91',
     dark: '#333844',
-    black: '#000',
+    black: '#000000',
 
     // Colors
     gold: "#B69D60",
     red: "#EF476F",
-    green: "#06D6A0"
+    green: "#06D6A0",
 };
 
 // ===============================================

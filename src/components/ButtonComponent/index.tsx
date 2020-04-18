@@ -28,9 +28,9 @@ const SButton = styled(Button)`
 `;
 
 interface Props extends ButtonType {
-    color: TColor,
-    background: TColor,
-    hoverColor: TColor;
+    color: TColor | string,
+    background: TColor | string,
+    hoverColor: TColor | string;
 
     padding?: string
     fontSize?: string
@@ -40,13 +40,16 @@ const ButtonComponent: FC<Props> = ({children, onClick, color, background, hover
     <SButton
         disabled={disabled}
         color={color}
-        onClick={onClick} focusIndicator={false}
+        onClick={onClick}
+        focusIndicator={false}
         margin={margin}
         style={{
             fontSize: fontSize,
             padding: padding,
-            background: colors[background],
-            boxShadow: "0 5px 0 " + colors[hoverColor]
+            // @ts-ignore
+            background: colors.hasOwnProperty(background) ? colors[background] : background,
+            // @ts-ignore
+            boxShadow: "0 5px 0 " + (colors.hasOwnProperty(hoverColor) ? colors[hoverColor] : hoverColor)
         }}>
         {children}
     </SButton>;

@@ -1,55 +1,64 @@
-import React, {FC} from 'react';
+import React, {FC, useContext} from 'react';
 import {Box, Image} from "grommet";
 import styled from "styled-components";
 
 import {colors} from "../../../styles/theme";
 
-import {changeColorBrightness} from "../../../services/ColorService";
+import GameMasterContext from "../../../contexts/GameMasterContext";
+
+import {changeColorBrightness, hexToRgbA} from "../../../services/ColorService";
 
 import logoSmall from "../../../assets/logo/logo_small.png"
 
-const SNavigationbar = styled(Box)`
+const SNavigationbar = styled(Box)<{ disabled: boolean }>`
     background: ${colors.gold};
 
     :hover {
-        background: ${changeColorBrightness(colors.gold, 20)};
+        background: ${({disabled}) => disabled ? colors.gold : changeColorBrightness(colors.gold, -20)};
     }
 `
 
 interface Props {
-    delay: number
-    menuIsOpen: boolean
-    openMenu: () => void
+    menuAnimationDuration: number
 }
 
-const NavigationBarPartial: FC<Props> = ({delay, menuIsOpen, openMenu}) => (
-    <SNavigationbar
-        height="120%"
-        width="12rem"
-        background="gold"
-        align="center"
-        justify="end"
-        onClick={openMenu}
-        style={{
-            position: "absolute",
-            top: menuIsOpen ? -5 : "-95%",
-            left: 50,
-            transition: "top 2s ease-in-out, background 0.25s ease",
-            clipPath: "polygon(100% 0, 100% 100%, 50% 95%, 0 100%, 0 0)",
-            cursor: "pointer",
-            border: "solid white 3px",
-            boxShadow: "inset 0px 0px 53px 20px rgba(255,255,255,0.2)",
-            zIndex: 10
-        }}
-    >
-        {/* Logo */}
-        <Box width="90%"
-             align="center"
-             justify="center"
-             margin={{bottom: "5rem"}}
+const NavigationBarPartial: FC<Props> = ({menuAnimationDuration}) => {
+    const {menuIsOpen, setMenuIsOpen} = useContext(GameMasterContext);
+
+    return (
+        <SNavigationbar
+            disabled={menuIsOpen !== false}
+            height="120%"
+            width="200px"
+            align="center"
+            justify="between"
+            onClick={() => {
+                if (!menuIsOpen) setMenuIsOpen("Fähigkeiten");
+            }}
+            style={{
+                position: "absolute",
+                top: menuIsOpen ? -5 : "-95%",
+                left: "7.5%",
+                transition: "top " + menuAnimationDuration + "ms ease-in-out, background 0.25s ease",
+                clipPath: "polygon(100% 0, 100% 100%, 50% 95%, 0 100%, 0 0)",
+                cursor: menuIsOpen ? "default" : "pointer",
+                border: `solid ${colors.white} 5px`,
+                boxShadow: "inset 0px 0px 50px 20px " + hexToRgbA(colors.white, "0.1"),
+                zIndex: 10
+            }}
         >
-            <Image src={logoSmall} fit="contain"/>
-        </Box>
-    </SNavigationbar>
-);
+            {/* TODO: Tab Depending Items */}
+            <Box width="90%"/>
+
+            {/* Logo */}
+            <Box width="90%"
+                 align="center"
+                 justify="center"
+                 margin={{bottom: "5rem"}}
+            >
+                <Image src={logoSmall} fit="contain"/>
+            </Box>
+        </SNavigationbar>
+    );
+}
 export default NavigationBarPartial;

@@ -8,7 +8,6 @@ import GameMasterContext from "../../../../contexts/GameMasterContext";
 import {changeColorBrightness, hexToRgbA,} from "../../../../services/ColorService";
 
 import ButtonComponent from "../../../../components/ButtonComponent";
-import {Simulate} from "react-dom/test-utils";
 
 interface Props {
     menuAnimationDuration: number

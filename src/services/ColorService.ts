@@ -13,12 +13,12 @@ export function hexToRgbA(hex: string, alpha: string = "1") {
 export function changeColorBrightness(col: string | any[], amt: number) {
     var usePound = false;
 
-    if (col[0] == "#") {
+    if (col[0] === "#") {
         col = col.slice(1);
         usePound = true;
     }
 
-    var num = parseInt(<string>col, 16);
+    var num = parseInt(col as string, 16);
 
     var r = (num >> 16) + amt;
 

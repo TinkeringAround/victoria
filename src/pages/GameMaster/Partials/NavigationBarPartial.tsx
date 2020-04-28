@@ -1,14 +1,18 @@
 import React, {FC, useContext} from 'react';
-import {Box, Image} from "grommet";
+import {Box, Heading, Image} from "grommet";
 import styled from "styled-components";
 
 import {colors} from "../../../styles/theme";
+
+import {TMenuTabs} from "../../../types/TMenuTabs";
 
 import GameMasterContext from "../../../contexts/GameMasterContext";
 
 import {changeColorBrightness, hexToRgbA} from "../../../services/ColorService";
 
 import logoSmall from "../../../assets/logo/logo_small.png"
+
+import ButtonComponent from "../../../components/ButtonComponent";
 
 const SNavigationbar = styled(Box)<{ disabled: boolean }>`
     background: ${colors.gold};
@@ -17,6 +21,8 @@ const SNavigationbar = styled(Box)<{ disabled: boolean }>`
         background: ${({disabled}) => disabled ? colors.gold : changeColorBrightness(colors.gold, -20)};
     }
 `
+
+const MENU_TABS: Array<TMenuTabs> = ["Fähigkeiten", "Alchemie", "Einstellungen"];
 
 interface Props {
     menuAnimationDuration: number
@@ -47,8 +53,41 @@ const NavigationBarPartial: FC<Props> = ({menuAnimationDuration}) => {
                 zIndex: 10
             }}
         >
-            {/* TODO: Tab Depending Items */}
-            <Box width="90%"/>
+            {/* Tabs */}
+            <Box width="100%"
+                 margin="100%"
+                 align="center"
+            >
+                <Box height="3.5rem"
+                     width="100%"
+                     background="red"
+                     pad="0.75rem 1rem"
+                     margin={{bottom: "3rem"}}
+                >
+                    <Heading size="1.75rem"
+                             margin="0"
+                             color="white"
+                             textAlign="center"
+                    >
+                        {menuIsOpen}
+                    </Heading>
+                </Box>
+
+                <Box width="90%">
+                    {MENU_TABS.map(tab =>
+                        <ButtonComponent key={"MenuTab-" + tab}
+                                         color="white"
+                                         background="medium"
+                                         hoverColor="dark"
+                                         fontSize="1.25rem"
+                                         padding="0.75rem 1rem"
+                                         margin={{bottom: "2rem"}}
+                                         onClick={() => setMenuIsOpen(tab)}
+                        >
+                            {tab}
+                        </ButtonComponent>)}
+                </Box>
+            </Box>
 
             {/* Logo */}
             <Box width="90%"

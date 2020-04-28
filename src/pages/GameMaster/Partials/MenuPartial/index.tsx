@@ -43,13 +43,13 @@ const MenuPartial: FC<Props> = ({menuAnimationDuration}) => {
                      clipPath: "polygon(1% 3%, 3% 0, 97% 1%, 99% 5%, 100% 71%, 99% 97%, 96% 99%, 78% 99%, 75% 98%, 73% 99%, 3% 99%, 1% 96%)",
                      boxShadow: "inset 0px 0px 1000px 300px " + hexToRgbA(colors.gold, "0.2")
                  }}>
-                {menuIsOpen}
+                
             </Box>
 
             {/* Close Button */}
             <Box style={{
                 position: "absolute",
-                top: "6%",
+                top: "8%",
                 right: "5%"
             }}>
                 <ButtonComponent color="white"

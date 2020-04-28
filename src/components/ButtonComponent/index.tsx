@@ -13,16 +13,12 @@ const SButton = styled(Button)`
     max-width: 250px;
 
     font-weight: bold;
-    
-    background: lightblue;
-    color: white;
-    
     text-align: center;
     
     border-radius: 10px;
 
     :active {
-        box-shadow: 0px 0px 0px #fff; 
+        box-shadow: 0px 0px 0px rgba(0,0,0,0) !important; 
         transform: translateY(4px);
     }
 `;

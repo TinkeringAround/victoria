@@ -13,6 +13,7 @@ import CanvasPartial from "./Partials/CanvasPartial";
 import PlayerStatsPartial from "./Partials/PlayerStatsPartial";
 import CurrentLevelPartial from "./Partials/CurrentLevelPartial";
 import MenuPartial from "./Partials/MenuPartial";
+import DetailsPartial from "./Partials/DetailsPartial";
 
 const CHAPTER_MASTER_ID = "levelMaster";
 const LOADING_DURATION = 5000;
@@ -38,10 +39,8 @@ const GameMasterPage: FC = () => {
     }, [])
 
     const selectMesh = useCallback((name: string) => {
-        console.log("Selected Mesh:", name);
-
         if (name !== "") setMesh(name);
-        if (name === "" && mesh !== "") setMesh("");
+        else setMesh("");
     }, []);
 
     return (
@@ -80,6 +79,7 @@ const GameMasterPage: FC = () => {
                 <MenuPartial menuAnimationDuration={MENU_ANIMATION_DURATION}/>
 
                 {/* TODO: Details Menu for Selected Mesh*/}
+                <DetailsPartial mesh={menuIsOpen === false ? mesh : ""}/>
             </Box>
         </GameMasterContext.Provider>
     );

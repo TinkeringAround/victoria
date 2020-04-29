@@ -4,43 +4,47 @@ import {
     ArcRotateCamera,
     Engine,
     ExecuteCodeAction,
-    Light,
+    HemisphericLight,
+    IShadowLight,
     Scene,
     SceneLoader,
+    ShadowGenerator,
     Vector3
 } from 'babylonjs';
 
 import {
     createArcRotateCamera,
-    createBackgroundLight,
+    createBackgroundLightInScene,
     createFogFor,
     createPointLight,
     createShadowGeneratorFor
 } from "../services/InitializerService";
 import {getFileNameFromAssetImport, getRootUrlFromAssetImport} from '../services/MeshLoaderService';
 
-import {Chapter1} from "./Meshes";
 import {BACKGROUND, BLUE, RED, WHITE} from "./Colors";
+import CHAPTERS from "./Chapters";
+import MESHES from "./Meshes";
 
 export default class ChapterMaster {
 
     // CONSTS
-    private CHAPTER1_MESHES = ["Acker", "DeepForest", "MotherTree", "Treasure"];
     private CHAPTER_ISLAND_NAME = "Island";
     private BACKGROUND_LIGHT = "Light_Background";
 
     // Engine Attributes
-    private _canvas: HTMLCanvasElement;
-    private _engine: Engine;
-    private _scene: Scene;
+    private readonly _canvas: HTMLCanvasElement;
+    private readonly _engine: Engine;
+    private readonly _scene: Scene;
     private _camera: ArcRotateCamera;
-    private _lights: Array<Light> = [];
+    private _backgroundLight: HemisphericLight;
+    private _lights: Array<IShadowLight> = [];
+    private _shadowGenerators: Array<ShadowGenerator> = [];
 
     // Game Attributes
     private _activeLevel: string = "";
 
     // Handler Attributes
-    private _selectMesh: any;
+    private _selectRegion: any;
 
     constructor(canvas: string, selectMesh: (name: string) => void) {
         // Canvas Settings
@@ -58,52 +62,50 @@ export default class ChapterMaster {
         this._camera = createArcRotateCamera(this._canvas, this._scene);
 
         // Background Light Settings
-        this._lights.push(createBackgroundLight(this.BACKGROUND_LIGHT, this._scene));
+        this._backgroundLight = createBackgroundLightInScene(this.BACKGROUND_LIGHT, this._scene);
 
         // Fog Settings
         createFogFor(this._scene);
 
         // Handler Settings
-        this._selectMesh = selectMesh;
+        this._selectRegion = selectMesh;
     }
 
     //#region Level Creation
     public createLevel(level: number): void {
-        switch (level) {
-            case 1:
-                this.createLevel1();
-                break;
-        }
+        this.createLightAndShadowForLevel(level);
+        this.loadMeshForLevel(level);
     }
 
-    private createLevel1() {
-        // TODO: Chapter 1 Setup
-        // Lights
-        const whiteLight = createPointLight("white", new Vector3(-15, 25, 5), this._scene, WHITE, 6000, 60);
-        const redLight = createPointLight("red", new Vector3(-5, 5, 15), this._scene, RED, 3000, 25);
-        const blueLight = createPointLight("blue", new Vector3(-5, 5, -10), this._scene, BLUE, 750, 20);
+    private createLightAndShadowForLevel(level: number): void {
+        if (level === 0) {
+            this._lights.push(
+                createPointLight("white", new Vector3(-15, 25, 5), this._scene, WHITE, 6000, 60),
+                createPointLight("red", new Vector3(-5, 5, 15), this._scene, RED, 3000, 25),
+                createPointLight("blue", new Vector3(-5, 5, -10), this._scene, BLUE, 750, 20));
+        }
 
-        this._lights.push(whiteLight);
-        this._lights.push(redLight);
-        this._lights.push(blueLight);
+        this._shadowGenerators.push(createShadowGeneratorFor(this._lights[0]));
+    }
 
-        // Shadow Generator
-        const shadowGenerator = createShadowGeneratorFor(whiteLight);
-
-        SceneLoader.ImportMesh("", getRootUrlFromAssetImport(Chapter1), getFileNameFromAssetImport(Chapter1), this._scene, (newMesh) => {
+    private loadMeshForLevel(level: number): void {
+        SceneLoader.ImportMesh("", getRootUrlFromAssetImport(MESHES[level]), getFileNameFromAssetImport(MESHES[level]), this._scene, (newMesh) => {
                 newMesh.forEach(mesh => {
 
                         // Actions Manager
-                        if (this.CHAPTER1_MESHES.includes(mesh.name)) {
+                        if (CHAPTERS[level].meshes.includes(mesh.name)) {
                             mesh.actionManager = new ActionManager(this._scene);
                             this.createOverlayActionManagerFor(mesh);
                             this.createOnClickActionManagerFor(mesh);
                         }
 
-                        // Shadows
-                        this._lights.forEach(light => light.name !== this.BACKGROUND_LIGHT ? light.includedOnlyMeshes.push(mesh) : null);
+                        // Apply Light to Mesh
+                        this._backgroundLight.includedOnlyMeshes.push(mesh);
+                        this._lights.forEach(light => light.includedOnlyMeshes.push(mesh));
+
+                        // Apply Shadow to Mesh
                         if (mesh.name.includes(this.CHAPTER_ISLAND_NAME)) mesh.receiveShadows = true;
-                        shadowGenerator?.getShadowMap()?.renderList?.push(mesh);
+                        this._shadowGenerators.forEach(shadowGenerator => shadowGenerator?.getShadowMap()?.renderList?.push(mesh));
                     }
                 );
 
@@ -128,10 +130,10 @@ export default class ChapterMaster {
                     mesh.overlayColor = WHITE;
                     mesh.overlayAlpha = 0.5;
                     this._activeLevel = mesh.name;
-                    this._selectMesh(mesh.name);
+                    this._selectRegion(mesh.name);
                 } else {
                     this._activeLevel = "";
-                    this._selectMesh("");
+                    this._selectRegion("");
                 }
             }
         ));

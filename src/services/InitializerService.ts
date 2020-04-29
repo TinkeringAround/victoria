@@ -21,7 +21,7 @@ export const createArcRotateCamera: (canvas: HTMLElement, scene: Scene) => ArcRo
 }
 
 // Background Light
-export const createBackgroundLight: (backgroundLightName: string, scene: Scene) => HemisphericLight = (backgroundLightName, scene) => {
+export const createBackgroundLightInScene: (backgroundLightName: string, scene: Scene) => HemisphericLight = (backgroundLightName, scene) => {
     const backgroundLight = new HemisphericLight(backgroundLightName, Vector3.Zero(), scene);
     backgroundLight.diffuse = WHITE;
     backgroundLight.specular = WHITE;

@@ -23,14 +23,15 @@ const MENU_ANIMATION_DURATION = 1000;
 const GameMasterPage: FC = () => {
     const {showLoadingScreenForDuration} = useContext(LoadingContext);
     const [chapterMaster, setChapterMaster] = useState<ChapterMaster | null>(null);
-    const [level] = useState<number>(1);
+    const [level] = useState<number>(0);
     const [menuIsOpen, setMenu] = useState<false | TMenuTabs>(false);
-    const [mesh, setMesh] = useState<string>("");
+    const [region, setRegion] = useState<string>("");
 
     useEffect(() => {
         if (chapterMaster == null && document.getElementById(CHAPTER_MASTER_ID)) {
+            const newChapterMaster = new ChapterMaster(CHAPTER_MASTER_ID, selectRegion);
+
             console.log(`Create LevelMaster for Level ${level}`);
-            const newChapterMaster = new ChapterMaster(CHAPTER_MASTER_ID, selectMesh);
             newChapterMaster.createLevel(level);
             newChapterMaster.doRender();
             showLoadingScreenForDuration(LOADING_DURATION);
@@ -38,9 +39,9 @@ const GameMasterPage: FC = () => {
         }
     }, [])
 
-    const selectMesh = useCallback((name: string) => {
-        if (name !== "") setMesh(name);
-        else setMesh("");
+    const selectRegion = useCallback((regionName: string) => {
+        if (regionName !== "") setRegion(regionName);
+        else setRegion("");
     }, []);
 
     return (
@@ -79,7 +80,7 @@ const GameMasterPage: FC = () => {
                 <MenuPartial menuAnimationDuration={MENU_ANIMATION_DURATION}/>
 
                 {/* TODO: Details Menu for Selected Mesh*/}
-                <DetailsPartial mesh={menuIsOpen === false ? mesh : ""}/>
+                <DetailsPartial level={level} regionName={menuIsOpen === false ? region : ""}/>
             </Box>
         </GameMasterContext.Provider>
     );

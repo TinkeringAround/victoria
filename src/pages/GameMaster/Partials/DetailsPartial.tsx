@@ -5,8 +5,8 @@ import {colors} from "../../../styles/theme";
 
 import {hexToRgbA} from "../../../services/ColorService";
 
-import CHAPTERS from "../../../game/Chapters";
 import ENEMIES from "../../../game/Enemies";
+import LEVELS from "../../../game/Levels";
 
 interface Props {
     level: number
@@ -41,10 +41,10 @@ const DetailsPartial: FC<Props> = ({level, regionName}) => {
                      clipPath: "polygon(99% 2%, 100% 58%, 97% 65%, 99% 72%, 100% 100%, 59% 100%, 8% 100%, 0 99%, 1% 0)"
                  }}
             >
-                <Heading textAlign="center">{level >= 0 ? CHAPTERS[level].name : ""}</Heading>
+                <Heading textAlign="center">{level >= 0 ? LEVELS[level].name : ""}</Heading>
 
                 <Box width="100%" direction="row" wrap={false} justify="around" align="center">
-                    {level >= 0 && regionName !== "" && CHAPTERS[level].regions["MotherTree"].enemies.map((enemy: number) =>
+                    {level >= 0 && regionName !== "" && LEVELS[level].regions["MotherTree"].enemies.map((enemy: number) =>
                         <Box key={"Enemy-" + enemy}
                              width="100px"
                              height="100px"
@@ -54,7 +54,6 @@ const DetailsPartial: FC<Props> = ({level, regionName}) => {
                     )}
                 </Box>
             </Box>
-
         </Box>
     );
 };

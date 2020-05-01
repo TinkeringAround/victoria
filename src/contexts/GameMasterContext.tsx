@@ -2,11 +2,11 @@ import React from "react";
 
 import {TMenuTabs} from "../types/TMenuTabs";
 
-import ChapterMaster from "../game/ChapterMaster";
+import LevelMaster from "../game/LevelMaster";
 
 interface Props {
     id: string
-    chapterMaster: ChapterMaster | null,
+    levelMaster: LevelMaster | null,
 
     menuIsOpen: false | TMenuTabs
     setMenuIsOpen: (tab: false | TMenuTabs) => void
@@ -14,7 +14,7 @@ interface Props {
 
 const gameMasterContext = React.createContext<Props>({
     id: "",
-    chapterMaster: null,
+    levelMaster: null,
 
     menuIsOpen: false,
     setMenuIsOpen: (tab: false | TMenuTabs) => {

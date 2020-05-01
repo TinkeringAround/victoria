@@ -11,10 +11,12 @@ import {
 
 import {WHITE} from "../game/Colors";
 
+import {lockCameraPosition} from "./SceneManipulatorService";
+
 // Camera
 export const createArcRotateCamera: (canvas: HTMLElement, scene: Scene) => ArcRotateCamera = (canvas, scene) => {
     const arcCamera = new ArcRotateCamera("ArcCamera", 3, 1.2, 35, new Vector3(0, 0, 0), scene, true);
-    arcCamera.attachControl(canvas, false);
+    lockCameraPosition(arcCamera, canvas, false);
     arcCamera.wheelPrecision = 30;
 
     return arcCamera;

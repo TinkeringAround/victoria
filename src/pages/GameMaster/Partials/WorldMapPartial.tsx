@@ -1,24 +1,28 @@
-import React, {FC} from 'react';
+import React, {FC, useContext} from 'react';
 import {Box} from "grommet";
 
 import {colors} from "../../../styles/theme";
 
+import GameMasterContext from "../../../contexts/GameMasterContext";
+
 import {changeColorBrightness} from "../../../services/ColorService";
 
 import ButtonComponent from "../../../components/ButtonComponent";
+import IconComponent from "../../../components/IconComponent";
 
 interface Props {
-    worldMapIsOpen: boolean
     click: () => void
 }
 
-const WorldMapPartial: FC<Props> = ({worldMapIsOpen, click}) =>
-    <Box style={{
+const WorldMapPartial: FC<Props> = ({click}) => {
+    const {viewMode} = useContext(GameMasterContext);
+
+    return <Box style={{
         position: "absolute",
         bottom: "5%",
         right: "5%",
         transition: "all 0.25s ease",
-        opacity: worldMapIsOpen ? 0 : 1,
+        opacity: viewMode === "world" ? 0 : 1,
         zIndex: 4
     }}
     >
@@ -29,8 +33,9 @@ const WorldMapPartial: FC<Props> = ({worldMapIsOpen, click}) =>
                          fontSize="1.25rem"
                          padding="0.75rem"
         >
-            Weltkarte
+            <IconComponent type="sign"/>
         </ButtonComponent>
     </Box>
+}
 
 export default WorldMapPartial;

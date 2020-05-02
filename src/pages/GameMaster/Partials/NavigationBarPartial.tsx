@@ -29,25 +29,25 @@ interface Props {
 }
 
 const NavigationBarPartial: FC<Props> = ({menuAnimationDuration}) => {
-    const {menuIsOpen, setMenuIsOpen} = useContext(GameMasterContext);
+    const {menuTab, setMenuTab} = useContext(GameMasterContext);
 
     return (
         <SNavigationbar
-            disabled={menuIsOpen !== false}
+            disabled={menuTab !== null}
             height="120%"
             width="200px"
             align="center"
             justify="between"
             onClick={() => {
-                if (!menuIsOpen) setMenuIsOpen("Fähigkeiten");
+                if (!menuTab) setMenuTab("Fähigkeiten");
             }}
             style={{
                 position: "absolute",
-                top: menuIsOpen ? -5 : "-95%",
+                top: menuTab ? -5 : "-95%",
                 left: "7.5%",
                 transition: "top " + menuAnimationDuration + "ms ease-in-out, background 0.25s ease",
                 clipPath: "polygon(100% 0, 100% 100%, 50% 95%, 0 100%, 0 0)",
-                cursor: menuIsOpen ? "default" : "pointer",
+                cursor: menuTab ? "default" : "pointer",
                 border: `solid ${colors.white} 5px`,
                 boxShadow: "inset 0px 0px 50px 20px " + hexToRgbA(colors.white, "0.1"),
                 zIndex: 10
@@ -69,7 +69,7 @@ const NavigationBarPartial: FC<Props> = ({menuAnimationDuration}) => {
                              color="white"
                              textAlign="center"
                     >
-                        {menuIsOpen}
+                        {menuTab}
                     </Heading>
                 </Box>
 
@@ -82,7 +82,7 @@ const NavigationBarPartial: FC<Props> = ({menuAnimationDuration}) => {
                                          fontSize="1.25rem"
                                          padding="0.75rem 1rem"
                                          margin={{bottom: "2rem"}}
-                                         onClick={() => setMenuIsOpen(tab)}
+                                         onClick={() => setMenuTab(tab)}
                         >
                             {tab}
                         </ButtonComponent>)}

@@ -14,7 +14,7 @@ interface Props {
 }
 
 const MenuPartial: FC<Props> = ({menuAnimationDuration}) => {
-    const {menuIsOpen, setMenuIsOpen} = useContext(GameMasterContext);
+    const {menuTab, setMenuTab} = useContext(GameMasterContext);
 
     return (
         <Box
@@ -25,7 +25,7 @@ const MenuPartial: FC<Props> = ({menuAnimationDuration}) => {
             align="end"
             style={{
                 position: "absolute",
-                top: menuIsOpen ? "2.5%" : "-95%",
+                top: menuTab ? "2.5%" : "-95%",
                 left: "1%",
                 zIndex: 8,
                 transition: "top " + menuAnimationDuration + "ms ease-in-out",
@@ -43,7 +43,7 @@ const MenuPartial: FC<Props> = ({menuAnimationDuration}) => {
                      clipPath: "polygon(1% 3%, 3% 0, 97% 1%, 99% 5%, 100% 71%, 99% 97%, 96% 99%, 78% 99%, 75% 98%, 73% 99%, 3% 99%, 1% 96%)",
                      boxShadow: "inset 0px 0px 1000px 300px " + hexToRgbA(colors.gold, "0.2")
                  }}>
-                
+
             </Box>
 
             {/* Close Button */}
@@ -57,7 +57,7 @@ const MenuPartial: FC<Props> = ({menuAnimationDuration}) => {
                                  hoverColor={changeColorBrightness(colors.red, -50)}
                                  fontSize="1.5rem"
                                  padding="0.5rem 0.75rem"
-                                 onClick={() => setMenuIsOpen(false)}>
+                                 onClick={() => setMenuTab(null)}>
                     X
                 </ButtonComponent>
             </Box>

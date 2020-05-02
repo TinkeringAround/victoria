@@ -2,6 +2,7 @@ import React, {FC, useCallback, useContext, useEffect, useState} from 'react';
 import {Box} from "grommet";
 
 import {TMenuTabs} from "../../types/TMenuTabs";
+import {TViewMode} from "../../types/TViewMode";
 
 import GameMasterContext from "../../contexts/GameMasterContext";
 import LoadingContext from "../../contexts/LoadingContext";
@@ -17,41 +18,33 @@ import DetailsPartial from "./Partials/DetailsPartial";
 import WorldMapPartial from "./Partials/WorldMapPartial";
 
 const CHAPTER_MASTER_ID = "levelMaster";
-const LOADING_DURATION = 5000;
-const ANIMATION_DURATION = 2000;
-const MENU_ANIMATION_DURATION = 1000;
+const DURATION = 1500;
+const DELAY = 100;
+const MENU_DURATION = 1000;
 
 const GameMasterPage: FC = () => {
-    const {showLoadingScreenForDuration} = useContext(LoadingContext);
-    const [menuTab, setMenuTab] = useState<false | TMenuTabs>(false);
+    const {toggleLoadingScreen} = useContext(LoadingContext);
+    const [menuTab, setMenuTab] = useState<null | TMenuTabs>(null);
 
     const [levelMaster, setLevelMaster] = useState<LevelMaster | null>(null);
-    const [level] = useState<number>(0);
-    const [viewMode, setViewMode] = useState<"world" | "detail">("detail");
+    const [viewMode, setViewMode] = useState<TViewMode>("detail");
 
+    const [level, setLevel] = useState<number>(0);
     const [region, setRegion] = useState<string>("");
-    const [world, setWorld] = useState<string>("");
 
     useEffect(() => {
         if (levelMaster == null && document.getElementById(CHAPTER_MASTER_ID)) {
-            const newLevelMaster = new LevelMaster(CHAPTER_MASTER_ID, selectWorld, selectRegion);
+            toggleLoadingScreen(true);
+            const newLevelMaster = new LevelMaster(CHAPTER_MASTER_ID, setLevel, setRegion);
 
-            console.log(`Create LevelMaster for Level ${level}`);
-            newLevelMaster.createLevel(level);
-            newLevelMaster.doRender();
-            showLoadingScreenForDuration(LOADING_DURATION);
-            setLevelMaster(newLevelMaster);
+            newLevelMaster.createWorld(level).then(() => {
+                newLevelMaster.doRender();
+                setTimeout(() => {
+                    toggleLoadingScreen(false);
+                    setLevelMaster(newLevelMaster);
+                }, DELAY)
+            })
         }
-    }, []);
-
-    const selectRegion = useCallback((regionName: string) => {
-        if (regionName !== "") setRegion(regionName);
-        else setRegion("");
-    }, []);
-
-    const selectWorld = useCallback((worldName: string) => {
-        if (worldName !== "") setWorld(worldName);
-        else setWorld("");
     }, []);
 
     const toggleViewMode = useCallback(() => {
@@ -68,29 +61,45 @@ const GameMasterPage: FC = () => {
         }
     }, [levelMaster, viewMode]);
 
+    const playLevelOrRegion = useCallback(() => {
+        if (viewMode === "world") {
+            levelMaster?.changeLevel(level);
+            toggleViewMode();
+        }
+
+        if (viewMode === "detail") {
+            // TODO: Implement
+            console.log("TODO: Implement Game Menu");
+        }
+    }, [viewMode, levelMaster, level, toggleViewMode]);
+
     return (
         <GameMasterContext.Provider value={{
             id: CHAPTER_MASTER_ID,
             levelMaster: levelMaster,
 
-            menuIsOpen: menuTab,
-            setMenuIsOpen: setMenuTab
+            viewMode: viewMode,
+            level: level,
+            region: region,
+
+            menuTab: menuTab,
+            setMenuTab: setMenuTab
         }}>
             <Box width="100%"
                  height="100%"
                  background="dark"
                  direction="row"
-                 animation={{type: "fadeIn", duration: ANIMATION_DURATION, delay: LOADING_DURATION}}
+                 animation={levelMaster !== null ? {type: "fadeIn", duration: DURATION} : "fadeOut"}
                  style={{
                      position: "relative",
                      overflow: "hidden"
                  }}
             >
                 {/* Navigation Bar */}
-                <NavigationBarPartial menuAnimationDuration={MENU_ANIMATION_DURATION}/>
+                <NavigationBarPartial menuAnimationDuration={MENU_DURATION}/>
 
                 {/* Current Level */}
-                <CurrentLevelPartial level="Krähenwald"/>
+                <CurrentLevelPartial/>
 
                 {/* Player Stats */}
                 <PlayerStatsPartial visible={!menuTab}
@@ -101,13 +110,13 @@ const GameMasterPage: FC = () => {
                 <CanvasPartial/>
 
                 {/* Menu */}
-                <MenuPartial menuAnimationDuration={MENU_ANIMATION_DURATION}/>
+                <MenuPartial menuAnimationDuration={MENU_DURATION}/>
 
-                {/* TODO: Details Menu for Selected Mesh*/}
-                <DetailsPartial level={level} regionName={menuTab === false && viewMode === "detail" ? region : ""}/>
+                {/* Details Menu*/}
+                <DetailsPartial play={playLevelOrRegion}/>
 
-                {/* TODO: WorldMap Button */}
-                <WorldMapPartial worldMapIsOpen={viewMode === "world"} click={toggleViewMode}/>
+                {/* WorldMap Button */}
+                <WorldMapPartial click={toggleViewMode}/>
             </Box>
         </GameMasterContext.Provider>
     );

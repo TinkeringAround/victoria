@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import ReactDOM from 'react-dom';
 import firebase, {User} from "firebase/app";
 import {Grommet} from "grommet";
@@ -23,18 +23,16 @@ initializeFirebaseApp();
 
 // ===================================================
 const App: FC = () => {
-    const [authenticated, setAuthenticated] = useState<boolean>(false);
-    const [loading, setLoading] = useState<boolean>(false);
-
-    firebase.auth().onAuthStateChanged((user: User | null) => {
-        if (user && !authenticated) setAuthenticated(true);
-        if (!user && authenticated) setAuthenticated(false);
-    });
-
-    const showLoadingScreen = (duration: number) => {
-        setLoading(true);
-        setTimeout(() => setLoading(false), duration);
-    }
+    const [authenticated, setAuthenticated] = useState<boolean>();
+    const [loadingScreen, showLoadingScreen] = useState<boolean>(true);
+    
+    useEffect(() => {
+        firebase.auth().onAuthStateChanged((user: User | null) => {
+            if (user && !authenticated) setAuthenticated(true);
+            else if (!user && authenticated) setAuthenticated(false);
+            else if (!user && !authenticated) showLoadingScreen(false);
+        });
+    })
 
     return (
         <Grommet theme={theme} full>
@@ -43,10 +41,10 @@ const App: FC = () => {
                 logout: () => firebase.auth().signOut()
             }}>
                 <LoadingContext.Provider value={{
-                    showLoadingScreenForDuration: (duration: number) => showLoadingScreen(duration)
+                    toggleLoadingScreen: showLoadingScreen
                 }}>
                     {/* Loading Screen */}
-                    {loading && <LoadingScreenPage/>}
+                    {loadingScreen && <LoadingScreenPage/>}
 
                     {/* Content */}
                     <LayoutComponent>

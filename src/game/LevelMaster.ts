@@ -6,11 +6,15 @@ import {
     ExecuteCodeAction,
     HemisphericLight,
     IShadowLight,
+    Nullable,
     Scene,
     SceneLoader,
     ShadowGenerator,
     Vector3
 } from 'babylonjs';
+
+import {TViewMode} from "../types/TViewMode";
+import {TLevel} from '../types/TLevel';
 
 import {
     createArcRotateCamera,
@@ -29,12 +33,11 @@ import {getFileNameFromAssetImport, getRootUrlFromAssetImport} from '../services
 
 import {BACKGROUND, BLUE, RED, WHITE} from "./Colors";
 import LEVELS from "./Levels";
-import MESHES from "./Meshes";
 
 export default class LevelMaster {
 
     // CONSTS
-    private CHAPTER_ISLAND_NAME = "Island";
+    private LEVEL_ISLAND_NAME = "Island";
     private BACKGROUND_LIGHT = "Light_Background";
 
     // Engine Attributes
@@ -47,7 +50,7 @@ export default class LevelMaster {
     private _shadowGenerators: Array<ShadowGenerator> = [];
 
     // Game Attributes
-    private _viewMode: "world" | "detail" = "detail";
+    private _viewMode: TViewMode = "detail";
     private _level: number = -1;
 
     private _activeRegion: string = "";
@@ -57,7 +60,7 @@ export default class LevelMaster {
     private _selectWorld: any;
     private _selectRegion: any;
 
-    constructor(canvas: string, selectWorld: (worldName: string) => void, selectRegion: (regionName: string) => void) {
+    constructor(canvas: string, selectWorld: (worldIndex: number) => void, selectRegion: (regionName: string) => void) {
         // Canvas Settings
         this._canvas = document.getElementById(canvas) as HTMLCanvasElement;
 
@@ -83,18 +86,28 @@ export default class LevelMaster {
         this._selectRegion = selectRegion;
     }
 
-    //#region Level Creation
-    public createLevel(level: number): void {
-        this._level = level;
-        this._activeLevel = level;
+    //#region World Creation
+    public createWorld(level: number): Promise<boolean> {
+        return new Promise(async (resolve) => {
+            this._level = level;
 
-        this.createLightAndShadowForLevel(level);
-        this.loadMeshForLevel(level);
+            // Camera
+            moveCameraTargetTo(this._camera, new Vector3(LEVELS[level].meshes.basePosition.x, LEVELS[level].meshes.basePosition.y, LEVELS[level].meshes.basePosition.z));
 
-        moveCameraTargetTo(this._camera, new Vector3(LEVELS[level].basePosition.x, LEVELS[level].basePosition.y, LEVELS[level].basePosition.z));
+            // Light and Shadow
+            this.createLightAndShadowForLevel(level);
+
+            // Meshes
+            await this.loadAllMeshes(level);
+
+            // Resolve
+            console.log("Successfully Loaded All Meshes with Start Level " + level);
+            resolve()
+        })
     }
 
     private createLightAndShadowForLevel(level: number): void {
+        this._lights = [];
         if (level === 0) {
             this._lights.push(
                 createPointLight("white", new Vector3(-15, 25, 5), this._scene, WHITE, 6000, 60),
@@ -105,71 +118,117 @@ export default class LevelMaster {
         this._shadowGenerators.push(createShadowGeneratorFor(this._lights[0]));
     }
 
-    private loadMeshForLevel(level: number): void {
-        SceneLoader.ImportMesh("", getRootUrlFromAssetImport(MESHES[level]), getFileNameFromAssetImport(MESHES[level]), this._scene, (newMesh) => {
+    private loadAllMeshes(currentLevel: number): Promise<unknown[]> {
+        const promises = LEVELS.map((level: TLevel, index: number) => {
+            return new Promise(async (resolve) => {
+                await this.importSingleMeshes(level);
+                await this.importMultiMeshes(level, index, currentLevel);
+                resolve();
+            });
+        });
+
+        return Promise.all(promises);
+    }
+
+    private importSingleMeshes(level: TLevel): Promise<unknown> {
+        return new Promise((resolve) => {
+            SceneLoader.ImportMesh("", getRootUrlFromAssetImport(level.meshes.single), getFileNameFromAssetImport(level.meshes.single), this._scene, (newMesh) => {
                 newMesh.forEach(mesh => {
-                        // Apply Mesh Position
-                        mesh.position = new Vector3(LEVELS[level].basePosition.x, LEVELS[level].basePosition.y, LEVELS[level].basePosition.z);
+                    // Apply Mesh Position
+                    mesh.position = new Vector3(level.meshes.basePosition.x, level.meshes.basePosition.y, level.meshes.basePosition.z);
 
-                        // Actions Manager
-                        mesh.actionManager = new ActionManager(this._scene);
-                        if (LEVELS[level].regionMeshes.includes(mesh.name)) {
-                            this.createClickActionManagerInDetailMap(mesh);
-                            this.createOverlayActionManagerFor(mesh);
+                    // Actions Manager
+                    mesh.actionManager = new ActionManager(this._scene);
+                    this.createClickActionManagerInWorldMap(mesh);
+                    this.createOverlayActionManagerInWorldMap(mesh);
+
+                    // Apply Light to Mesh
+                    this._backgroundLight.includedOnlyMeshes.push(mesh);
+                    this._lights.forEach(light => light.includedOnlyMeshes.push(mesh));
+
+                    // Disable Mesh
+                    mesh.setEnabled(false);
+                });
+
+                resolve();
+            });
+        })
+    }
+
+    private importMultiMeshes(level: TLevel, index: number, currentLevel: number): Promise<unknown> {
+        return new Promise(resolve => {
+            SceneLoader.ImportMesh("", getRootUrlFromAssetImport(level.meshes.multi), getFileNameFromAssetImport(level.meshes.multi), this._scene, (newMesh) => {
+                    newMesh.forEach(mesh => {
+                            // Apply Mesh Position
+                            mesh.position = new Vector3(level.meshes.basePosition.x, level.meshes.basePosition.y, level.meshes.basePosition.z);
+
+                            if (index === currentLevel) {
+                                // Actions Manager
+                                mesh.actionManager = new ActionManager(this._scene);
+                                if (LEVELS[currentLevel].meshes.regions.includes(mesh.name)) {
+                                    this.createClickActionManagerInDetailMap(mesh);
+                                    this.createOverlayActionManagerInDetailMap(mesh);
+                                }
+
+                                // Apply Light to Mesh
+                                this._backgroundLight.includedOnlyMeshes.push(mesh);
+                                this._lights.forEach(light => light.includedOnlyMeshes.push(mesh));
+
+                                // Apply Shadow to Mesh
+                                if (mesh.name.includes(this.LEVEL_ISLAND_NAME)) mesh.receiveShadows = true;
+                                this._shadowGenerators.forEach(shadowGenerator => shadowGenerator?.getShadowMap()?.renderList?.push(mesh));
+                            }
                         }
+                    );
 
-                        // Apply Light to Mesh
-                        this._backgroundLight.includedOnlyMeshes.push(mesh);
-                        this._lights.forEach(light => light.includedOnlyMeshes.push(mesh));
-
-                        // Apply Shadow to Mesh
-                        if (mesh.name.includes(this.CHAPTER_ISLAND_NAME)) mesh.receiveShadows = true;
-                        this._shadowGenerators.forEach(shadowGenerator => shadowGenerator?.getShadowMap()?.renderList?.push(mesh));
-                    }
-                );
-
-                console.log("Successfully Loaded");
-            }
-        );
+                    resolve();
+                }
+            );
+        })
     }
 
     //#endregion
 
     //#region View Mode
-    public setViewMode(mode: "world" | "detail"): void {
+    public setViewMode(mode: TViewMode): void {
         // Set View Mode
         this._viewMode = mode;
         const isWorldMap = mode === "world";
+        const currentLevelMesh = this._scene.getMeshByName("Level" + this._level);
 
         // Camera
         this.setCameraViewMode(mode);
 
-        // Register ActionManagers on Toggle
-        LEVELS[this._level].meshes.forEach(meshName => {
+        // Toggle Multi and Single Meshes
+        this.moveAllMeshes("right");
+        LEVELS[this._level].meshes.all.forEach(meshName => {
             const mesh = this._scene.getMeshByName(meshName);
             if (mesh) {
-                mesh.actionManager?.dispose();
-                mesh.actionManager = new ActionManager(this._scene);
-
-                if (isWorldMap) {
-                    // this.createOverlayActionManagerInWorldMap(mesh);
-                    // this.createClickActionManagerInWorldMap(mesh);
-                }
-
-                if (!isWorldMap && LEVELS[this._level].regionMeshes.includes(meshName)) {
-                    this.createOverlayActionManagerFor(mesh);
-                    this.createClickActionManagerInDetailMap(mesh);
-                }
+                mesh.setEnabled(!isWorldMap);
+                this.setOverlayForMesh(mesh, false);
             }
         });
+        currentLevelMesh?.setEnabled(isWorldMap);
+        if (!isWorldMap && currentLevelMesh) this.setOverlayForMesh(currentLevelMesh, false);
+
+        // Reset Level
+        if (isWorldMap) {
+            this._activeLevel = -1;
+            this._selectWorld(-1);
+        }
+
+        // Reset Region
+        if (!isWorldMap) {
+            this._activeRegion = "";
+            this._selectRegion("");
+        }
     }
 
-    private setCameraViewMode(mode: "world" | "detail"): void {
+    private setCameraViewMode(mode: TViewMode): void {
         const isWordMap = mode === "world";
-        if (this._camera !== null) {
-            changeCameraAngleTo(this._camera, isWordMap ? Math.PI : 3, isWordMap ? 0 : 1.2, 60, isWordMap ? 100 : 35);
-            lockCameraPosition(this._camera, this._canvas, isWordMap);
-        }
+
+        changeCameraAngleTo(this._camera, isWordMap ? Math.PI : 3, isWordMap ? 0 : 1.2, 60, isWordMap ? 100 : 35);
+        lockCameraPosition(this._camera, this._canvas, isWordMap);
     }
 
     //#endregion
@@ -180,7 +239,7 @@ export default class LevelMaster {
         mesh.actionManager?.registerAction(new ExecuteCodeAction(
             ActionManager.OnPickTrigger,
             () => {
-                const currentlyActiveMesh = this._scene.getMeshByName(this._activeRegion);
+                const currentlyActiveMesh = this.getMeshByName(this._activeRegion);
                 if (currentlyActiveMesh) currentlyActiveMesh.renderOverlay = false;
 
                 if (this._activeRegion !== mesh.name) {
@@ -198,7 +257,7 @@ export default class LevelMaster {
     }
 
     // Overlay
-    private createOverlayActionManagerFor(mesh: AbstractMesh): void {
+    private createOverlayActionManagerInDetailMap(mesh: AbstractMesh): void {
         mesh.actionManager?.registerAction(new ExecuteCodeAction(
             ActionManager.OnPointerOverTrigger,
             () => mesh.name !== this._activeRegion ? this.setOverlayForMesh(mesh, true) : null
@@ -218,16 +277,21 @@ export default class LevelMaster {
             ActionManager.OnPickTrigger,
             () => {
                 if (mesh) {
-                    const index = this.getLevelIndexByMesh(mesh);
-                    if (index >= 0) {
-                        if (this._activeLevel === index) {
-                            this._activeLevel = -1;
-                            this._selectWorld("");
-                        } else {
-                            this._activeLevel = index;
-                            this._selectWorld(LEVELS[index].name);
-                        }
+                    const levelIndex = this.getLevelIndexByLevelName(mesh.name);
+
+                    if (levelIndex !== this._activeLevel) {
+                        const currentlyActiveLevel = this.getMeshByName(mesh.name);
+                        if (currentlyActiveLevel) currentlyActiveLevel.renderOverlay = false;
+
+                        this.setOverlayForMesh(mesh, true, 0.4);
+                        this._activeLevel = levelIndex;
+                        this._selectWorld(levelIndex);
+                    } else {
+                        this.setOverlayForMesh(mesh, false);
+                        this._activeLevel = -1;
+                        this._selectWorld(-1);
                     }
+
                 }
             }
         ));
@@ -236,13 +300,28 @@ export default class LevelMaster {
     private createOverlayActionManagerInWorldMap(mesh: AbstractMesh): void {
         mesh.actionManager?.registerAction(new ExecuteCodeAction(
             ActionManager.OnPointerOverTrigger,
-            () => this.getLevelIndexByMesh(mesh) !== this._activeLevel ? this.setOverlayForLevel(this._activeLevel, true) : null
+            () => {
+                const levelIndex = this.getLevelIndexByLevelName(mesh.name);
+                if (levelIndex !== this._activeLevel) this.setOverlayForMesh(this.getMeshByName(mesh.name), true, 0.1);
+            }
         ));
 
         mesh.actionManager?.registerAction(new ExecuteCodeAction(
             ActionManager.OnPointerOutTrigger,
-            () => this.getLevelIndexByMesh(mesh) !== this._activeLevel ? this.setOverlayForLevel(this._activeLevel, false) : null
+            () => {
+                const levelIndex = this.getLevelIndexByLevelName(mesh.name);
+                if (levelIndex !== this._activeLevel) this.setOverlayForMesh(this.getMeshByName(mesh.name), false);
+            }
         ));
+    }
+
+    //#endregion
+
+    //#region World Update
+    public changeLevel(level: number): void {
+        if (this._level !== level) {
+            //TODO: Do something
+        }
     }
 
     //#endregion
@@ -253,20 +332,11 @@ export default class LevelMaster {
         window.addEventListener('resize', () => this._engine.resize());
     }
 
-    public stopRender(): void {
-        this._engine.stopRenderLoop();
-    }
-
     //#endregion
 
     //#region Utilty
-    private getMeshByName(meshName: string): AbstractMesh | null {
-        const mesh = this._scene.getMeshByName(meshName);
-        return mesh ? mesh : null;
-    }
-
-    private setOverlayForLevel(level: number, status: boolean): void {
-        LEVELS[level].meshes.forEach(mesh => this.setOverlayForMesh(this.getMeshByName(mesh), status));
+    private getMeshByName(meshName: string): Nullable<AbstractMesh> {
+        return this._scene.getMeshByName(meshName)
     }
 
     private setOverlayForMesh(mesh: AbstractMesh | null, status: boolean, overlayAlpha = 0.2): void {
@@ -277,13 +347,13 @@ export default class LevelMaster {
         }
     }
 
-    private getLevelIndexByMesh(mesh: AbstractMesh): number {
-        const index = LEVELS.findIndex(chapter => chapter.meshes.includes(mesh.name));
-        return index >= 0 ? index : -1;
+    private getLevelIndexByLevelName(levelName: string): number {
+        const char = levelName.charAt(levelName.length - 1);
+        return Number.parseInt(char);
     }
 
     private moveAllMeshes(direction: "right" | "left"): void {
-        this._scene.meshes.forEach(mesh => moveMeshTo(mesh, new Vector3(0, 0, direction === "left" ? 7 : 0), 150));
+        this._scene.meshes.forEach(mesh => moveMeshTo(mesh, new Vector3(0, 0, direction === "left" ? 7 : 0), 250));
     }
 
     //#endregion

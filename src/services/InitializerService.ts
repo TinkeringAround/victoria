@@ -18,6 +18,8 @@ export const createArcRotateCamera: (canvas: HTMLElement, scene: Scene) => ArcRo
     const arcCamera = new ArcRotateCamera("ArcCamera", 3, 1.2, 35, new Vector3(0, 0, 0), scene, true);
     lockCameraPosition(arcCamera, canvas, false);
     arcCamera.wheelPrecision = 30;
+    arcCamera.lowerRadiusLimit = 20;
+    arcCamera.upperRadiusLimit = 80;
 
     return arcCamera;
 }

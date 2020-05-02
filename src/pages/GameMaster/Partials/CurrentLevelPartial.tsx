@@ -1,19 +1,25 @@
-import React, {FC} from 'react';
+import React, {FC, useContext} from 'react';
 import {Box, Heading} from "grommet";
 
-interface Props {
-    level: string
-}
+import GameMasterContext from "../../../contexts/GameMasterContext";
 
-const CurrentLevelPartial: FC<Props> = ({level}) => <Box
-    width="100%"
-    justify="center"
-    align="center"
-    style={{
-        position: "absolute",
-        top: 75,
-    }}>
-    <Heading margin="0">{level}</Heading>
-</Box>
+import LEVELS from "../../../game/Levels";
+
+const CurrentLevelPartial: FC = () => {
+    const {level, viewMode} = useContext(GameMasterContext);
+
+    return (
+        <Box
+            width="100%"
+            justify="center"
+            align="center"
+            style={{
+                position: "absolute",
+                top: 75,
+            }}>
+            <Heading margin="0">{viewMode === "world" ? "Weltkarte" : LEVELS[level].name}</Heading>
+        </Box>
+    )
+}
 
 export default CurrentLevelPartial;

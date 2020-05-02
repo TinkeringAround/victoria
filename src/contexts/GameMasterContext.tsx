@@ -1,23 +1,31 @@
 import React from "react";
 
 import {TMenuTabs} from "../types/TMenuTabs";
+import {TViewMode} from "../types/TViewMode";
 
 import LevelMaster from "../game/LevelMaster";
 
 interface Props {
     id: string
     levelMaster: LevelMaster | null,
+    viewMode: TViewMode,
+    level: number,
+    region: string,
 
-    menuIsOpen: false | TMenuTabs
-    setMenuIsOpen: (tab: false | TMenuTabs) => void
+    menuTab: null | TMenuTabs
+    setMenuTab: (tab: null | TMenuTabs) => void
 }
 
 const gameMasterContext = React.createContext<Props>({
     id: "",
     levelMaster: null,
 
-    menuIsOpen: false,
-    setMenuIsOpen: (tab: false | TMenuTabs) => {
+    viewMode: "detail",
+    level: -1,
+    region: "",
+
+    menuTab: null,
+    setMenuTab: (tab: null | TMenuTabs) => {
     }
 });
 

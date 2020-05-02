@@ -1,58 +1,132 @@
-import React, {FC} from 'react';
-import {Box, Heading} from "grommet";
+import React, {FC, Fragment, useContext} from 'react';
+import {Box, Heading, Paragraph, Text} from "grommet";
 
 import {colors} from "../../../styles/theme";
 
-import {hexToRgbA} from "../../../services/ColorService";
+import GameMasterContext from "../../../contexts/GameMasterContext";
+
+import {changeColorBrightness, hexToRgbA} from "../../../services/ColorService";
+
+import ButtonComponent from "../../../components/ButtonComponent";
+import EnemyComponent from "../../../components/EnemyComponent";
 
 import ENEMIES from "../../../game/Enemies";
 import LEVELS from "../../../game/Levels";
 
 interface Props {
-    level: number
-    regionName: string
+    play: () => void
 }
 
-const DetailsPartial: FC<Props> = ({level, regionName}) => {
+// TODO!
+const DetailsPartial: FC<Props> = ({play}) => {
+    const {viewMode, level, region, menuTab} = useContext(GameMasterContext);
+
+    const isVisible = !menuTab && ((region !== "" && viewMode === "detail") || (level >= 0 && viewMode === "world"));
 
     return (
         <Box width="400px"
              height="60%"
-             background={hexToRgbA(colors.light, "0.95")}
+             background={hexToRgbA(colors.gold, "0.95")}
              justify="center"
              align="center"
              style={{
                  position: "absolute",
                  bottom: "15%",
-                 right: regionName !== "" ? "5%" : "-5%",
-                 opacity: regionName !== "" ? 1 : 0,
+                 right: isVisible ? "5%" : "-5%",
+                 opacity: isVisible ? 1 : 0,
                  transition: "all 0.5s ease",
-                 zIndex: regionName !== "" ? 6 : -1,
+                 zIndex: isVisible ? 6 : -1,
                  borderRadius: "1rem",
-                 clipPath: "polygon(100% 0, 99% 31%, 100% 100%, 72% 100%, 64% 98%, 59% 100%, 0 100%, 1% 22%, 0 0)"
+                 clipPath: "polygon(100% 0, 99% 31%, 100% 100%, 72% 100%, 64% 98%, 59% 100%, 0 100%, 1% 22%, 0 0)",
+                 boxShadow: "inset 0px 0px 20px 20px " + changeColorBrightness(colors.gold, -20)
              }}
         >
             <Box width="90%"
                  height="90%"
-                 background="gold"
+                 background="light"
                  pad="1rem"
+                 align="center"
+                 justify="evenly"
                  style={{
                      borderRadius: "1rem",
                      clipPath: "polygon(99% 2%, 100% 58%, 97% 65%, 99% 72%, 100% 100%, 59% 100%, 8% 100%, 0 99%, 1% 0)"
                  }}
             >
-                <Heading textAlign="center">{level >= 0 ? LEVELS[level].name : ""}</Heading>
+                {isVisible &&
+                <Fragment>
+                    <Heading textAlign="center"
+                             margin="1.5rem 0 0"
+                    >
+                        {level >= 0 && (viewMode === "world" || region === "" ? LEVELS[level].name : LEVELS[level].regions[region].name)}
+                    </Heading>
 
-                <Box width="100%" direction="row" wrap={false} justify="around" align="center">
-                    {level >= 0 && regionName !== "" && LEVELS[level].regions["MotherTree"].enemies.map((enemy: number) =>
-                        <Box key={"Enemy-" + enemy}
-                             width="100px"
-                             height="100px"
-                             background="medium">
-                            {ENEMIES[enemy].name}
+                    {/* World */}
+                    {viewMode === "world" &&
+                    <Box width="90%"
+                         align="center"
+                         margin={{bottom: "1rem"}}
+                    >
+                        {/* Description */}
+                        <Paragraph margin="0 0 3rem 0"
+                                   textAlign="center"
+                        >
+                            {level >= 0 ? LEVELS[level].description : ""}
+                        </Paragraph>
+                    </Box>}
+
+                    {/* Region */}
+                    {viewMode === "detail" &&
+                    <Box width="90%"
+                         align="center"
+                         margin={{bottom: "1rem"}}
+                    >
+                        {/* Description */}
+                        <Paragraph margin="0 0 3rem 0"
+                                   textAlign="center"
+                        >
+                            {level >= 0 && region !== "" ? LEVELS[level].regions[region].description : ""}
+                        </Paragraph>
+
+                        {/* Enemies */}
+                        <Box width="100%"
+                             margin={{bottom: "3rem"}}
+                        >
+                            {/* Text: Gegner */}
+                            <Text color="dark"
+                                  size="1.5rem"
+                                  weight="bold"
+                            >
+                                Mögliche Gegner
+                            </Text>
+
+                            <Box width="100%"
+                                 direction="row"
+                                 alignSelf="center"
+                                 wrap={false}
+                                 align="center"
+                                 justify="between"
+                                 pad="1rem 0.5rem 0"
+                            >
+                                {level >= 0 && region !== "" &&
+                                LEVELS[level].regions[region].enemies.map((enemyName: string) =>
+                                    <EnemyComponent key={"Enemy-" + enemyName}
+                                                    enemy={ENEMIES[enemyName]}/>
+                                )}
+                            </Box>
                         </Box>
-                    )}
-                </Box>
+                    </Box>}
+
+                    {/* Button */}
+                    <ButtonComponent color="white"
+                                     background="gold"
+                                     hoverColor={changeColorBrightness(colors.gold, -20)}
+                                     onClick={play}
+                                     fontSize="1.75rem"
+                                     padding="1rem .75rem"
+                    >
+                        Hinreisen
+                    </ButtonComponent>
+                </Fragment>}
             </Box>
         </Box>
     );

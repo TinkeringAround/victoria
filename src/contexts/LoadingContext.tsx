@@ -1,11 +1,11 @@
 import React from "react";
 
 interface Props {
-    showLoadingScreenForDuration: (duration: number) => void;
+    toggleLoadingScreen: (show: boolean) => void;
 }
 
 const loadingContext = React.createContext<Props>({
-    showLoadingScreenForDuration: (duration: number) => {
+    toggleLoadingScreen: (show: boolean) => {
     }
 });
 

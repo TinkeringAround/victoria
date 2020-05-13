@@ -8,6 +8,7 @@ import GameMasterContext from "../../../../contexts/GameMasterContext";
 import {changeColorBrightness, hexToRgbA,} from "../../../../services/ColorService";
 
 import ButtonComponent from "../../../../components/ButtonComponent";
+import SkillTab from "./SkillTab";
 
 interface Props {
     menuAnimationDuration: number
@@ -43,7 +44,8 @@ const MenuPartial: FC<Props> = ({menuAnimationDuration}) => {
                      clipPath: "polygon(1% 3%, 3% 0, 97% 1%, 99% 5%, 100% 71%, 99% 97%, 96% 99%, 78% 99%, 75% 98%, 73% 99%, 3% 99%, 1% 96%)",
                      boxShadow: "inset 0px 0px 1000px 300px " + hexToRgbA(colors.gold, "0.2")
                  }}>
-
+                {/* Tabs */}
+                {menuTab === "Fähigkeiten" && <SkillTab/>}
             </Box>
 
             {/* Close Button */}

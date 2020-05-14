@@ -33,6 +33,7 @@ const DetailsPartial: FC<Props> = ({play}) => {
                  position: "absolute",
                  bottom: "15%",
                  right: isVisible ? "5%" : "-5%",
+                 minHeight: "500px",
                  opacity: isVisible ? 1 : 0,
                  transition: "all 0.5s ease",
                  zIndex: isVisible ? 6 : -1,

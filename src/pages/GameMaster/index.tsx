@@ -103,8 +103,8 @@ const GameMasterPage: FC = () => {
 
                 {/* Player Stats */}
                 <PlayerStatsPartial visible={!menuTab}
-                                    playerLevel={10}
-                                    playerExperience={45}/>
+                                    level={10}
+                                    experience={45}/>
 
                 {/* Canvas */}
                 <CanvasPartial/>

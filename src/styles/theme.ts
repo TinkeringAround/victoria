@@ -6,6 +6,7 @@ export const colors = {
     medium: '#757E91',
     dark: '#333844',
     black: '#000000',
+    beige: '#F0EBE0',
 
     // Colors
     gold: "#B69D60",

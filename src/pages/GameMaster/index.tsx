@@ -116,7 +116,7 @@ const GameMasterPage: FC = () => {
                 <DetailsPartial play={playLevelOrRegion}/>
 
                 {/* WorldMap Button */}
-                <WorldMapPartial click={toggleViewMode}/>
+                <WorldMapPartial visible={!menuTab} click={toggleViewMode}/>
             </Box>
         </GameMasterContext.Provider>
     );

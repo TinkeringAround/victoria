@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
+    "@nivo/pie": "^0.61.1",
     "@nivo/radar": "^0.61.1",
     "babylonjs": "^4.1.0",
     "firebase": "^7.13.2",

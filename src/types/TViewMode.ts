@@ -1,1 +1,3 @@
-export type TViewMode = "world" | "detail";
+type TViewMode = "world" | "detail";
+
+export default TViewMode;

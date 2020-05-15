@@ -2,7 +2,7 @@ import React, {FC, useCallback, useContext, useEffect, useState} from 'react';
 import {Box} from "grommet";
 
 import TMenuTabs from "../../types/TMenuTabs";
-import {TViewMode} from "../../types/TViewMode";
+import TViewMode from "../../types/TViewMode";
 
 import PlayerContext from "../../contexts/PlayerContext";
 import GameMasterContext from "../../contexts/GameMasterContext";

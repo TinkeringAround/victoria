@@ -13,7 +13,7 @@ import {
     Vector3
 } from 'babylonjs';
 
-import {TViewMode} from "../types/TViewMode";
+import TViewMode from "../types/TViewMode";
 import {TLevel} from '../types/TLevel';
 
 import {

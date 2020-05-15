@@ -1,4 +1,4 @@
-import {TEnemy} from "../types/TEnemy";
+import TEnemy from "../types/TEnemy";
 
 type TEnemyCollection = {
     [name: string]: TEnemy

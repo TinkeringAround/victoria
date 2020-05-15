@@ -9,5 +9,8 @@ export enum TResponseCode {
     LOGIN_ERROR,
 
     REGISTRATION_OK,
-    REGISTRATION_ERROR
+    REGISTRATION_ERROR,
+
+    DATABASE_OK,
+    DATABASE_ERROR
 }

@@ -1,25 +1,23 @@
 import React, {FC} from 'react';
 import {Box, Heading, Paragraph} from "grommet";
 
-import {TSkillTypes} from "../../../../types/TSkillTypes";
+import TSkillTypes from "../../../../../types/TSkillTypes";
+import TPosition from "../../../../../types/TPosition";
 
-import {colors} from "../../../../styles/theme";
+import {colors} from "../../../../../styles/theme";
 
-import {changeColorBrightness} from "../../../../services/ColorService";
+import {changeColorBrightness} from "../../../../../services/ColorService";
 
-import ButtonComponent from "../../../../components/ButtonComponent";
+import ButtonComponent from "../../../../../components/ButtonComponent";
 
-import SKILLS from "../../../../game/Skills";
+import SKILLS from "../../../../../game/Skills";
 
 const INFO_DIALOG_WIDTH = 300;
 const INFO_DIALOG_HEIGHT = 350;
 
 interface Props {
     skill: TSkillTypes
-    position: {
-        x: number
-        y: number
-    }
+    position: TPosition
     cancel: () => void
     improveSkill: () => void
     disabled: boolean
@@ -27,7 +25,7 @@ interface Props {
 
 const InfoDialogPartial: FC<Props> = ({skill, position, cancel, improveSkill, disabled}) =>
     <Box width={`${INFO_DIALOG_WIDTH}px`}
-         background="white"
+         background="beige"
          align="center"
          pad="2rem 1rem 2.25rem"
          margin={{bottom: "15%"}}

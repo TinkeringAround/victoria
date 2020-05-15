@@ -1,16 +1,18 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useCallback, useEffect, useState} from 'react';
 import ReactDOM from 'react-dom';
 import firebase, {User} from "firebase/app";
 import {Grommet} from "grommet";
 
+import TPlayer from "./types/TPlayer";
+
 import './styles/index.css';
 import {theme} from "./styles/theme";
 
-import UserContext from "./contexts/UserContext";
+import PlayerContext from "./contexts/PlayerContext";
 import LoadingContext from "./contexts/LoadingContext";
 
 import {unregisterServiceWorker} from "./services/ServiceWorkerService";
-import {initializeFirebaseApp} from "./services/FirebaseService";
+import {initializeFirebaseApp, loadPlayerProfile, updatePlayerProfile} from "./services/FirebaseService";
 
 import LoadingScreenPage from "./pages/LoadingScreen";
 import LoginPage from "./pages/Login";
@@ -23,22 +25,47 @@ initializeFirebaseApp();
 
 // ===================================================
 const App: FC = () => {
-    const [authenticated, setAuthenticated] = useState<boolean>();
     const [loadingScreen, showLoadingScreen] = useState<boolean>(true);
-    
+    const [playerProfile, setPlayerProfile] = useState<{
+        uid: string
+        player: TPlayer
+    } | null>(null);
+
+    const logout = useCallback(() => firebase.auth().signOut(), []);
+
+    const updatePlayer = useCallback((newPlayer: TPlayer) => {
+        if (playerProfile) {
+            updatePlayerProfile(playerProfile.uid, playerProfile.player);
+        }
+    }, [playerProfile])
+
     useEffect(() => {
-        firebase.auth().onAuthStateChanged((user: User | null) => {
-            if (user && !authenticated) setAuthenticated(true);
-            else if (!user && authenticated) setAuthenticated(false);
-            else if (!user && !authenticated) showLoadingScreen(false);
+        firebase.auth().onAuthStateChanged(async (user: User | null) => {
+            if (user && !playerProfile) {
+                const response = await loadPlayerProfile(user.uid);
+                if (response.data) {
+                    setPlayerProfile({
+                        uid: user.uid,
+                        player: response.data as TPlayer
+                    });
+                }
+
+                if (response.errors.length > 0) {
+                    console.error("TODO: Implement Error Handling", response.errors);
+                    logout();
+                }
+            } else if (!user && playerProfile) setPlayerProfile(null);
+            else if (!user && !playerProfile) showLoadingScreen(false);
         });
     })
 
     return (
         <Grommet theme={theme} full>
-            <UserContext.Provider value={{
-                user: null,
-                logout: () => firebase.auth().signOut()
+            <PlayerContext.Provider value={{
+                player: playerProfile ? playerProfile.player : null,
+                update: updatePlayer,
+
+                logout: logout
             }}>
                 <LoadingContext.Provider value={{
                     toggleLoadingScreen: showLoadingScreen
@@ -48,11 +75,11 @@ const App: FC = () => {
 
                     {/* Content */}
                     <LayoutComponent>
-                        {!authenticated && <LoginPage/>}
-                        {authenticated && <GameMasterPage/>}
+                        {!playerProfile && <LoginPage/>}
+                        {playerProfile && <GameMasterPage/>}
                     </LayoutComponent>
                 </LoadingContext.Provider>
-            </UserContext.Provider>
+            </PlayerContext.Provider>
         </Grommet>
     )
 };

@@ -1,10 +1,11 @@
 import React, {FC, useState} from 'react';
 import {Box} from "grommet";
 
-import {TEnemy} from "../../types/TEnemy";
+import TEnemy from "../../types/TEnemy";
 
 import "./style.css";
 import {colors} from "../../styles/theme";
+
 import {changeColorBrightness} from "../../services/ColorService";
 
 const SIZE = "75px";

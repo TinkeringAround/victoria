@@ -1,16 +1,14 @@
-import React, {FC} from 'react';
+import React, {FC, useContext, useEffect, useState} from 'react';
 import styled from "styled-components";
 import {ResponsiveRadar} from "@nivo/radar";
 import {Box} from "grommet";
 
-import {TSkillTypes} from "../../../../types/TSkillTypes";
-import {TPosition} from "../../../../types/TPosition";
-import TSize from "../../../../types/TSize";
+import TSkillTypes from "../../../../../types/TSkillTypes";
+import TPosition from "../../../../../types/TPosition";
 
-import {colors} from "../../../../styles/theme";
+import {colors} from "../../../../../styles/theme";
 
-import CLASSNAMES from "../../../classNames";
-import {hexToRgbA} from "../../../../services/ColorService";
+import PlayerContext from "../../../../../contexts/PlayerContext";
 
 const SText = styled.text`
     font-size: 1.5rem;
@@ -25,21 +23,50 @@ const SText = styled.text`
     }
 `
 
+const CLASSNAME = "RadarParial";
+
 interface Props {
-    data: any
     setPosition: (position: TPosition) => void
     selectSkill: (skill: TSkillTypes) => void
-
-    size: TSize
 }
 
-const RadarPartial: FC<Props> = ({data, setPosition, selectSkill, size}) => {
+const RadarPartial: FC<Props> = ({setPosition, selectSkill}) => {
+    const {player} = useContext(PlayerContext);
+    const [data, setData] = useState<Array<any>>([]);
+
+    useEffect(() => {
+        if (data.length === 0 && player) {
+            setData([
+                {
+                    "skill": "Alchemie",
+                    "Victoria": player.skills.Alchemie,
+                },
+                {
+                    "skill": "Agilität",
+                    "Victoria": player.skills.Agilität,
+                },
+                {
+                    "skill": "Verteidigung",
+                    "Victoria": player.skills.Verteidigung,
+                },
+                {
+                    "skill": "Handwerk",
+                    "Victoria": player.skills.Handwerk,
+                },
+                {
+                    "skill": "Angriff",
+                    "Victoria": player.skills.Angriff
+                }
+            ])
+        }
+    }, [player])
+
 
     // @ts-ignore
     const GridLabel = ({id, anchor}) =>
         <g transform={`translate(${anchor === 'end' ? -70 : anchor === 'middle' ? -25 : 0}, 0)`}>
             <SText onClick={() => {
-                const radar = document.getElementsByClassName(CLASSNAMES.Radar);
+                const radar = document.getElementsByClassName(CLASSNAME);
                 //@ts-ignore
                 const boundingRect = radar.item(0).getBoundingClientRect();
                 setPosition({
@@ -53,15 +80,10 @@ const RadarPartial: FC<Props> = ({data, setPosition, selectSkill, size}) => {
         </g>
 
     return (
-        <Box className={CLASSNAMES.Radar}
-             background={hexToRgbA(colors.white, "0.5")}
-             width={`${size.width * 1.3}px`}
-             height={`${size.height}px`}
+        <Box className={CLASSNAME}
+             width="60%"
+             height="90%"
              pad="1rem"
-             style={{
-                 borderRadius: "1rem",
-                 border: "solid 3px " + colors.gold
-             }}
         >
             <ResponsiveRadar
                 data={data}

@@ -1,1 +1,3 @@
-export type TMenuTabs = "Fähigkeiten" | "Alchemie" | "Einstellungen";
+type TMenuTabs = "Fähigkeiten" | "Alchemie" | "Abmelden";
+
+export default TMenuTabs;

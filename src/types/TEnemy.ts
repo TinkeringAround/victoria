@@ -1,4 +1,4 @@
-export type TEnemy = {
+type TEnemy = {
     name: string
     image: any
     stats: {
@@ -8,3 +8,5 @@ export type TEnemy = {
         experience: number
     }
 }
+
+export default TEnemy;

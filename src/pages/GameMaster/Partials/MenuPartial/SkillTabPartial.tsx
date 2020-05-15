@@ -1,89 +1,63 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useCallback, useContext, useState} from 'react';
 import {Box} from "grommet";
 
-import {TSkillTypes} from "../../../../types/TSkillTypes";
-import {TPosition} from "../../../../types/TPosition";
-import TSize from "../../../../types/TSize";
+import TSkillTypes from "../../../../types/TSkillTypes";
+import TPosition from "../../../../types/TPosition";
 
-import InfoDialogPartial from "./InfoDialogPartial";
-import RadarPartial from "./RadarPartial";
-import SideBarPartial from "./SideBarPartial";
+import PlayerContext from "../../../../contexts/PlayerContext";
 
-import CLASSNAMES from "../../../classNames";
+import InfoDialogPartial from "./SkillTabPartials/InfoDialogPartial";
+import RadarPartial from "./SkillTabPartials/RadarPartial";
+import SkillPointsPartial from "./SkillTabPartials/SkillPointsPartial";
+import PlayerStatsPartial from "./SkillTabPartials/PlayerStatsPartial";
 
-const data = [
-    {
-        "skill": "Alchemie",
-        "Victoria": 6,
-    },
-    {
-        "skill": "Agilität",
-        "Victoria": 4,
-    },
-    {
-        "skill": "Verteidigung",
-        "Victoria": 1,
-    },
-    {
-        "skill": "Handwerk",
-        "Victoria": 3,
-    },
-    {
-        "skill": "Angriff",
-        "Victoria": 2
-    }
-]
 
 const SkillTabPartial: FC = () => {
+    const {player} = useContext(PlayerContext);
+
     const [selectedSkill, selectSkill] = useState<TSkillTypes | null>(null);
-    const [position, setPosition] = useState<TPosition>({
-        x: 0,
-        y: 0
-    });
-    const [size, setSize] = useState<TSize | null>(null);
+    const [position, setPosition] = useState<TPosition>({x: 0, y: 0});
 
     const improveSkill = () => {
         console.log("TODO: Improve Skill ", selectedSkill);
     }
 
-    useEffect(() => {
-        if (!size) {
-            const skillTab = document.getElementsByClassName(CLASSNAMES.SkillTab)[0];
-            if (skillTab != null) {
-                setSize({
-                    height: skillTab.getBoundingClientRect().height * 0.9,
-                    width: skillTab.getBoundingClientRect().width / 2
-                });
-            }
+    const playerSkillPoints = useCallback(() => {
+        if (player) {
+            return player.level - (player.skills.Angriff + player.skills.Handwerk + player.skills.Verteidigung + player.skills.Agilität + player.skills.Alchemie - 4);
         }
-    }, [])
+        return 0;
+    }, [player])
 
     return (
-        <Box className={CLASSNAMES.SkillTab}
-             width="100%"
+        <Box width="100%"
              height="100%"
              direction="row"
              align="center"
-             justify="around"
+             justify="end"
+             background="white"
              style={{
-                 position: "relative"
+                 position: "relative",
+                 borderRadius: "1rem"
              }}
         >
-            {/* Radar */}
-            {size && <RadarPartial data={data}
-                                   setPosition={setPosition}
-                                   selectSkill={selectSkill}
-                                   size={size}/>}
+            {/* Skill Points */}
+            <SkillPointsPartial skillPoints={playerSkillPoints()}/>
 
-            {/* Side Bar */}
-            {size && <SideBarPartial size={size} level={10}/>}
+            {/* Player Stats */}
+            <PlayerStatsPartial/>
+
+            {/* Radar */}
+            <RadarPartial setPosition={setPosition}
+                          selectSkill={selectSkill}/>
+
 
             {/* Info Dialog */}
             {selectedSkill && <InfoDialogPartial skill={selectedSkill}
                                                  position={position}
                                                  cancel={() => selectSkill(null)}
                                                  improveSkill={improveSkill}
-                                                 disabled={true}/>}
+                                                 disabled={playerSkillPoints() === 0}/>}
         </Box>
     );
 };

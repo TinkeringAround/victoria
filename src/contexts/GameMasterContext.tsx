@@ -1,6 +1,6 @@
 import React from "react";
 
-import {TMenuTabs} from "../types/TMenuTabs";
+import TMenuTabs from "../types/TMenuTabs";
 import {TViewMode} from "../types/TViewMode";
 
 import LevelMaster from "../game/LevelMaster";

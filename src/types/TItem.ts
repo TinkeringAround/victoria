@@ -6,3 +6,8 @@ export type TItem = {
 }
 
 export type TItemType = "gold" | "crafting" | "weapon" | "shield" | "staff"
+
+export type TItemDto = {
+    name: string
+    amount: number
+}

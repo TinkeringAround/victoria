@@ -4,35 +4,37 @@ import styled from "styled-components";
 
 import {colors} from "../../../styles/theme";
 
-import {TMenuTabs} from "../../../types/TMenuTabs";
+import TMenuTabs from "../../../types/TMenuTabs";
 
+import PlayerContext from "../../../contexts/PlayerContext";
 import GameMasterContext from "../../../contexts/GameMasterContext";
 
-import {changeColorBrightness, hexToRgbA} from "../../../services/ColorService";
+import {changeColorBrightness} from "../../../services/ColorService";
 
 import logoSmall from "../../../assets/logo/logo_small.png"
 
 import ButtonComponent from "../../../components/ButtonComponent";
 
-const SNavigationbar = styled(Box)<{ disabled: boolean }>`
-    background: ${colors.gold};
+const SNavigationBar = styled(Box)<{ disabled: boolean }>`
+    background: ${({disabled}) => disabled ? colors.beige : colors.gold};
 
     :hover {
-        background: ${({disabled}) => disabled ? colors.gold : changeColorBrightness(colors.gold, -20)};
+        background: ${({disabled}) => disabled ? colors.beige : changeColorBrightness(colors.gold, -20)};
     }
 `
 
-const MENU_TABS: Array<TMenuTabs> = ["Fähigkeiten", "Alchemie", "Einstellungen"];
+const MENU_TABS: Array<TMenuTabs> = ["Fähigkeiten", "Alchemie", "Abmelden"];
 
 interface Props {
     menuAnimationDuration: number
 }
 
 const NavigationBarPartial: FC<Props> = ({menuAnimationDuration}) => {
+    const {logout} = useContext(PlayerContext);
     const {menuTab, setMenuTab} = useContext(GameMasterContext);
 
     return (
-        <SNavigationbar
+        <SNavigationBar
             disabled={menuTab !== null}
             height="120%"
             width="200px"
@@ -44,12 +46,11 @@ const NavigationBarPartial: FC<Props> = ({menuAnimationDuration}) => {
             style={{
                 position: "absolute",
                 top: menuTab ? -5 : "-95%",
-                left: "7.5%",
-                transition: "top " + menuAnimationDuration + "ms ease-in-out, background 0.25s ease",
+                left: "10%",
+                transition: "top " + menuAnimationDuration + "ms ease-in-out, background " + (menuTab ? menuAnimationDuration + "ms ease-in-out" : "0.25s ease"),
                 clipPath: "polygon(100% 0, 100% 100%, 50% 95%, 0 100%, 0 0)",
                 cursor: menuTab ? "default" : "pointer",
                 border: `solid ${colors.white} 5px`,
-                boxShadow: "inset 0px 0px 50px 20px " + hexToRgbA(colors.white, "0.1"),
                 zIndex: 10
             }}
         >
@@ -60,14 +61,15 @@ const NavigationBarPartial: FC<Props> = ({menuAnimationDuration}) => {
             >
                 <Box height="3.5rem"
                      width="100%"
-                     background="red"
+                     background="medium"
                      pad="0.75rem 1rem"
                      margin={{bottom: "3rem"}}
                 >
-                    <Heading size="1.75rem"
-                             margin="0"
-                             color="white"
-                             textAlign="center"
+                    <Heading
+                        size="1.75rem"
+                        margin="0"
+                        color="white"
+                        textAlign="center"
                     >
                         {menuTab}
                     </Heading>
@@ -82,7 +84,10 @@ const NavigationBarPartial: FC<Props> = ({menuAnimationDuration}) => {
                                          fontSize="1.25rem"
                                          padding="0.75rem 1rem"
                                          margin={{bottom: "2rem"}}
-                                         onClick={() => setMenuTab(tab)}
+                                         onClick={() => {
+                                             if (tab === "Abmelden") logout();
+                                             else setMenuTab(tab);
+                                         }}
                         >
                             {tab}
                         </ButtonComponent>)}
@@ -97,7 +102,7 @@ const NavigationBarPartial: FC<Props> = ({menuAnimationDuration}) => {
             >
                 <Image src={logoSmall} fit="contain"/>
             </Box>
-        </SNavigationbar>
+        </SNavigationBar>
     );
 }
 export default NavigationBarPartial;

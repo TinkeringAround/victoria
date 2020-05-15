@@ -1,9 +1,10 @@
 import React, {FC, useCallback, useContext, useEffect, useState} from 'react';
 import {Box} from "grommet";
 
-import {TMenuTabs} from "../../types/TMenuTabs";
+import TMenuTabs from "../../types/TMenuTabs";
 import {TViewMode} from "../../types/TViewMode";
 
+import PlayerContext from "../../contexts/PlayerContext";
 import GameMasterContext from "../../contexts/GameMasterContext";
 import LoadingContext from "../../contexts/LoadingContext";
 
@@ -24,6 +25,8 @@ const MENU_DURATION = 1000;
 
 const GameMasterPage: FC = () => {
     const {toggleLoadingScreen} = useContext(LoadingContext);
+    const {player} = useContext(PlayerContext);
+
     const [menuTab, setMenuTab] = useState<null | TMenuTabs>(null);
 
     const [levelMaster, setLevelMaster] = useState<LevelMaster | null>(null);
@@ -103,8 +106,8 @@ const GameMasterPage: FC = () => {
 
                 {/* Player Stats */}
                 <PlayerStatsPartial visible={!menuTab}
-                                    level={10}
-                                    experience={45}/>
+                                    level={player ? player.level : 0}
+                                    experience={player ? player.experience : 0}/>
 
                 {/* Canvas */}
                 <CanvasPartial/>
@@ -116,7 +119,7 @@ const GameMasterPage: FC = () => {
                 <DetailsPartial play={playLevelOrRegion}/>
 
                 {/* WorldMap Button */}
-                <WorldMapPartial visible={!menuTab} click={toggleViewMode}/>
+                <WorldMapPartial visible={!menuTab && viewMode === "detail"} click={toggleViewMode}/>
             </Box>
         </GameMasterContext.Provider>
     );

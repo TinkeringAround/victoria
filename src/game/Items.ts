@@ -1,5 +1,7 @@
 import {TItem} from "../types/TItem";
 
+import potion from "../assets/images/items/potion.png";
+
 type TItemCollection = {
     [name: string]: TItem
 }
@@ -29,11 +31,11 @@ const ITEMS: TItemCollection = {
         type: "crafting",
         image: ""
     },
-    "Rattenschwanz": {
-        name: "Rattenschwanz",
+    "Trank": {
+        name: "Trank",
         description: "Lorem ipsum dolor sit amet, consetetur",
         type: "crafting",
-        image: ""
+        image: potion
     }
 }
 

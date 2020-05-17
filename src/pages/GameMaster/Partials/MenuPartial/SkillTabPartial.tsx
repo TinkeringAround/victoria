@@ -11,8 +11,12 @@ import RadarPartial from "./SkillTabPartials/RadarPartial";
 import SkillPointsPartial from "./SkillTabPartials/SkillPointsPartial";
 import PlayerStatsPartial from "./SkillTabPartials/PlayerStatsPartial";
 
+interface Props {
+    clipPath: string
 
-const SkillTabPartial: FC = () => {
+}
+
+const SkillTabPartial: FC<Props> = ({clipPath}) => {
     const {player} = useContext(PlayerContext);
 
     const [selectedSkill, selectSkill] = useState<TSkillTypes | null>(null);
@@ -34,11 +38,12 @@ const SkillTabPartial: FC = () => {
              height="100%"
              direction="row"
              align="center"
-             justify="end"
+             justify="center"
              background="white"
              style={{
                  position: "relative",
-                 borderRadius: "1rem"
+                 borderRadius: "1rem",
+                 clipPath: clipPath
              }}
         >
             {/* Skill Points */}

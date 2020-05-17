@@ -81,7 +81,7 @@ const RadarPartial: FC<Props> = ({setPosition, selectSkill}) => {
 
     return (
         <Box className={CLASSNAME}
-             width="60%"
+             width="80%"
              height="90%"
              pad="1rem"
         >

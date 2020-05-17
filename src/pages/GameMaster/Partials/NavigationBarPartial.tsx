@@ -46,7 +46,7 @@ const NavigationBarPartial: FC<Props> = ({menuAnimationDuration}) => {
             style={{
                 position: "absolute",
                 top: menuTab ? -5 : "-95%",
-                left: "10%",
+                left: "12.5%",
                 transition: "top " + menuAnimationDuration + "ms ease-in-out, background " + (menuTab ? menuAnimationDuration + "ms ease-in-out" : "0.25s ease"),
                 clipPath: "polygon(100% 0, 100% 100%, 50% 95%, 0 100%, 0 0)",
                 cursor: menuTab ? "default" : "pointer",

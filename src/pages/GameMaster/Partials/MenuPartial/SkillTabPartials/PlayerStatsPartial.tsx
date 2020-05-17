@@ -15,9 +15,9 @@ const PlayerStatsPartial: FC = () => {
              align="center"
              style={{
                  position: "absolute",
-                 top: "2rem",
-                 left: "2rem",
-                 borderRadius: "1rem",
+                 top: "4rem",
+                 left: "3rem",
+                 borderRadius: ".1rem",
                  color: colors.dark,
                  textAlign: "center"
              }}

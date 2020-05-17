@@ -25,12 +25,12 @@ const SkillPointsPartial: FC<Props> = ({skillPoints}) => {
                 {
                     "id": "Erfahrung",
                     "label": "Erfahrung",
-                    "value": 67,
+                    "value": player.experience,
                 },
                 {
                     "id": "",
                     "label": "",
-                    "value": 100 - 67,
+                    "value": 100 - player.experience,
                 }
             ])
         }
@@ -43,8 +43,8 @@ const SkillPointsPartial: FC<Props> = ({skillPoints}) => {
              pad="1rem"
              style={{
                  position: "absolute",
-                 top: "1.5rem",
-                 right: "1.5rem",
+                 top: "2rem",
+                 right: "4rem",
                  borderRadius: "50%"
              }}>
 

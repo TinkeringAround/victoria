@@ -1,22 +1,29 @@
-import React, {FC, useContext, useEffect} from 'react';
+import React, {FC, useContext, useEffect, useState} from 'react';
 import {Box} from "grommet";
+
+import {TItemDto} from "../../../../types/TItem";
 
 import playerContext from "../../../../contexts/PlayerContext";
 
 import ITEMS from "../../../../game/Items";
 
-interface Props {
+import ItemComponent from "../../../../components/ItemComponent";
+import HeadingPartial from "./AlchemyTabPartials/HeadingPartial";
 
+interface Props {
+    clipPath: string
 }
 
-const AlchemyTabPartial: FC<Props> = ({}) => {
+const AlchemyTabPartial: FC<Props> = ({clipPath}) => {
     const {player} = useContext(playerContext);
+    const [items, setItems] = useState<Array<TItemDto>>([]);
 
     useEffect(() => {
         if (player) {
             console.log(player.items);
             const element = ITEMS[player.items[0].name];
             console.log("ELement", element)
+            setItems(player.items);
         }
     }, [player])
 
@@ -24,30 +31,28 @@ const AlchemyTabPartial: FC<Props> = ({}) => {
         <Box width="100%"
              height="100%"
              direction="row"
-             align="center"
-             justify="between"
+             align="end"
+             justify="center"
              background="white"
              style={{
                  position: "relative",
-                 borderRadius: "1rem"
+                 borderRadius: "1rem",
+                 clipPath: clipPath
              }}
         >
+            {/* Heading */}
+            <HeadingPartial/>
 
-            <Box width="70%"
-                 height="90%"
-                 background="beige"
-                 style={{
-                     borderRadius: "1rem"
-                 }}>
-                Collection
-            </Box>
-
-            <Box width="25%"
-                 height="90%"
-                 style={{
-                     borderRadius: "1rem"
-                 }}>
-                Kombination
+            {/* Player Items */}
+            <Box width="90%"
+                 height="70%"
+                 pad="1rem"
+            >
+                {items.map((item: TItemDto) => {
+                    return <ItemComponent key={"Item-" + item.name}
+                                          image={ITEMS[item.name].image}
+                                          amount={item.amount}/>
+                })}
             </Box>
         </Box>
     );

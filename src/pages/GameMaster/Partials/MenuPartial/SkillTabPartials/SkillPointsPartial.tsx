@@ -44,7 +44,7 @@ const SkillPointsPartial: FC<Props> = ({skillPoints}) => {
              style={{
                  position: "absolute",
                  top: "2rem",
-                 right: "4rem",
+                 left: "4rem",
                  borderRadius: "50%"
              }}>
 

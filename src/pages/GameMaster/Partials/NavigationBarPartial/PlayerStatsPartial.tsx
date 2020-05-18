@@ -1,39 +1,37 @@
 import React, {FC, useContext} from 'react';
 import {Box, Heading, Text} from "grommet";
 
-import {colors} from "../../../../../styles/theme";
+import {colors} from "../../../../styles/theme";
 
-import playerContext from "../../../../../contexts/PlayerContext";
+import playerContext from "../../../../contexts/PlayerContext";
 
 const PlayerStatsPartial: FC = () => {
     const {player} = useContext(playerContext);
 
     return (
-        <Box pad="1rem 1.5rem"
-             background="beige"
-             direction="row"
+        <Box width="100%"
+             direction="column"
              align="center"
+             justify="center"
+             margin={{bottom: "2rem"}}
              style={{
-                 position: "absolute",
-                 top: "4rem",
-                 left: "3rem",
-                 borderRadius: ".1rem",
                  color: colors.dark,
                  textAlign: "center"
              }}
         >
             {/* Stufe */}
-            <Box width="70px"
-                 height="70px"
+            <Box width="80px"
+                 height="80px"
                  background="white"
                  align="center"
                  justify="center"
-                 margin={{right: "1.5rem"}}
+                 direction="column"
+                 margin={{bottom: "1rem"}}
                  style={{
                      borderRadius: "50%"
                  }}
             >
-                <Text size="0.75rem">
+                <Text size="1rem">
                     Stufe
                 </Text>
                 <Text size="2rem"
@@ -50,7 +48,7 @@ const PlayerStatsPartial: FC = () => {
 
 
             {/* Name */}
-            <Heading size="2rem"
+            <Heading size="3rem"
                      margin="0"
             >
                 Victoria

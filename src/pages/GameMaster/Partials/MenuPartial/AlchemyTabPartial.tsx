@@ -7,8 +7,9 @@ import playerContext from "../../../../contexts/PlayerContext";
 
 import ITEMS from "../../../../game/Items";
 
-import ItemComponent from "../../../../components/ItemComponent";
 import HeadingPartial from "./AlchemyTabPartials/HeadingPartial";
+
+import ItemComponent from "../../../../components/ItemComponent";
 
 interface Props {
     clipPath: string

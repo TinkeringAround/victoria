@@ -17,7 +17,7 @@ interface Props {
 }
 
 const MenuPartial: FC<Props> = ({menuAnimationDuration}) => {
-    const {menuTab, setMenuTab} = useContext(GameMasterContext);
+    const {menuTab} = useContext(GameMasterContext);
 
     return (
         <Box

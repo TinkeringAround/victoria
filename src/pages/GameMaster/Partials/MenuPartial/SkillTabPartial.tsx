@@ -9,7 +9,6 @@ import PlayerContext from "../../../../contexts/PlayerContext";
 import InfoDialogPartial from "./SkillTabPartials/InfoDialogPartial";
 import RadarPartial from "./SkillTabPartials/RadarPartial";
 import SkillPointsPartial from "./SkillTabPartials/SkillPointsPartial";
-import PlayerStatsPartial from "./SkillTabPartials/PlayerStatsPartial";
 
 interface Props {
     clipPath: string
@@ -48,9 +47,6 @@ const SkillTabPartial: FC<Props> = ({clipPath}) => {
         >
             {/* Skill Points */}
             <SkillPointsPartial skillPoints={playerSkillPoints()}/>
-
-            {/* Player Stats */}
-            <PlayerStatsPartial/>
 
             {/* Radar */}
             <RadarPartial setPosition={setPosition}

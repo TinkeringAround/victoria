@@ -1,19 +1,21 @@
 import React, {FC, useContext} from 'react';
-import {Box, Heading, Image} from "grommet";
+import {Box, Image} from "grommet";
 import styled from "styled-components";
 
-import {colors} from "../../../styles/theme";
+import {colors} from "../../../../styles/theme";
 
-import TMenuTabs from "../../../types/TMenuTabs";
+import TMenuTabs from "../../../../types/TMenuTabs";
 
-import PlayerContext from "../../../contexts/PlayerContext";
-import GameMasterContext from "../../../contexts/GameMasterContext";
+import PlayerContext from "../../../../contexts/PlayerContext";
+import GameMasterContext from "../../../../contexts/GameMasterContext";
 
-import {changeColorBrightness} from "../../../services/ColorService";
+import {changeColorBrightness} from "../../../../services/ColorService";
 
-import logoSmall from "../../../assets/logo/logo_small.png"
+import PlayerStatsPartial from "./PlayerStatsPartial";
 
-import ButtonComponent from "../../../components/ButtonComponent";
+import ButtonComponent from "../../../../components/ButtonComponent";
+
+import logoSmall from "../../../../assets/images/logo/logo_small.png";
 
 const SNavigationBar = styled(Box)<{ disabled: boolean }>`
     background: ${({disabled}) => disabled ? colors.beige : colors.gold};
@@ -23,7 +25,7 @@ const SNavigationBar = styled(Box)<{ disabled: boolean }>`
     }
 `
 
-const MENU_TABS: Array<TMenuTabs> = ["Fähigkeiten", "Alchemie", "Abmelden"];
+const MENU_TABS: Array<TMenuTabs> = ["Fähigkeiten", "Alchemie"];
 
 interface Props {
     menuAnimationDuration: number
@@ -56,34 +58,22 @@ const NavigationBarPartial: FC<Props> = ({menuAnimationDuration}) => {
         >
             {/* Tabs */}
             <Box width="100%"
-                 margin="100%"
+                 margin="85% 0 0"
                  align="center"
             >
-                <Box height="3.5rem"
-                     width="100%"
-                     background="medium"
-                     pad="0.75rem 1rem"
-                     margin={{bottom: "3rem"}}
-                >
-                    <Heading
-                        size="1.75rem"
-                        margin="0"
-                        color="white"
-                        textAlign="center"
-                    >
-                        {menuTab}
-                    </Heading>
-                </Box>
+                {/* Player Stats */}
+                <PlayerStatsPartial/>
 
+                {/* Tabs */}
                 <Box width="90%">
                     {MENU_TABS.map(tab =>
                         <ButtonComponent key={"MenuTab-" + tab}
                                          color="white"
-                                         background="medium"
-                                         hoverColor="dark"
+                                         background={menuTab === tab ? "gold" : "medium"}
+                                         hoverColor={menuTab === tab ? changeColorBrightness(colors.gold, -20) : "dark"}
                                          fontSize="1.25rem"
                                          padding="0.75rem 1rem"
-                                         margin={{bottom: "2rem"}}
+                                         margin={{bottom: "1rem"}}
                                          onClick={() => {
                                              if (tab === "Abmelden") logout();
                                              else setMenuTab(tab);
@@ -91,6 +81,29 @@ const NavigationBarPartial: FC<Props> = ({menuAnimationDuration}) => {
                         >
                             {tab}
                         </ButtonComponent>)}
+                </Box>
+
+                {/* Close Button */}
+                <Box width="90%" margin={{top: "120%"}}>
+                    <ButtonComponent color="dark"
+                                     background="light"
+                                     hoverColor={changeColorBrightness(colors.light, -20)}
+                                     fontSize="1.25rem"
+                                     padding="0.75rem 1rem"
+                                     margin={{bottom: "1rem"}}
+                                     onClick={logout}
+                    >
+                        Abmelden
+                    </ButtonComponent>
+                    <ButtonComponent color="dark"
+                                     background="light"
+                                     hoverColor={changeColorBrightness(colors.light, -20)}
+                                     fontSize="1.25rem"
+                                     padding="0.75rem 1rem"
+                                     onClick={() => setMenuTab(null)}
+                    >
+                        Zurück
+                    </ButtonComponent>
                 </Box>
             </Box>
 

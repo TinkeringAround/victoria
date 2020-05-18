@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {Image, ImageProps} from "grommet";
 
-import logo from "../../assets/logo/logo.png";
+import logo from "../../assets/images/logo/logo.png";
 
 interface Props extends ImageProps {
 }

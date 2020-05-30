@@ -15,7 +15,7 @@ import HeadingPartial from "./InventarTabPartials/HeadingPartial";
 import MenuCardComponent from "../../../../components/MenuCardComponent";
 
 import ITEMS from "../../../../game/Items";
-import WEAPONS from "../../../../game/TWeapons";
+import WEAPONS from "../../../../game/Weapons";
 
 const InventarTabPartial: FC = () => {
     const {player} = useContext(playerContext);

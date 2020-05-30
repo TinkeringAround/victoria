@@ -25,7 +25,7 @@ const SNavigationBar = styled(Box)<{ disabled: boolean }>`
     }
 `
 
-const MENU_TABS: Array<TMenuTabs> = ["Fähigkeiten", "Alchemie"];
+const MENU_TABS: Array<TMenuTabs> = ["Fähigkeiten", "Inventar", "Ausrüstung"];
 
 interface Props {
     menuAnimationDuration: number
@@ -74,10 +74,7 @@ const NavigationBarPartial: FC<Props> = ({menuAnimationDuration}) => {
                                          fontSize="1.25rem"
                                          padding="0.75rem 1rem"
                                          margin={{bottom: "1rem"}}
-                                         onClick={() => {
-                                             if (tab === "Abmelden") logout();
-                                             else setMenuTab(tab);
-                                         }}
+                                         onClick={() => setMenuTab(tab)}
                         >
                             {tab}
                         </ButtonComponent>)}

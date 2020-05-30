@@ -5,10 +5,11 @@ import {colors} from "../../../../styles/theme";
 
 import GameMasterContext from "../../../../contexts/GameMasterContext";
 
-import {changeColorBrightness, hexToRgbA,} from "../../../../services/ColorService";
+import {changeColorBrightness,} from "../../../../services/ColorService";
 
 import SkillTabPartial from "./SkillTabPartial";
-import AlchemyTabPartial from "./AlchemyTabPartial";
+import InventarTabPartial from "./InventarTabPartial";
+import DeckTabPartial from "./DeckTabPartial";
 
 const CLIP_PATH = "polygon(41% 1%, 96% 0, 99% 2%, 99% 52%, 100% 98%, 96% 100%, 2% 100%, 0 93%, 0 4%, 2% 0)";
 
@@ -36,20 +37,6 @@ const MenuPartial: FC<Props> = ({menuAnimationDuration}) => {
                 borderRadius: "2rem"
             }}
         >
-            {/* Shadow */}
-            <Box width="50%"
-                 height="100%"
-                 background={hexToRgbA(colors.black, "0.02")}
-                 style={{
-                     position: "absolute",
-                     top: 0,
-                     left: 0,
-                     borderTopLeftRadius: "2rem",
-                     borderBottomLeftRadius: "2rem",
-                     clipPath: "polygon(0 0, 38% 0, 66% 100%, 0% 100%)",
-                     zIndex: 8
-                 }}/>
-
             {/* Tabs */}
             <Box width="100%"
                  height="100%"
@@ -63,8 +50,21 @@ const MenuPartial: FC<Props> = ({menuAnimationDuration}) => {
                      width="100%"
                      height="100%"
                 >
-                    {menuTab === "Fähigkeiten" && <SkillTabPartial clipPath={CLIP_PATH}/>}
-                    {menuTab === "Alchemie" && <AlchemyTabPartial clipPath={CLIP_PATH}/>}
+                    <Box width="100%"
+                         height="100%"
+                         align="center"
+                         justify="center"
+                         background="white"
+                         style={{
+                             position: "relative",
+                             borderRadius: "1rem",
+                             clipPath: CLIP_PATH
+                         }}
+                    >
+                        {menuTab === "Fähigkeiten" && <SkillTabPartial/>}
+                        {menuTab === "Inventar" && <InventarTabPartial/>}
+                        {menuTab === "Ausrüstung" && <DeckTabPartial/>}
+                    </Box>
                 </Box>
             </Box>
         </Box>

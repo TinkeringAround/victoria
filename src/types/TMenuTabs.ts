@@ -1,3 +1,3 @@
-type TMenuTabs = "Fähigkeiten" | "Alchemie" | "Abmelden";
+type TMenuTabs = "Fähigkeiten" | "Inventar" | "Ausrüstung";
 
 export default TMenuTabs;

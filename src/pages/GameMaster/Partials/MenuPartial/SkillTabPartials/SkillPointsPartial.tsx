@@ -39,13 +39,11 @@ const SkillPointsPartial: FC<Props> = ({skillPoints}) => {
     return (
         <Box width={`${SIZE}px`}
              height={`${SIZE}px`}
-             background="beige"
              pad="1rem"
              style={{
                  position: "absolute",
                  top: "2rem",
-                 left: "4rem",
-                 borderRadius: "50%"
+                 left: "4rem"
              }}>
 
             {/* Experience */}

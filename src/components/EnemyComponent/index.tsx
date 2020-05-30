@@ -3,7 +3,6 @@ import {Box} from "grommet";
 
 import TEnemy from "../../types/TEnemy";
 
-import "./style.css";
 import {colors} from "../../styles/theme";
 
 import {changeColorBrightness} from "../../services/ColorService";

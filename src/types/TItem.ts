@@ -5,7 +5,7 @@ export type TItem = {
     image: any
 }
 
-export type TItemType = "gold" | "crafting" | "weapon" | "shield" | "staff" | "consumable"
+export type TItemType = "treasure" | "material" | "consumable"
 
 export type TItemDto = {
     name: string

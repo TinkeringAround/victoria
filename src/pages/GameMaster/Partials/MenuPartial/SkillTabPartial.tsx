@@ -1,5 +1,4 @@
 import React, {FC, useCallback, useContext, useState} from 'react';
-import {Box} from "grommet";
 
 import TSkillTypes from "../../../../types/TSkillTypes";
 import TPosition from "../../../../types/TPosition";
@@ -10,12 +9,7 @@ import InfoDialogPartial from "./SkillTabPartials/InfoDialogPartial";
 import RadarPartial from "./SkillTabPartials/RadarPartial";
 import SkillPointsPartial from "./SkillTabPartials/SkillPointsPartial";
 
-interface Props {
-    clipPath: string
-
-}
-
-const SkillTabPartial: FC<Props> = ({clipPath}) => {
+const SkillTabPartial: FC = () => {
     const {player} = useContext(PlayerContext);
 
     const [selectedSkill, selectSkill] = useState<TSkillTypes | null>(null);
@@ -33,18 +27,7 @@ const SkillTabPartial: FC<Props> = ({clipPath}) => {
     }, [player])
 
     return (
-        <Box width="100%"
-             height="100%"
-             direction="row"
-             align="center"
-             justify="center"
-             background="white"
-             style={{
-                 position: "relative",
-                 borderRadius: "1rem",
-                 clipPath: clipPath
-             }}
-        >
+        <React.Fragment>
             {/* Skill Points */}
             <SkillPointsPartial skillPoints={playerSkillPoints()}/>
 
@@ -59,7 +42,7 @@ const SkillTabPartial: FC<Props> = ({clipPath}) => {
                                                  cancel={() => selectSkill(null)}
                                                  improveSkill={improveSkill}
                                                  disabled={playerSkillPoints() === 0}/>}
-        </Box>
+        </React.Fragment>
     );
 };
 

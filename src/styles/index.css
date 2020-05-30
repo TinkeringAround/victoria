@@ -79,3 +79,44 @@ body {
 .icon-sign:before {
     content: "\e900";
 }
+
+/* Effects */
+.shine:after {
+    animation: shine 10s ease-in-out;
+    animation-fill-mode: forwards;
+    content: "";
+    position: absolute;
+    top: -125%;
+    left: -125%;
+    width: 175%;
+    height: 175%;
+    opacity: 0;
+    transform: rotate(30deg);
+
+    background: rgba(240, 235, 224, 0.05);
+    background: linear-gradient(
+            to right,
+            rgba(240, 235, 224, 0.05) 0%,
+            rgba(240, 235, 224, 0.05) 77%,
+            rgba(240, 235, 224, 0.25) 92%,
+            rgba(240, 235, 224, 0.0) 100%
+    );
+}
+
+@keyframes shine {
+    10% {
+        opacity: 1;
+        top: 125%;
+        left: 125%;
+        transition-property: left, top, opacity;
+        transition-duration: 0.05s;
+        transition-timing-function: ease;
+    }
+
+    100% {
+        opacity: 0;
+        top: -30%;
+        left: -30%;
+        transition-property: left, top, opacity;
+    }
+}

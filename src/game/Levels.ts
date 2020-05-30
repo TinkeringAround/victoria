@@ -1,9 +1,8 @@
 import {TLevel} from "../types/TLevel";
-// Meshes
+
 import level0Single from "../assets/meshes/level0_Single.babylon";
 import level0Multi from "../assets/meshes/level0_Multi.babylon";
 
-// Levels
 const LEVELS: Array<TLevel> = [
     {
         name: "Krähenwald",

@@ -3,8 +3,8 @@ import {TWeaponDto} from "./TWeapon";
 
 type TPlayer = {
     level: number
-    experience: number,
-    gold: number,
+    experience: number
+    gold: number
     skills: {
         "Angriff": number
         "Verteidigung": number
@@ -14,7 +14,7 @@ type TPlayer = {
     }
     items: Array<TItemDto>
     weapons: Array<TWeaponDto>
-//    TODO: Add deck
+    equipments: Array<TWeaponDto | TItemDto>
 }
 
 export default TPlayer;

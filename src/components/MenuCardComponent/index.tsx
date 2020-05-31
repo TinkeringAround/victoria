@@ -19,15 +19,18 @@ const SIZE = "100px";
 
 interface Props {
     itemOrWeapon?: TItem | TWeapon
-    amount: number
+    amount: number | null
 
     size?: string
 
+    mode?: 1 | 2
+
+    enabledToolTip?: boolean
     selectable?: boolean
     select?: (item: TItem | TWeapon | null) => void
 }
 
-const MenuCardComponent: FC<Props> = ({itemOrWeapon = null, amount, size = SIZE, selectable = false, select}) => {
+const MenuCardComponent: FC<Props> = ({itemOrWeapon = null, amount, size = SIZE, mode = 1, enabledToolTip = true, selectable = false, select}) => {
     const [isSelected, setSelected] = useState<boolean>(false);
     const [isHovered, setHovered] = useState<boolean>(false);
 
@@ -37,13 +40,16 @@ const MenuCardComponent: FC<Props> = ({itemOrWeapon = null, amount, size = SIZE,
         if (select && selectable) select(isSelected ? itemOrWeapon : null);
     }, [isSelected])
 
+    const margin = mode === 1 ? "1rem" : "10px";
+    const toolTipPlace = mode === 1 ? "top" : "right";
+
     return (
         <React.Fragment>
             {itemOrWeapon != null &&
             <Box className={isHovered ? "shine" : ""}
                  width={size}
                  height={size}
-                 margin="0 1rem"
+                 margin={margin}
                  align="center"
                  justify="center"
                  onMouseOver={() => setHovered(true)}
@@ -63,7 +69,10 @@ const MenuCardComponent: FC<Props> = ({itemOrWeapon = null, amount, size = SIZE,
                  data-for={"Item-" + itemOrWeapon.name}
             >
                 {/* ToolTip */}
+                {enabledToolTip &&
+                isHovered &&
                 <SToolTip id={"Item-" + itemOrWeapon.name}
+                          place={toolTipPlace}
                           effect="solid"
                           backgroundColor={colors.dark}
                 >
@@ -99,13 +108,13 @@ const MenuCardComponent: FC<Props> = ({itemOrWeapon = null, amount, size = SIZE,
                             {(itemOrWeapon.type === "weapon" ? "Schaden   " : "Verteidigung   ") + (itemOrWeapon as TWeapon).value}
                         </p>}
                     </Box>
-                </SToolTip>
+                </SToolTip>}
 
                 {/* Overlay */}
-                <ItemOverlayPartial size={SIZE} color={color}/>
+                <ItemOverlayPartial size={size} color={color}/>
 
                 {/* Amount */}
-                <ItemAmountPartial amount={amount}/>
+                {amount != null && <ItemAmountPartial amount={amount}/>}
 
                 {/* Image */}
                 <Image width={size}
@@ -117,6 +126,6 @@ const MenuCardComponent: FC<Props> = ({itemOrWeapon = null, amount, size = SIZE,
             </Box>}
         </React.Fragment>
     );
-};
+}
 
 export default MenuCardComponent;

@@ -35,7 +35,8 @@ const App: FC = () => {
 
     const updatePlayer = useCallback((newPlayer: TPlayer) => {
         if (playerProfile) {
-            updatePlayerProfile(playerProfile.uid, playerProfile.player);
+            updatePlayerProfile(playerProfile.uid, newPlayer);
+            setPlayerProfile({...playerProfile, player: newPlayer});
         }
     }, [playerProfile])
 

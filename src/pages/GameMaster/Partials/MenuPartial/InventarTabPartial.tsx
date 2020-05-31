@@ -25,7 +25,6 @@ const InventarTabPartial: FC = () => {
 
     useEffect(() => {
         if (player) {
-            console.log([...items, ...weapons]);
             setItems(player.items);
             setWeapons(player.weapons);
         }
@@ -42,6 +41,7 @@ const InventarTabPartial: FC = () => {
                  pad="2rem"
                  background="beige"
                  direction="row"
+                 alignContent="start"
                  wrap
                  style={{
                      boxShadow: "inset 0px 0px 15px 9px " + changeColorBrightness(colors.beige, -20),
@@ -62,7 +62,7 @@ const InventarTabPartial: FC = () => {
                     <React.Fragment key={"Weapon-" + weapon.name}>
                         {WEAPONS[weapon.name].type === typeFilter &&
                         <MenuCardComponent itemOrWeapon={WEAPONS[weapon.name]}
-                                           amount={weapon.amount}/>}
+                                           amount={null}/>}
                     </React.Fragment>)}
             </Box>
         </React.Fragment>

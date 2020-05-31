@@ -9,7 +9,7 @@ import {changeColorBrightness,} from "../../../../services/ColorService";
 
 import SkillTabPartial from "./SkillTabPartial";
 import InventarTabPartial from "./InventarTabPartial";
-import DeckTabPartial from "./DeckTabPartial";
+import EquipmentTabPartial from "./EquipmentTabPartial";
 
 const CLIP_PATH = "polygon(41% 1%, 96% 0, 99% 2%, 99% 52%, 100% 98%, 96% 100%, 2% 100%, 0 93%, 0 4%, 2% 0)";
 
@@ -63,7 +63,7 @@ const MenuPartial: FC<Props> = ({menuAnimationDuration}) => {
                     >
                         {menuTab === "Fähigkeiten" && <SkillTabPartial/>}
                         {menuTab === "Inventar" && <InventarTabPartial/>}
-                        {menuTab === "Ausrüstung" && <DeckTabPartial/>}
+                        {menuTab === "Ausrüstung" && <EquipmentTabPartial/>}
                     </Box>
                 </Box>
             </Box>

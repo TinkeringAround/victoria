@@ -81,7 +81,7 @@ const NavigationBarPartial: FC<Props> = ({menuAnimationDuration}) => {
                 </Box>
 
                 {/* Close Button */}
-                <Box width="90%" margin={{top: "120%"}}>
+                <Box width="90%" margin={{top: "60%"}}>
                     <ButtonComponent color="dark"
                                      background="light"
                                      hoverColor={changeColorBrightness(colors.light, -20)}

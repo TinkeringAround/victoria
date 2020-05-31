@@ -32,7 +32,7 @@ const TAB_NAMES: { [name: string]: string } = {
     "material": "Materialien",
     "consumable": "Verzehrbares",
     "weapon": "Waffen",
-    "shield": "Schilde"
+    "shield": "Schutz"
 }
 
 interface Props {

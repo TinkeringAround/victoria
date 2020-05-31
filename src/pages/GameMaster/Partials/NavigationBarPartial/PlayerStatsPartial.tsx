@@ -13,7 +13,7 @@ const PlayerStatsPartial: FC = () => {
              direction="column"
              align="center"
              justify="center"
-             margin={{bottom: "2rem"}}
+             margin={{bottom: "1rem"}}
              style={{
                  color: colors.dark,
                  textAlign: "center"

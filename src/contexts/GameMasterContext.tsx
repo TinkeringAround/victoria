@@ -2,6 +2,7 @@ import React from "react";
 
 import TMenuTabs from "../types/TMenuTabs";
 import TViewMode from "../types/TViewMode";
+import {TCombinationAnimation} from "../types/TCombination";
 
 import LevelMaster from "../game/LevelMaster";
 
@@ -14,6 +15,8 @@ interface Props {
 
     menuTab: null | TMenuTabs
     setMenuTab: (tab: null | TMenuTabs) => void
+
+    executeCombination: (combination: string | null, animation: TCombinationAnimation) => void
 }
 
 const gameMasterContext = React.createContext<Props>({
@@ -25,7 +28,10 @@ const gameMasterContext = React.createContext<Props>({
     region: "",
 
     menuTab: null,
-    setMenuTab: (tab: null | TMenuTabs) => {
+    setMenuTab: (tab) => {
+    },
+
+    executeCombination: (combination, animation) => {
     }
 });
 

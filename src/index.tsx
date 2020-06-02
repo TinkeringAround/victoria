@@ -14,7 +14,7 @@ import LoadingContext from "./contexts/LoadingContext";
 import {unregisterServiceWorker} from "./services/ServiceWorkerService";
 import {initializeFirebaseApp, loadPlayerProfile, updatePlayerProfile} from "./services/FirebaseService";
 
-import LoadingScreenPage from "./pages/LoadingScreen";
+import LoadingPage from "./pages/Loading";
 import LoginPage from "./pages/Login";
 import GameMasterPage from "./pages/GameMaster";
 
@@ -72,7 +72,7 @@ const App: FC = () => {
                     toggleLoadingScreen: showLoadingScreen
                 }}>
                     {/* Loading Screen */}
-                    {loadingScreen && <LoadingScreenPage/>}
+                    {loadingScreen && <LoadingPage/>}
 
                     {/* Content */}
                     <LayoutComponent>

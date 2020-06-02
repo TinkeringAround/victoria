@@ -17,6 +17,8 @@ import CurrentLevelPartial from "./Partials/CurrentLevelPartial";
 import MenuPartial from "./Partials/MenuPartial";
 import DetailsPartial from "./Partials/DetailsPartial";
 import WorldMapPartial from "./Partials/WorldMapPartial";
+import CombinationPartial from "./Partials/CombinationPartial";
+import {TCombinationAnimation, TCombinationDto} from "../../types/TCombination";
 
 const CHAPTER_MASTER_ID = "levelMaster";
 const DURATION = 1500;
@@ -34,6 +36,8 @@ const GameMasterPage: FC = () => {
 
     const [level, setLevel] = useState<number>(0);
     const [region, setRegion] = useState<string>("");
+
+    const [combination, setCombination] = useState<TCombinationDto | null>(null);
 
     useEffect(() => {
         if (levelMaster == null && document.getElementById(CHAPTER_MASTER_ID)) {
@@ -71,10 +75,12 @@ const GameMasterPage: FC = () => {
         }
 
         if (viewMode === "detail") {
-            // TODO: Implement
-            console.log("TODO: Implement Game Menu");
+            console.error("TODO: Implement Game Menu"); // TODO: Implement
         }
     }, [viewMode, levelMaster, level, toggleViewMode]);
+
+    const onExecuteCombination = useCallback((newCombination: string | null, animation: TCombinationAnimation) =>
+        setCombination({name: newCombination, animation: animation}), [])
 
     return (
         <GameMasterContext.Provider value={{
@@ -86,7 +92,9 @@ const GameMasterPage: FC = () => {
             region: region,
 
             menuTab: menuTab,
-            setMenuTab: setMenuTab
+            setMenuTab: setMenuTab,
+
+            executeCombination: onExecuteCombination
         }}>
             <Box width="100%"
                  height="100%"
@@ -120,6 +128,11 @@ const GameMasterPage: FC = () => {
 
                 {/* WorldMap Button */}
                 <WorldMapPartial visible={!menuTab && viewMode === "detail"} click={toggleViewMode}/>
+
+                {/* Combination Overlay */}
+                <CombinationPartial combination={combination} onFinished={() => {
+                    console.error("TODO: Implement On Finished");
+                }}/>
             </Box>
         </GameMasterContext.Provider>
     );

@@ -14,7 +14,8 @@ type TPlayer = {
     }
     items: Array<TItemDto>
     weapons: Array<TWeaponDto>
-    equipments: Array<TWeaponDto | TItemDto>
+    equipments: Array<TWeaponDto | TItemDto>,
+    combinations: Array<string>
 }
 
 export default TPlayer;

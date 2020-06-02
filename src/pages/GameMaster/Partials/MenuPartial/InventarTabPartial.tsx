@@ -7,21 +7,26 @@ import {TWeapon, TWeaponDto, TWeaponType} from "../../../../types/TWeapon";
 import {colors} from "../../../../styles/theme";
 
 import playerContext from "../../../../contexts/PlayerContext";
+import gameMasterContext from "../../../../contexts/GameMasterContext";
 
 import {changeColorBrightness} from "../../../../services/ColorService";
 
 import HeadingPartial from "./InventarTabPartials/HeadingPartial";
+import CombinePartial from "./InventarTabPartials/CombinePartial";
 
 import MenuCardComponent from "../../../../components/MenuCardComponent";
 
 import ITEMS from "../../../../game/Items";
 import WEAPONS from "../../../../game/Weapons";
+import COMBINATIONS from "../../../../game/Combinations";
 
 const InventarTabPartial: FC = () => {
     const {player} = useContext(playerContext);
+    const {executeCombination} = useContext(gameMasterContext);
+    const [typeFilter, setTypeFilter] = useState<TItemType | TWeaponType>("material");
+
     const [items, setItems] = useState<Array<TItemDto>>([]);
     const [weapons, setWeapons] = useState<Array<TWeaponDto>>([]);
-    const [typeFilter, setTypeFilter] = useState<TItemType | TWeaponType>("material");
     const [materials, setMaterials] = useState<Array<string>>([]);
 
     useEffect(() => {
@@ -41,10 +46,31 @@ const InventarTabPartial: FC = () => {
         setMaterials(newMaterials);
     }
 
+    const onCombineMaterials = () => {
+        if (player) {
+            let fulfilledCombination = null;
+
+            for (const combination in COMBINATIONS) {
+                if (COMBINATIONS[combination].requirements.every((requirement) => materials.includes(requirement))) {
+                    fulfilledCombination = combination;
+                    break;
+                }
+            }
+
+            if (fulfilledCombination != null) {
+                const combinationIsDiscovered = player.combinations.includes(fulfilledCombination);
+                executeCombination(fulfilledCombination, combinationIsDiscovered ? "short" : "long");
+            } else executeCombination(null, "long");
+        }
+    }
+
     return (
         <React.Fragment>
             {/* Heading */}
             <HeadingPartial filter={typeFilter} setFilter={setTypeFilter}/>
+
+            {/* Combination Button */}
+            <CombinePartial isVisible={materials.length >= 2} onClick={onCombineMaterials}/>
 
             {/* Player Items */}
             <Box width="90%"

@@ -1,5 +1,5 @@
 import React, {FC, useCallback, useContext, useEffect, useState} from 'react';
-import {Box, Heading, Text} from "grommet";
+import {Box} from "grommet";
 import {DragDropContext, Draggable, Droppable, DropResult} from "react-beautiful-dnd";
 
 import {TWeaponDto} from "../../../../types/TWeapon";
@@ -11,6 +11,9 @@ import playerContext from "../../../../contexts/PlayerContext";
 
 import {changeColorBrightness} from "../../../../services/ColorService";
 import {move, remove, reorder} from "../../../../services/DragDropService";
+
+import CounterPartial from "./EquipmentTabPartials/CounterPartial";
+import HeadingPartial from "./EquipmentTabPartials/HeadingPartial";
 
 import MenuCardComponent from "../../../../components/MenuCardComponent";
 
@@ -85,45 +88,10 @@ const EquipmentTabPartial: FC = () => {
              }}
         >
             {/* Counter */}
-            <Box style={{
-                position: "absolute",
-                bottom: "0.5rem",
-                right: "5.5%"
-            }}>
-                <Text size="1.5rem" weight="bold" color="dark">
-                    {`${equipments.length} von max. 30`}
-                </Text>
-            </Box>
+            <CounterPartial count={equipments.length}/>
 
             {/* Heading */}
-            <Box width="90%"
-                 height="30px"
-                 direction="row"
-                 justify="between"
-                 style={{
-                     position: "absolute",
-                     top: `calc(calc(calc(100% - ${WRAPPER_HEIGHT}) / 2) - 1rem)`,
-                     left: "5%"
-                 }}>
-                <Heading size="1.75rem"
-                         color="dark"
-                         margin="0"
-                         textAlign="center"
-                         style={{
-                             width: ITEMS_WIDTH,
-                         }}>
-                    Inventar
-                </Heading>
-                <Heading size="1.75rem"
-                         color="dark"
-                         margin="0"
-                         textAlign="center"
-                         style={{
-                             width: `calc(100% - ${ITEMS_WIDTH} - 2rem)`
-                         }}>
-                    Ausrüstung
-                </Heading>
-            </Box>
+            <HeadingPartial width={ITEMS_WIDTH} offsetTop={WRAPPER_HEIGHT}/>
 
             {/* All Items */}
             <DragDropContext onDragEnd={onDragEnd}>

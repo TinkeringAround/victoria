@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useState} from 'react';
 import {Box, Image} from "grommet";
 import styled from "styled-components";
 import ReactTooltip from "react-tooltip";
@@ -18,30 +18,26 @@ const SToolTip = styled(ReactTooltip)`
 const SIZE = "100px";
 
 interface Props {
-    itemOrWeapon?: TItem | TWeapon
+    itemOrWeapon: TItem | TWeapon
     amount: number | null
 
     size?: string
 
-    mode?: 1 | 2
+    mode?: 1 | 2 | 3
 
     enabledToolTip?: boolean
     selectable?: boolean
-    select?: (item: TItem | TWeapon | null) => void
+    select?: ((item: TItem | TWeapon) => void) | null
 }
 
-const MenuCardComponent: FC<Props> = ({itemOrWeapon = null, amount, size = SIZE, mode = 1, enabledToolTip = true, selectable = false, select}) => {
+const MenuCardComponent: FC<Props> = ({itemOrWeapon, amount, size = SIZE, mode = 1, enabledToolTip = true, selectable = false, select}) => {
     const [isSelected, setSelected] = useState<boolean>(false);
     const [isHovered, setHovered] = useState<boolean>(false);
 
     const color = isSelected ? colors.gold : (isHovered ? colors.medium : colors.dark);
 
-    useEffect(() => {
-        if (select && selectable) select(isSelected ? itemOrWeapon : null);
-    }, [isSelected])
-
-    const margin = mode === 1 ? "1rem" : "10px";
-    const toolTipPlace = mode === 1 ? "top" : "right";
+    const margin = mode === 1 || mode === 3 ? "1rem" : "10px";
+    const toolTipPlace = mode === 1 || mode === 3 ? "top" : "right";
 
     return (
         <React.Fragment>
@@ -56,7 +52,10 @@ const MenuCardComponent: FC<Props> = ({itemOrWeapon = null, amount, size = SIZE,
                  onMouseEnter={() => setHovered(true)}
                  onMouseLeave={() => setHovered(false)}
                  onClick={() => {
-                     if (selectable) setSelected(!isSelected)
+                     if (selectable && select) {
+                         setSelected(!isSelected)
+                         select(itemOrWeapon);
+                     }
                  }}
                  style={{
                      position: "relative",
@@ -83,19 +82,21 @@ const MenuCardComponent: FC<Props> = ({itemOrWeapon = null, amount, size = SIZE,
                          }}>
                         {/* Name */}
                         <h1 style={{
-                            margin: "1rem 0",
+                            margin: "0.5rem 0",
                             fontSize: "2rem"
                         }}>
                             {itemOrWeapon.name}
                         </h1>
 
                         {/* Description */}
+                        {mode === 1 &&
                         <p style={{
-                            margin: "0 0 1rem",
-                            fontSize: "1.25rem"
+                            margin: "0.5rem 0",
+                            fontSize: "1.35rem",
+                            lineHeight: "1.25rem",
                         }}>
                             {itemOrWeapon.description}
-                        </p>
+                        </p>}
 
                         {/* Damage / Defence */}
                         {itemOrWeapon.hasOwnProperty("value") &&

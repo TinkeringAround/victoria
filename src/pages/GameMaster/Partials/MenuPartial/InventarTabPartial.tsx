@@ -1,8 +1,8 @@
 import React, {FC, useContext, useEffect, useState} from 'react';
 import {Box} from "grommet";
 
-import {TItemDto, TItemType} from "../../../../types/TItem";
-import {TWeaponDto, TWeaponType} from "../../../../types/TWeapon";
+import {TItem, TItemDto, TItemType} from "../../../../types/TItem";
+import {TWeapon, TWeaponDto, TWeaponType} from "../../../../types/TWeapon";
 
 import {colors} from "../../../../styles/theme";
 
@@ -22,6 +22,7 @@ const InventarTabPartial: FC = () => {
     const [items, setItems] = useState<Array<TItemDto>>([]);
     const [weapons, setWeapons] = useState<Array<TWeaponDto>>([]);
     const [typeFilter, setTypeFilter] = useState<TItemType | TWeaponType>("material");
+    const [materials, setMaterials] = useState<Array<string>>([]);
 
     useEffect(() => {
         if (player) {
@@ -29,6 +30,16 @@ const InventarTabPartial: FC = () => {
             setWeapons(player.weapons);
         }
     }, [player])
+
+    const selectMaterial = (item: TItem | TWeapon) => {
+        const materialIndex = materials.indexOf(item.name);
+        const newMaterials = Array.from(materials);
+
+        if (materialIndex < 0) newMaterials.push(item.name);
+        else newMaterials.splice(materialIndex, 1);
+
+        setMaterials(newMaterials);
+    }
 
     return (
         <React.Fragment>
@@ -54,6 +65,7 @@ const InventarTabPartial: FC = () => {
                         {ITEMS[item.name].type === typeFilter &&
                         <MenuCardComponent itemOrWeapon={ITEMS[item.name]}
                                            selectable={ITEMS[item.name].type === "material"}
+                                           select={ITEMS[item.name].type === "material" ? selectMaterial : null}
                                            amount={item.amount}/>}
                     </React.Fragment>)}
 

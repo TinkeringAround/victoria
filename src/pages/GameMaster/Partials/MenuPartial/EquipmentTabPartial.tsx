@@ -213,7 +213,7 @@ const EquipmentTabPartial: FC = () => {
                                             >
                                                 <MenuCardComponent
                                                     itemOrWeapon={isItem ? ITEMS[itemOrWeapon.name] : WEAPONS[itemOrWeapon.name]}
-                                                    mode={1}
+                                                    mode={3}
                                                     enabledToolTip={!snapshot.isDragging}
                                                     selectable={false}
                                                     amount={null}

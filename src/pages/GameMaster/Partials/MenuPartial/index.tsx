@@ -44,7 +44,8 @@ const MenuPartial: FC<Props> = ({menuAnimationDuration}) => {
                  pad="2.5% 2.5% 2.5% calc(5% + 200px)"
                  style={{
                      borderRadius: "1rem",
-                     clipPath: CLIP_PATH
+                     clipPath: CLIP_PATH,
+                     boxShadow: "rgb(162, 137, 76) 0px 0px 20px 20px inset"
                  }}>
                 <Box animation={menuTab != null ? "fadeIn" : "fadeOut"}
                      width="100%"

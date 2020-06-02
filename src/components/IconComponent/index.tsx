@@ -6,6 +6,6 @@ interface Props {
     type: TIconType
 }
 
-const IconComponent: FC<Props> = ({type}) => <span className={"icon-" + type}></span>
+const IconComponent: FC<Props> = ({type}) => <span className={"icon-" + type}/>
 
 export default IconComponent;

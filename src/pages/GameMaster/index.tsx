@@ -59,6 +59,11 @@ const GameMasterPage: FC = () => {
         }
     }, []);
 
+    useEffect(() => {
+        if (menuTab != null) levelMaster?.pauseRender();
+        else levelMaster?.doRender();
+    }, [menuTab])
+
     const toggleViewMode = useCallback(() => {
         if (levelMaster !== null) {
             if (viewMode === "detail") {

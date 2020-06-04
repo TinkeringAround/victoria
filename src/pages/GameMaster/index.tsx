@@ -3,6 +3,7 @@ import {Box} from "grommet";
 
 import TMenuTabs from "../../types/TMenuTabs";
 import TViewMode from "../../types/TViewMode";
+import {TCombinationAnimation, TCombinationDto} from "../../types/TCombination";
 
 import PlayerContext from "../../contexts/PlayerContext";
 import GameMasterContext from "../../contexts/GameMasterContext";
@@ -18,7 +19,8 @@ import MenuPartial from "./Partials/MenuPartial";
 import DetailsPartial from "./Partials/DetailsPartial";
 import WorldMapPartial from "./Partials/WorldMapPartial";
 import CombinationPartial from "./Partials/CombinationPartial";
-import {TCombinationAnimation, TCombinationDto} from "../../types/TCombination";
+
+import ITEMS from "../../game/Items";
 
 const CHAPTER_MASTER_ID = "levelMaster";
 const DURATION = 1500;
@@ -27,7 +29,7 @@ const MENU_DURATION = 1000;
 
 const GameMasterPage: FC = () => {
     const {toggleLoadingScreen} = useContext(LoadingContext);
-    const {player} = useContext(PlayerContext);
+    const {player, update} = useContext(PlayerContext);
 
     const [menuTab, setMenuTab] = useState<null | TMenuTabs>(null);
 
@@ -79,8 +81,51 @@ const GameMasterPage: FC = () => {
         }
     }, [viewMode, levelMaster, level, toggleViewMode]);
 
-    const onExecuteCombination = useCallback((newCombination: string | null, animation: TCombinationAnimation) =>
-        setCombination({name: newCombination, animation: animation}), [])
+    const onExecuteCombination = useCallback((newCombination: string | null, materials: Array<string>, animation: TCombinationAnimation) =>
+        setCombination({name: newCombination, materials: materials, animation: animation}), [])
+
+    const onFinishedCombination = () => {
+        if (combination != null && player != null) {
+            const playerItems = Array.from(player.items);
+            const playerWeapons = Array.from(player.weapons);
+            const playerCombinations = Array.from(player.combinations);
+
+            // Add new Item
+            if (combination.name != null) {
+                const isItem = ITEMS.hasOwnProperty(combination.name);
+
+                if (isItem) {
+                    const itemIndex = playerItems.findIndex((item) => item.name === combination.name);
+
+                    if (itemIndex < 0) playerItems.push({name: combination.name, amount: 1});
+                    else playerItems[itemIndex].amount += 1;
+                }
+
+                if (!isItem) {
+                    const weaponIndex = playerItems.findIndex((item) => item.name === combination.name);
+
+                    if (weaponIndex < 0) playerWeapons.push({name: combination.name, amount: 1});
+                }
+            }
+
+            // Remove used Items
+            combination.materials.forEach((material) => {
+                const materialIndex = playerItems.findIndex(item => item.name === material);
+
+                if (playerItems[materialIndex].amount === 1) playerItems.splice(materialIndex, 1);
+                else playerItems[materialIndex].amount -= 1;
+            });
+
+            // Update Combinations List
+            if (combination.name != null && combination.animation === "long") {
+                playerCombinations.push(combination.name);
+            }
+
+            // Reset and Update Player
+            setCombination(null);
+            update({...player, items: playerItems, weapons: playerWeapons, combinations: playerCombinations});
+        }
+    }
 
     return (
         <GameMasterContext.Provider value={{
@@ -130,9 +175,7 @@ const GameMasterPage: FC = () => {
                 <WorldMapPartial visible={!menuTab && viewMode === "detail"} click={toggleViewMode}/>
 
                 {/* Combination Overlay */}
-                <CombinationPartial combination={combination} onFinished={() => {
-                    console.error("TODO: Implement On Finished");
-                }}/>
+                <CombinationPartial combination={combination} onFinished={onFinishedCombination}/>
             </Box>
         </GameMasterContext.Provider>
     );

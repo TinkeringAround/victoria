@@ -2,6 +2,7 @@ export type TCombinationAnimation = "short" | "long"
 
 export type TCombinationDto = {
     name: string | null
+    materials: Array<string>
     animation: TCombinationAnimation
 }
 

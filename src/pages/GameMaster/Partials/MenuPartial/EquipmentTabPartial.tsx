@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useContext, useEffect, useState} from 'react';
+import React, {FC, useContext, useEffect, useState} from 'react';
 import {Box} from "grommet";
 import {DragDropContext, Draggable, Droppable, DropResult} from "react-beautiful-dnd";
 
@@ -7,7 +7,7 @@ import {TItemDto} from "../../../../types/TItem";
 
 import {colors} from "../../../../styles/theme";
 
-import playerContext from "../../../../contexts/PlayerContext";
+import PlayerContext from "../../../../contexts/PlayerContext";
 
 import {changeColorBrightness} from "../../../../services/ColorService";
 import {move, remove, reorder} from "../../../../services/DragDropService";
@@ -20,19 +20,19 @@ import MenuCardComponent from "../../../../components/MenuCardComponent";
 import ITEMS from "../../../../game/Items";
 import WEAPONS from "../../../../game/Weapons";
 
-const LISTS: Array<string> = ["items", "equipments"]
+const LISTS: Array<string> = ["items", "equipments"];
 const ITEMS_WIDTH = "125px";
 const ITEM_SIZE = "75px";
 const WRAPPER_HEIGHT = "550px";
 
 const EquipmentTabPartial: FC = () => {
-    const {player, update} = useContext(playerContext);
+    const {player, update} = useContext(PlayerContext);
     const [itemsAndWeapons, setItemsAndWeapons] = useState<Array<TItemDto | TWeaponDto>>([]);
     const [equipments, setEquipments] = useState<Array<TWeaponDto | TItemDto>>([]);
 
     useEffect(() => {
-        if (player && itemsAndWeapons.length === 0 && equipments.length === 0) {
-            let consumables = (player.items.filter((item) => ITEMS[item.name].type === "consumable"));
+        if (player) {
+            let consumables = player.items.filter((item) => ITEMS[item.name].type === "consumable");
 
             if (player.hasOwnProperty("equipments")) {
                 player.equipments.forEach((equipment) => {
@@ -40,23 +40,21 @@ const EquipmentTabPartial: FC = () => {
 
                     if (index >= 0) {
                         if ((consumables[index].amount - 1) === 0) consumables = remove(consumables, index);
-                        else consumables[index].amount -= 1;
+                        else {
+                            const newConsumable = consumables[index];
+                            consumables = remove(consumables, index);
+                            consumables.push({amount: newConsumable.amount - 1, name: newConsumable.name});
+                        }
                     }
                 })
                 setEquipments(player.equipments);
             }
 
-            setItemsAndWeapons([
-                ...consumables,
-                ...player.weapons]);
+            setItemsAndWeapons([...consumables, ...player.weapons]);
         }
-    }, [player])
+    }, [])
 
-    useEffect(() => {
-        if (player) update({...player, equipments: equipments});
-    }, [equipments]);
-
-    const onDragEnd = useCallback((result: DropResult) => {
+    const onDragEnd = (result: DropResult) => {
         const {source, destination} = result;
         const sourceIsItemsOrWeapons = source.droppableId === LISTS[0];
 
@@ -65,17 +63,25 @@ const EquipmentTabPartial: FC = () => {
 
         // Reorder
         if (destination) {
+            let newEquipments = equipments;
+            let newItemsAndWeapons = itemsAndWeapons;
+
             if (source.droppableId === destination.droppableId) {
-                if (sourceIsItemsOrWeapons) setItemsAndWeapons(reorder(itemsAndWeapons, source.index, destination.index));
-                else setEquipments(reorder(equipments, source.index, destination.index));
+                if (sourceIsItemsOrWeapons) newItemsAndWeapons = reorder(itemsAndWeapons, source.index, destination.index);
+                else newEquipments = reorder(equipments, source.index, destination.index);
             } else {
                 const {sourceResult, destinationResult} = move(sourceIsItemsOrWeapons ? itemsAndWeapons : equipments,
                     sourceIsItemsOrWeapons ? equipments : itemsAndWeapons, source, destination, sourceIsItemsOrWeapons);
-                setItemsAndWeapons(sourceIsItemsOrWeapons ? sourceResult : destinationResult);
-                setEquipments(sourceIsItemsOrWeapons ? destinationResult : sourceResult);
+
+                newItemsAndWeapons = sourceIsItemsOrWeapons ? sourceResult : destinationResult;
+                newEquipments = sourceIsItemsOrWeapons ? destinationResult : sourceResult
             }
+
+            setItemsAndWeapons(newItemsAndWeapons);
+            setEquipments(newEquipments);
+            if (player) update({...player, equipments: newEquipments});
         }
-    }, [itemsAndWeapons, equipments, setItemsAndWeapons, setEquipments])
+    }
 
     return (
         <Box width="100%"
@@ -83,9 +89,7 @@ const EquipmentTabPartial: FC = () => {
              direction="row"
              align="center"
              justify="center"
-             style={{
-                 position: "relative"
-             }}
+             style={{position: "relative"}}
         >
             {/* Counter */}
             <CounterPartial count={equipments.length}/>

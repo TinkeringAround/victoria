@@ -3,6 +3,7 @@ import {TWeaponDto} from "../types/TWeapon";
 import {DraggableLocation} from "react-beautiful-dnd";
 
 import WEAPONS from "../game/Weapons";
+import ITEMS from "../game/Items";
 
 export const remove = (list: Array<TItemDto | TWeaponDto>, index: number) => {
     const result = Array.from(list);
@@ -47,7 +48,10 @@ export const move = (source: Array<TItemDto | TWeaponDto>, destination: Array<TI
             name: draggedItemOrWeapon.name,
             amount: 1
         });
-        else destClone[draggedItemOrWeaponIndexInDestination].amount += 1;
+        else {
+            const isItem = ITEMS.hasOwnProperty(draggedItemOrWeapon.name);
+            if (isItem) destClone[draggedItemOrWeaponIndexInDestination].amount += 1;
+        }
 
         // Source
         sourceClone.splice(droppableSource.index, 1);

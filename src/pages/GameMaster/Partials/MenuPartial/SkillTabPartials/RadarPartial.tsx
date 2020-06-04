@@ -35,7 +35,7 @@ const RadarPartial: FC<Props> = ({setPosition, selectSkill}) => {
     const [data, setData] = useState<Array<any>>([]);
 
     useEffect(() => {
-        if (data.length === 0 && player) {
+        if (player) {
             setData([
                 {
                     "skill": "Alchemie",

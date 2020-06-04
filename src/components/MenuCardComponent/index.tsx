@@ -27,22 +27,25 @@ interface Props {
 
     enabledToolTip?: boolean
     selectable?: boolean
+    selected?: boolean
     select?: ((item: TItem | TWeapon) => void) | null
+
+    toolTipPosition?: "top" | "right"
+    noAnimation?: boolean
 }
 
-const MenuCardComponent: FC<Props> = ({itemOrWeapon, amount, size = SIZE, mode = 1, enabledToolTip = true, selectable = false, select}) => {
-    const [isSelected, setSelected] = useState<boolean>(false);
+const MenuCardComponent: FC<Props> = ({itemOrWeapon, amount, size = SIZE, mode = 1, enabledToolTip = true, selectable = false, selected = false, select, noAnimation = false, toolTipPosition}) => {
     const [isHovered, setHovered] = useState<boolean>(false);
 
-    const color = isSelected ? colors.gold : (isHovered ? colors.medium : colors.dark);
+    const color = selected ? colors.gold : (isHovered ? colors.medium : colors.dark);
 
     const margin = mode === 1 || mode === 3 ? "1rem" : "10px";
-    const toolTipPlace = mode === 1 || mode === 3 ? "top" : "right";
+    const toolTipPlace = toolTipPosition ? toolTipPosition : (mode === 1 || mode === 3 ? "top" : "right");
 
     return (
         <React.Fragment>
             {itemOrWeapon != null &&
-            <Box className={isHovered ? "shine" : ""}
+            <Box className={isHovered && !noAnimation ? "shine" : ""}
                  width={size}
                  height={size}
                  margin={margin}
@@ -52,10 +55,7 @@ const MenuCardComponent: FC<Props> = ({itemOrWeapon, amount, size = SIZE, mode =
                  onMouseEnter={() => setHovered(true)}
                  onMouseLeave={() => setHovered(false)}
                  onClick={() => {
-                     if (selectable && select) {
-                         setSelected(!isSelected)
-                         select(itemOrWeapon);
-                     }
+                     if (selectable && select) select(itemOrWeapon);
                  }}
                  style={{
                      position: "relative",
@@ -118,11 +118,11 @@ const MenuCardComponent: FC<Props> = ({itemOrWeapon, amount, size = SIZE, mode =
                 {amount != null && <ItemAmountPartial amount={amount}/>}
 
                 {/* Image */}
-                <Image width={size}
-                       height={size}
-                       src={itemOrWeapon.image}
+                <Image src={itemOrWeapon.image}
                        style={{
-                           borderRadius: "1rem"
+                           width: `calc(${size} - 10px)`,
+                           height: `calc(${size} - 10px)`,
+                           borderRadius: 1
                        }}/>
             </Box>}
         </React.Fragment>

@@ -9,7 +9,7 @@ interface Props {
     logout: () => void
 }
 
-const playerContext = React.createContext<Props>({
+const PlayerContext = React.createContext<Props>({
     player: null,
     update: (player: TPlayer) => {
     },
@@ -18,4 +18,4 @@ const playerContext = React.createContext<Props>({
     }
 });
 
-export default playerContext;
+export default PlayerContext;

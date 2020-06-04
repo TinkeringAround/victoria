@@ -26,10 +26,7 @@ initializeFirebaseApp();
 // ===================================================
 const App: FC = () => {
     const [loadingScreen, showLoadingScreen] = useState<boolean>(true);
-    const [playerProfile, setPlayerProfile] = useState<{
-        uid: string
-        player: TPlayer
-    } | null>(null);
+    const [playerProfile, setPlayerProfile] = useState<{ uid: string, player: TPlayer } | null>(null);
 
     const logout = useCallback(() => firebase.auth().signOut(), []);
 

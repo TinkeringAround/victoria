@@ -16,10 +16,10 @@ interface Props {
     menuTab: null | TMenuTabs
     setMenuTab: (tab: null | TMenuTabs) => void
 
-    executeCombination: (combination: string | null, animation: TCombinationAnimation) => void
+    executeCombination: (combination: string | null, materials: Array<string>, animation: TCombinationAnimation) => void
 }
 
-const gameMasterContext = React.createContext<Props>({
+const GameMasterContext = React.createContext<Props>({
     id: "",
     levelMaster: null,
 
@@ -31,8 +31,8 @@ const gameMasterContext = React.createContext<Props>({
     setMenuTab: (tab) => {
     },
 
-    executeCombination: (combination, animation) => {
+    executeCombination: (combination, materials, animation) => {
     }
 });
 
-export default gameMasterContext;
+export default GameMasterContext;

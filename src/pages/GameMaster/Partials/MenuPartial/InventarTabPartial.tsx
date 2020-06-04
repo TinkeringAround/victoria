@@ -6,8 +6,8 @@ import {TWeapon, TWeaponDto, TWeaponType} from "../../../../types/TWeapon";
 
 import {colors} from "../../../../styles/theme";
 
-import playerContext from "../../../../contexts/PlayerContext";
-import gameMasterContext from "../../../../contexts/GameMasterContext";
+import PlayerContext from "../../../../contexts/PlayerContext";
+import GameMasterContext from "../../../../contexts/GameMasterContext";
 
 import {changeColorBrightness} from "../../../../services/ColorService";
 
@@ -21,8 +21,8 @@ import WEAPONS from "../../../../game/Weapons";
 import COMBINATIONS from "../../../../game/Combinations";
 
 const InventarTabPartial: FC = () => {
-    const {player} = useContext(playerContext);
-    const {executeCombination} = useContext(gameMasterContext);
+    const {player} = useContext(PlayerContext);
+    const {executeCombination} = useContext(GameMasterContext);
     const [typeFilter, setTypeFilter] = useState<TItemType | TWeaponType>("material");
 
     const [items, setItems] = useState<Array<TItemDto>>([]);
@@ -35,6 +35,10 @@ const InventarTabPartial: FC = () => {
             setWeapons(player.weapons);
         }
     }, [player])
+
+    useEffect(() => {
+        if (materials.length > 0) setMaterials([]);
+    }, [typeFilter])
 
     const selectMaterial = (item: TItem | TWeapon) => {
         const materialIndex = materials.indexOf(item.name);
@@ -49,7 +53,6 @@ const InventarTabPartial: FC = () => {
     const onCombineMaterials = () => {
         if (player) {
             let fulfilledCombination = null;
-
             for (const combination in COMBINATIONS) {
                 if (COMBINATIONS[combination].requirements.every((requirement) => materials.includes(requirement))) {
                     fulfilledCombination = combination;
@@ -59,8 +62,10 @@ const InventarTabPartial: FC = () => {
 
             if (fulfilledCombination != null) {
                 const combinationIsDiscovered = player.combinations.includes(fulfilledCombination);
-                executeCombination(fulfilledCombination, combinationIsDiscovered ? "short" : "long");
-            } else executeCombination(null, "long");
+                executeCombination(fulfilledCombination, materials, combinationIsDiscovered ? "short" : "long");
+            } else executeCombination(null, materials, "long");
+
+            setMaterials([]);
         }
     }
 
@@ -70,7 +75,7 @@ const InventarTabPartial: FC = () => {
             <HeadingPartial filter={typeFilter} setFilter={setTypeFilter}/>
 
             {/* Combination Button */}
-            <CombinePartial isVisible={materials.length >= 2} onClick={onCombineMaterials}/>
+            <CombinePartial isVisible={materials.length >= 2 && materials.length < 4} onClick={onCombineMaterials}/>
 
             {/* Player Items */}
             <Box width="90%"
@@ -90,6 +95,7 @@ const InventarTabPartial: FC = () => {
                     <React.Fragment key={"Item-" + item.name}>
                         {ITEMS[item.name].type === typeFilter &&
                         <MenuCardComponent itemOrWeapon={ITEMS[item.name]}
+                                           selected={materials.includes(item.name)}
                                            selectable={ITEMS[item.name].type === "material"}
                                            select={ITEMS[item.name].type === "material" ? selectMaterial : null}
                                            amount={item.amount}/>}

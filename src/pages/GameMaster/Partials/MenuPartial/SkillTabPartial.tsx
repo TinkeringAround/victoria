@@ -10,13 +10,19 @@ import RadarPartial from "./SkillTabPartials/RadarPartial";
 import SkillPointsPartial from "./SkillTabPartials/SkillPointsPartial";
 
 const SkillTabPartial: FC = () => {
-    const {player} = useContext(PlayerContext);
+    const {player, update} = useContext(PlayerContext);
 
     const [selectedSkill, selectSkill] = useState<TSkillTypes | null>(null);
     const [position, setPosition] = useState<TPosition>({x: 0, y: 0});
 
     const improveSkill = () => {
-        console.log("TODO: Improve Skill ", selectedSkill);
+        if (player && selectedSkill) {
+            const updatedSkills = player.skills;
+            updatedSkills[selectedSkill] += 1;
+
+            selectSkill(null);
+            update({...player, skills: updatedSkills});
+        }
     }
 
     const playerSkillPoints = useCallback(() => {

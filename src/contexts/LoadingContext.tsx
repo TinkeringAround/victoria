@@ -4,9 +4,9 @@ interface Props {
     toggleLoadingScreen: (show: boolean) => void;
 }
 
-const loadingContext = React.createContext<Props>({
+const LoadingContext = React.createContext<Props>({
     toggleLoadingScreen: (show: boolean) => {
     }
 });
 
-export default loadingContext;
+export default LoadingContext;

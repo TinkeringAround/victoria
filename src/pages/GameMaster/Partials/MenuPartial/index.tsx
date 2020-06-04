@@ -5,7 +5,7 @@ import {colors} from "../../../../styles/theme";
 
 import GameMasterContext from "../../../../contexts/GameMasterContext";
 
-import {changeColorBrightness,} from "../../../../services/ColorService";
+import {changeColorBrightness} from "../../../../services/ColorService";
 
 import SkillTabPartial from "./SkillTabPartial";
 import InventarTabPartial from "./InventarTabPartial";
@@ -46,7 +46,8 @@ const MenuPartial: FC<Props> = ({menuAnimationDuration}) => {
                      borderRadius: "1rem",
                      clipPath: CLIP_PATH,
                      boxShadow: "rgb(162, 137, 76) 0px 0px 20px 20px inset"
-                 }}>
+                 }}
+            >
                 <Box animation={menuTab != null ? "fadeIn" : "fadeOut"}
                      width="100%"
                      height="100%"

@@ -11,6 +11,8 @@ import LoadingContext from "../../contexts/LoadingContext";
 
 import LevelMaster from "../../game/LevelMaster";
 
+import {gainExperience} from "../../services/PlayerService";
+
 import NavigationBarPartial from "./Partials/NavigationBarPartial";
 import CanvasPartial from "./Partials/CanvasPartial";
 import PlayerStatsPartial from "./Partials/PlayerStatsPartial";
@@ -26,6 +28,7 @@ const CHAPTER_MASTER_ID = "levelMaster";
 const DURATION = 1500;
 const DELAY = 100;
 const MENU_DURATION = 1000;
+const COMBINATION_EXPERIENCES = [10, 50];
 
 const GameMasterPage: FC = () => {
     const {toggleLoadingScreen} = useContext(LoadingContext);
@@ -90,6 +93,8 @@ const GameMasterPage: FC = () => {
             const playerWeapons = Array.from(player.weapons);
             const playerCombinations = Array.from(player.combinations);
 
+            let combinationExperience = COMBINATION_EXPERIENCES[0];
+
             // Add new Item
             if (combination.name != null) {
                 const isItem = ITEMS.hasOwnProperty(combination.name);
@@ -119,11 +124,22 @@ const GameMasterPage: FC = () => {
             // Update Combinations List
             if (combination.name != null && combination.animation === "long") {
                 playerCombinations.push(combination.name);
+                combinationExperience = COMBINATION_EXPERIENCES[1];
             }
+
+            // Gain Experience
+            const {levelUp, experience} = gainExperience(player, combinationExperience);
 
             // Reset and Update Player
             setCombination(null);
-            update({...player, items: playerItems, weapons: playerWeapons, combinations: playerCombinations});
+            update({
+                ...player,
+                level: player.level + levelUp,
+                experience: player.experience + experience,
+                items: playerItems,
+                weapons: playerWeapons,
+                combinations: playerCombinations
+            });
         }
     }
 

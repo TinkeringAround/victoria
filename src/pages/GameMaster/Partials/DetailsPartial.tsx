@@ -13,11 +13,12 @@ import EnemyComponent from "../../../components/EnemyComponent";
 import ENEMIES from "../../../game/Enemies";
 import LEVELS from "../../../game/Levels";
 
+const ENEMY_SIZE = "85px";
+
 interface Props {
     play: () => void
 }
 
-// TODO!
 const DetailsPartial: FC<Props> = ({play}) => {
     const {viewMode, level, region, menuTab} = useContext(GameMasterContext);
 
@@ -25,7 +26,7 @@ const DetailsPartial: FC<Props> = ({play}) => {
 
     return (
         <Box width="400px"
-             height="60%"
+             height="65%"
              background={hexToRgbA(colors.gold, "0.95")}
              justify="center"
              align="center"
@@ -33,7 +34,7 @@ const DetailsPartial: FC<Props> = ({play}) => {
                  position: "absolute",
                  bottom: "15%",
                  right: isVisible ? "5%" : "-5%",
-                 minHeight: "500px",
+                 minHeight: "600px",
                  opacity: isVisible ? 1 : 0,
                  transition: "all 0.5s ease",
                  zIndex: isVisible ? 6 : -1,
@@ -68,8 +69,9 @@ const DetailsPartial: FC<Props> = ({play}) => {
                          margin={{bottom: "1rem"}}
                     >
                         {/* Description */}
-                        <Paragraph margin="0 0 3rem 0"
+                        <Paragraph margin="0"
                                    textAlign="center"
+                                   style={{fontSize: "1.5rem"}}
                         >
                             {level >= 0 ? LEVELS[level].description : ""}
                         </Paragraph>
@@ -79,23 +81,24 @@ const DetailsPartial: FC<Props> = ({play}) => {
                     {viewMode === "detail" &&
                     <Box width="90%"
                          align="center"
-                         margin={{bottom: "1rem"}}
+                         margin={{bottom: "3rem"}}
                     >
                         {/* Description */}
-                        <Paragraph margin="0 0 3rem 0"
+                        <Paragraph margin="0 0 2rem"
                                    textAlign="center"
+                                   style={{fontSize: "1.5rem"}}
                         >
                             {level >= 0 && region !== "" ? LEVELS[level].regions[region].description : ""}
                         </Paragraph>
 
                         {/* Enemies */}
-                        <Box width="100%"
-                             margin={{bottom: "3rem"}}
-                        >
+                        <Box width="100%">
                             {/* Text: Gegner */}
                             <Text color="dark"
                                   size="1.5rem"
                                   weight="bold"
+                                  textAlign="center"
+                                  margin={{bottom: "1rem"}}
                             >
                                 Mögliche Gegner
                             </Text>
@@ -105,13 +108,14 @@ const DetailsPartial: FC<Props> = ({play}) => {
                                  alignSelf="center"
                                  wrap={false}
                                  align="center"
-                                 justify="between"
-                                 pad="1rem 0.5rem 0"
+                                 justify="evenly"
                             >
                                 {level >= 0 && region !== "" &&
                                 LEVELS[level].regions[region].enemies.map((enemyName: string) =>
                                     <EnemyComponent key={"Enemy-" + enemyName}
-                                                    enemy={ENEMIES[enemyName]}/>
+                                                    enemy={ENEMIES[enemyName]}
+                                                    size={ENEMY_SIZE}
+                                    />
                                 )}
                             </Box>
                         </Box>

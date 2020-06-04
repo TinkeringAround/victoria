@@ -1,5 +1,9 @@
 import TEnemy from "../types/TEnemy";
 
+import ratte from "../assets/images/enemies/ratte.png";
+import schlange from "../assets/images/enemies/schlange.png";
+import wolf from "../assets/images/enemies/wolf.png";
+
 type TEnemyCollection = {
     [name: string]: TEnemy
 }
@@ -13,7 +17,7 @@ const ENEMIES: TEnemyCollection = {
             armor: 0,
             experience: 1
         },
-        image: ""
+        image: ratte
     },
     "Schlange": {
         name: "Schlange",
@@ -23,7 +27,7 @@ const ENEMIES: TEnemyCollection = {
             armor: 1,
             experience: 4
         },
-        image: ""
+        image: schlange
     },
     "Wolf": {
         name: "Wolf",
@@ -33,7 +37,7 @@ const ENEMIES: TEnemyCollection = {
             armor: 2,
             experience: 8
         },
-        image: ""
+        image: wolf
     }
 }
 

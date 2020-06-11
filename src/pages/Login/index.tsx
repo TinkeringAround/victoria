@@ -1,8 +1,10 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useContext, useEffect, useState} from 'react';
 import {Box, Heading} from "grommet";
 import styled from "styled-components";
 
 import {colors} from "../../styles/theme";
+
+import SoundContext from "../../contexts/SoundContext";
 
 import LogoComponent from "../../components/LogoComponent";
 
@@ -34,7 +36,10 @@ const DELAY_SHORT = 250;
 const MODES: Array<TLoginMode> = ["login", "register"];
 
 const LoginPage: FC = () => {
+    const {play} = useContext(SoundContext);
     const [mode, setMode] = useState<TLoginMode | null>(null);
+
+    useEffect(() => play("intro"), [])
 
     return (
         <React.Fragment>
@@ -50,10 +55,7 @@ const LoginPage: FC = () => {
                 <Box
                     width="30%"
                     height="30%"
-                    animation={[{
-                        type: "fadeIn",
-                        delay: 500
-                    }, "slideUp"]}
+                    animation={[{type: "fadeIn", delay: 500}, "slideUp"]}
                 >
                     <LogoComponent/>
                 </Box>

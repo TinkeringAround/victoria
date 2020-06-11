@@ -132,8 +132,12 @@ const GameMasterPage: FC = () => {
                 combinationExperience = COMBINATION_EXPERIENCES[1];
             }
 
-            // Gain Experience
+            // TODO: Gain Experience
             const {levelUp, experience} = gainExperience(player, combinationExperience);
+            console.log({
+                levelUp: levelUp,
+                experience: experience
+            })
 
             // Reset and Update Player
             setCombination(null);

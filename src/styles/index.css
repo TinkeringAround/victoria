@@ -77,6 +77,18 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-volume-mute:before {
+    content: "\e902";
+}
+
+.icon-volume-up:before {
+    content: "\e903";
+}
+
+.icon-gem:before {
+    content: "\e901";
+}
+
 .icon-sign:before {
     content: "\e900";
 }

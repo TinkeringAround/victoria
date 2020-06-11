@@ -12,7 +12,7 @@ import PlayerContext from "../../../../../contexts/PlayerContext";
 
 const SText = styled.text`
     font-size: 1.5rem;
-    font-family: Chinese Rocks;
+    font-weight: bold;
     
     fill: ${colors.dark};
     

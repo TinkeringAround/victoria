@@ -6,6 +6,8 @@ interface Props {
 
     play: (soundName: string) => void
     pause: () => void
+
+    playEffect: (effectName: string) => void
 }
 
 const SoundContext = React.createContext<Props>({
@@ -16,6 +18,9 @@ const SoundContext = React.createContext<Props>({
     play: (soundName) => {
     },
     pause: () => {
+    },
+
+    playEffect: effectName => {
     }
 });
 

@@ -19,7 +19,7 @@ interface Props {
 
 const MenuPartial: FC<Props> = ({menuAnimationDuration}) => {
     const {menuTab} = useContext(GameMasterContext);
-
+    
     return (
         <Box
             width="80%"

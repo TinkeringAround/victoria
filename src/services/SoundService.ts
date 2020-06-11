@@ -3,14 +3,16 @@ import TAudios from "../types/TAudios";
 import SOUNDS from "../game/Sounds";
 
 const TICK = 0.1;
+const MAX = 0.75;
+const EFFECT_MAX = 1.0;
 
-export const initAudioSource: (id: string) => HTMLAudioElement = (id) => {
+export const initAudioSource: (id: string, volume: number, loop?: boolean) => HTMLAudioElement = (id, volume, loop = true) => {
     const audio = new Audio("");
     audio.muted = false;
     audio.autoplay = false;
-    audio.loop = true;
+    audio.volume = volume;
+    audio.loop = loop;
     audio.setAttribute("muted", "");
-    audio.setAttribute("autoplay", "");
     audio.setAttribute("id", id);
 
     audio.addEventListener("click", () => audio.pause());
@@ -46,16 +48,15 @@ export const play: (audioSource: HTMLAudioElement, soundName?: string) => Promis
 
 export const pause = (audioSource: HTMLAudioElement) => fadeOut(audioSource);
 
-
 function fadeIn(audioSource: HTMLAudioElement) {
     audioSource.volume = 0.0;
 
     const fadeAudioInterval = setInterval(function () {
-        if ((audioSource.volume + TICK) <= 1.0) audioSource.volume += TICK;
+        if ((audioSource.volume + TICK) <= MAX) audioSource.volume += TICK;
         else clearInterval(fadeAudioInterval);
-    }, 1000);
+    }, 250);
 
-    return new Promise(((resolve, reject) => audioSource.play().then(resolve).catch(reject)));
+    return new Promise(((resolve, reject) => audioSource.play().then(() => resolve()).catch(() => reject())));
 }
 
 function fadeOut(audioSource: HTMLAudioElement) {
@@ -65,8 +66,16 @@ function fadeOut(audioSource: HTMLAudioElement) {
             clearInterval(fadeOutAudioInterval);
             audioSource.pause();
         }
-    }, 250);
+    }, 75);
 }
 
-export const AUDIOS: TAudios = {background: initAudioSource("background"), effect: initAudioSource("effect")};
+export const effect = (audioSource: HTMLAudioElement, effectName: string) => {
+    load(audioSource, effectName);
+    audioSource.play().catch(() => console.log("Effect could not be played."));
+}
+
+export const AUDIOS: TAudios = {
+    background: initAudioSource("background", 0),
+    effect: initAudioSource("effect", EFFECT_MAX, false)
+};
 

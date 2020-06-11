@@ -26,14 +26,6 @@ body {
     src: url(../assets/fonts/CardenioModernBold.woff) format('woff');
 }
 
-@font-face {
-    font-family: 'Chinese Rocks';
-    font-style: normal;
-    font-weight: 400;
-    font-display: swap;
-    src: url(../assets/fonts/ChineseRocks.woff) format('woff');
-}
-
 /* roboto-regular - latin */
 @font-face {
     font-family: 'Roboto';
@@ -61,7 +53,6 @@ body {
     font-display: block;
 }
 
-
 [class^="icon-"], [class*=" icon-"] {
     /* use !important to prevent issues with browser extensions that change fonts */
     font-family: 'icomoon' !important;
@@ -85,13 +76,14 @@ body {
     content: "\e903";
 }
 
-.icon-gem:before {
+.icon-money:before {
     content: "\e901";
 }
 
 .icon-sign:before {
     content: "\e900";
 }
+
 
 /* Effects */
 .shine:after {

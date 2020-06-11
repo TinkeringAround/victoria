@@ -1,1 +1,1 @@
-export type TIconType = "sign" | "gem" | "volume-up" | "volume-mute";
+export type TIconType = "sign" | "money" | "volume-up" | "volume-mute";

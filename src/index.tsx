@@ -15,7 +15,7 @@ import SoundContext from "./contexts/SoundContext";
 
 import {unregisterServiceWorker} from "./services/ServiceWorkerService";
 import {initializeFirebaseApp, loadPlayerProfile, updatePlayerProfile} from "./services/FirebaseService";
-import {AUDIOS, load, pause, play} from "./services/SoundService";
+import {AUDIOS, effect, load, pause, play} from "./services/SoundService";
 
 import LoadingPage from "./pages/Loading";
 import LoginPage from "./pages/Login";
@@ -32,7 +32,7 @@ const App: FC = () => {
     const [loadingScreen, showLoadingScreen] = useState<boolean>(true);
     const [playerProfile, setPlayerProfile] = useState<{ uid: string, player: TPlayer } | null>(null);
     const [audio] = useState<TAudios>(AUDIOS);
-    const [muted, setMuted] = useState<boolean>(false);
+    const [muted, setMuted] = useState<boolean>(true);
 
     const logout = useCallback(() => firebase.auth().signOut(), []);
     const updatePlayer = useCallback((newPlayer: TPlayer) => {
@@ -48,24 +48,18 @@ const App: FC = () => {
 
         setMuted(mute);
     }, [audio, muted])
-
     const pauseSound = useCallback(() => pause(audio.background), [audio]);
     const playSound = useCallback((soundName: string) => {
         if (!muted) play(audio.background, soundName).catch(() => setMuted(true));
         else load(audio.background, soundName);
     }, [audio, muted]);
-    const playEffect = useCallback((effectName: string) => {
-        // TODO: To Implement
-    }, [audio])
+    const playEffect = useCallback((effectName: string) => effect(audio.effect, effectName), [audio])
 
     useEffect(() => {
         firebase.auth().onAuthStateChanged(async (user: User | null) => {
             if (user && !playerProfile) {
                 const response = await loadPlayerProfile(user.uid);
-                if (response.data) {
-                    setPlayerProfile({uid: user.uid, player: response.data as TPlayer});
-                }
-
+                if (response.data) setPlayerProfile({uid: user.uid, player: response.data as TPlayer});
                 if (response.errors.length > 0) {
                     console.error("TODO: Implement Error Handling", response.errors);
                     logout();
@@ -80,7 +74,14 @@ const App: FC = () => {
             <PlayerContext.Provider
                 value={{player: playerProfile ? playerProfile.player : null, update: updatePlayer, logout: logout}}>
                 <LoadingContext.Provider value={{toggleLoadingScreen: showLoadingScreen}}>
-                    <SoundContext.Provider value={{muted: muted, mute: muteSound, play: playSound, pause: pauseSound}}>
+                    <SoundContext.Provider
+                        value={{
+                            muted: muted,
+                            mute: muteSound,
+                            play: playSound,
+                            pause: pauseSound,
+                            playEffect: playEffect
+                        }}>
                         {audio != null && <React.Fragment>
                             {/* Loading Screen */}
                             {loadingScreen && <LoadingPage/>}

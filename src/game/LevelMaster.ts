@@ -327,18 +327,22 @@ export default class LevelMaster {
     //#endregion
 
     //#region RenderLoop
-    onResize(): void {
-        this._engine.resize();
-    }
-
     public doRender(): void {
         this._engine.runRenderLoop(() => this._scene.render());
-        window.addEventListener('resize', this.onResize);
+        window.addEventListener('resize', () => {
+            if (this._engine != null) {
+                this._engine.resize();
+            }
+        });
     }
 
     public pauseRender(): void {
         this._engine.stopRenderLoop();
-        window.removeEventListener("resize", this.onResize);
+        window.removeEventListener("resize", () => {
+            if (this._engine != null) {
+                this._engine.resize();
+            }
+        });
     }
 
     //#endregion

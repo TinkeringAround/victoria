@@ -8,6 +8,7 @@ import {TCombinationAnimation, TCombinationDto} from "../../types/TCombination";
 import PlayerContext from "../../contexts/PlayerContext";
 import GameMasterContext from "../../contexts/GameMasterContext";
 import LoadingContext from "../../contexts/LoadingContext";
+import SoundContext from "../../contexts/SoundContext";
 
 import LevelMaster from "../../game/LevelMaster";
 
@@ -33,6 +34,7 @@ const COMBINATION_EXPERIENCES = [10, 50];
 const GameMasterPage: FC = () => {
     const {toggleLoadingScreen} = useContext(LoadingContext);
     const {player, update} = useContext(PlayerContext);
+    const {playEffect} = useContext(SoundContext);
 
     const [menuTab, setMenuTab] = useState<null | TMenuTabs>(null);
 
@@ -98,7 +100,7 @@ const GameMasterPage: FC = () => {
             const playerWeapons = Array.from(player.weapons);
             const playerCombinations = Array.from(player.combinations);
 
-            let combinationExperience = COMBINATION_EXPERIENCES[0];
+            let combinationExperience = combination.name != null ? COMBINATION_EXPERIENCES[0] : 0;
 
             // Add new Item
             if (combination.name != null) {
@@ -132,19 +134,14 @@ const GameMasterPage: FC = () => {
                 combinationExperience = COMBINATION_EXPERIENCES[1];
             }
 
-            // TODO: Gain Experience
-            const {levelUp, experience} = gainExperience(player, combinationExperience);
-            console.log({
-                levelUp: levelUp,
-                experience: experience
-            })
+            const {newLevel, newExperience} = gainExperience(player, combinationExperience);
 
             // Reset and Update Player
             setCombination(null);
             update({
                 ...player,
-                level: player.level + levelUp,
-                experience: player.experience + experience,
+                level: newLevel,
+                experience: newExperience,
                 items: playerItems,
                 weapons: playerWeapons,
                 combinations: playerCombinations
@@ -162,7 +159,10 @@ const GameMasterPage: FC = () => {
             region: region,
 
             menuTab: menuTab,
-            setMenuTab: setMenuTab,
+            setMenuTab: (newMenuTab: TMenuTabs | null) => {
+                if ((menuTab == null && newMenuTab != null) || (menuTab != null && newMenuTab == null)) playEffect("menu");
+                setMenuTab(newMenuTab);
+            },
 
             executeCombination: onExecuteCombination
         }}>
@@ -183,9 +183,7 @@ const GameMasterPage: FC = () => {
                 <CurrentLevelPartial/>
 
                 {/* Player Stats */}
-                <PlayerStatsPartial visible={!menuTab}
-                                    level={player ? player.level : 0}
-                                    experience={player ? player.experience : 0}/>
+                <PlayerStatsPartial visible={!menuTab}/>
 
                 {/* Canvas */}
                 <CanvasPartial/>

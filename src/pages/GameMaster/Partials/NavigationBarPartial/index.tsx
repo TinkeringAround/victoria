@@ -33,28 +33,30 @@ interface Props {
 
 const NavigationBarPartial: FC<Props> = ({menuAnimationDuration}) => {
     const {logout} = useContext(PlayerContext);
-    const {menuTab, setMenuTab} = useContext(GameMasterContext);
+    const {menuTab, setMenuTab, viewMode} = useContext(GameMasterContext);
+
+    const isVisible = viewMode !== "game";
 
     return (
-        <SNavigationBar
-            disabled={menuTab !== null}
-            height="120%"
-            width="200px"
-            align="center"
-            justify="between"
-            onClick={() => {
-                if (!menuTab) setMenuTab("Fähigkeiten");
-            }}
-            style={{
-                position: "absolute",
-                top: menuTab ? -5 : "-95%",
-                left: "12.5%",
-                transition: "top " + menuAnimationDuration + "ms ease-in-out, background " + (menuTab ? menuAnimationDuration + "ms ease-in-out" : "0.25s ease"),
-                clipPath: "polygon(100% 0, 100% 100%, 50% 95%, 0 100%, 0 0)",
-                cursor: menuTab ? "default" : "pointer",
-                border: `solid ${colors.white} 5px`,
-                zIndex: 10
-            }}
+        <SNavigationBar animation={isVisible ? "fadeIn" : "fadeOut"}
+                        disabled={menuTab !== null}
+                        height="120%"
+                        width="200px"
+                        align="center"
+                        justify="between"
+                        onClick={() => {
+                            if (!menuTab) setMenuTab("Fähigkeiten");
+                        }}
+                        style={{
+                            position: "absolute",
+                            top: menuTab ? -5 : "-95%",
+                            left: "12.5%",
+                            transition: "top " + menuAnimationDuration + "ms ease-in-out, background " + (menuTab ? menuAnimationDuration + "ms ease-in-out" : "0.25s ease"),
+                            clipPath: "polygon(100% 0, 100% 100%, 50% 95%, 0 100%, 0 0)",
+                            cursor: menuTab ? "default" : "pointer",
+                            border: `solid ${colors.white} 5px`,
+                            zIndex: 10
+                        }}
         >
             {/* Tabs */}
             <Box width="100%"

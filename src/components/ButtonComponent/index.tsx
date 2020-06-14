@@ -1,10 +1,12 @@
-import React, {FC} from 'react';
+import React, {FC, useContext} from 'react';
 import {Button, ButtonType} from "grommet";
 import styled from "styled-components";
 
 import {TColor} from "../../types/TColor";
 
 import {colors} from "../../styles/theme";
+
+import SoundContext from "../../contexts/SoundContext";
 
 import {changeColorBrightness} from "../../services/ColorService";
 
@@ -42,22 +44,31 @@ interface Props extends ButtonType {
     fontSize?: string
 }
 
-const ButtonComponent: FC<Props> = ({children, onClick, color, background, hoverColor, margin, padding = "1.5rem 1rem", fontSize = "2.5rem", disabled = false}) =>
-    <SButton
-        disabled={disabled}
-        color={color}
-        // @ts-ignore
-        backgroundColor={colors.hasOwnProperty(background) ? colors[background] : background}
-        onClick={onClick}
-        focusIndicator={false}
-        margin={margin}
-        style={{
-            fontSize: fontSize,
-            padding: padding,
+const ButtonComponent: FC<Props> = ({children, onClick, color, background, hoverColor, margin, padding = "1.5rem 1rem", fontSize = "2.5rem", disabled = false}) => {
+    const {playEffect} = useContext(SoundContext);
+
+    return (
+        <SButton
+            disabled={disabled}
+            color={color}
             // @ts-ignore
-            boxShadow: "0 5px 0 " + (colors.hasOwnProperty(hoverColor) ? colors[hoverColor] : hoverColor)
-        }}>
-        {children}
-    </SButton>;
+            backgroundColor={colors.hasOwnProperty(background) ? colors[background] : background}
+            onClick={(event) => {
+                playEffect("button");
+                if (onClick) onClick(event);
+            }}
+            focusIndicator={false}
+            margin={margin}
+            style={{
+                fontSize: fontSize,
+                padding: padding,
+                // @ts-ignore
+                boxShadow: "0 5px 0 " + (colors.hasOwnProperty(hoverColor) ? colors[hoverColor] : hoverColor)
+            }}
+        >
+            {children}
+        </SButton>
+    )
+};
 
 export default ButtonComponent;

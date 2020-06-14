@@ -22,7 +22,7 @@ interface Props {
 const DetailsPartial: FC<Props> = ({play}) => {
     const {viewMode, level, region, menuTab} = useContext(GameMasterContext);
 
-    const isVisible = !menuTab && ((region !== "" && viewMode === "detail") || (level >= 0 && viewMode === "world"));
+    const isVisible = !menuTab && viewMode !== "game" && ((region !== "" && viewMode === "detail") || (level >= 0 && viewMode === "world"));
 
     return (
         <Box width="400px"

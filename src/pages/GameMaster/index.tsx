@@ -24,6 +24,7 @@ import WorldMapPartial from "./Partials/WorldMapPartial";
 import CombinationPartial from "./Partials/CombinationPartial";
 
 import ITEMS from "../../game/Items";
+import GamePartial from "./Partials/GamePartial";
 
 const CHAPTER_MASTER_ID = "levelMaster";
 const DURATION = 1500;
@@ -49,7 +50,13 @@ const GameMasterPage: FC = () => {
     useEffect(() => {
         if (levelMaster == null && document.getElementById(CHAPTER_MASTER_ID)) {
             toggleLoadingScreen(true);
-            const newLevelMaster = new LevelMaster(CHAPTER_MASTER_ID, setLevel, setRegion);
+            const newLevelMaster = new LevelMaster(CHAPTER_MASTER_ID, (world) => {
+                playEffect("button");
+                setLevel(world);
+            }, (regionName) => {
+                playEffect("button");
+                setRegion(regionName);
+            });
 
             newLevelMaster.createWorld(level).then(() => {
                 newLevelMaster.doRender();
@@ -86,9 +93,7 @@ const GameMasterPage: FC = () => {
             toggleViewMode();
         }
 
-        if (viewMode === "detail") {
-            console.error("TODO: Implement Game Menu"); // TODO: Implement
-        }
+        // if (viewMode === "detail") setViewMode("game");
     }, [viewMode, levelMaster, level, toggleViewMode]);
 
     const onExecuteCombination = useCallback((newCombination: string | null, materials: Array<string>, animation: TCombinationAnimation) =>
@@ -183,7 +188,7 @@ const GameMasterPage: FC = () => {
                 <CurrentLevelPartial/>
 
                 {/* Player Stats */}
-                <PlayerStatsPartial visible={!menuTab}/>
+                <PlayerStatsPartial visible={!menuTab && viewMode !== "game"}/>
 
                 {/* Canvas */}
                 <CanvasPartial/>
@@ -199,6 +204,9 @@ const GameMasterPage: FC = () => {
 
                 {/* Combination Overlay */}
                 <CombinationPartial combination={combination} onFinished={onFinishedCombination}/>
+
+                {/* GamePartial*/}
+                <GamePartial isPlaying={viewMode === "game"}/>
             </Box>
         </GameMasterContext.Provider>
     );

@@ -291,7 +291,6 @@ export default class LevelMaster {
                         this._activeLevel = -1;
                         this._selectWorld(-1);
                     }
-
                 }
             }
         ));
@@ -316,7 +315,7 @@ export default class LevelMaster {
     }
 
     //#endregion
-
+    
     //#region World Update
     public changeLevel(level: number): void {
         if (this._level !== level) {

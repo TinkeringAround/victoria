@@ -21,21 +21,20 @@ const MenuPartial: FC<Props> = ({menuAnimationDuration}) => {
     const {menuTab} = useContext(GameMasterContext);
     
     return (
-        <Box
-            width="80%"
-            height="85%"
-            background="white"
-            pad="1rem"
-            align="end"
-            style={{
-                position: "absolute",
-                top: menuTab ? "7.5%" : "-95%",
-                left: "10%",
-                zIndex: 8,
-                transition: "top " + menuAnimationDuration + "ms ease-in-out",
-                clipPath: CLIP_PATH,
-                borderRadius: "2rem"
-            }}
+        <Box width="80%"
+             height="85%"
+             background="white"
+             pad="1rem"
+             align="end"
+             style={{
+                 position: "absolute",
+                 top: menuTab ? "7.5%" : "-95%",
+                 left: "10%",
+                 zIndex: 8,
+                 transition: "top " + menuAnimationDuration + "ms ease-in-out",
+                 clipPath: CLIP_PATH,
+                 borderRadius: "2rem"
+             }}
         >
             {/* Tabs */}
             <Box width="100%"

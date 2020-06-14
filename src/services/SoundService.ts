@@ -3,8 +3,8 @@ import TAudios from "../types/TAudios";
 import SOUNDS from "../game/Sounds";
 
 const TICK = 0.1;
-const MAX = 0.75;
-const EFFECT_MAX = 1.0;
+const MAX = 0.5;
+const EFFECT_MAX = 0.3;
 
 export const initAudioSource: (id: string, volume: number, loop?: boolean) => HTMLAudioElement = (id, volume, loop = true) => {
     const audio = new Audio("");
@@ -27,6 +27,7 @@ export const load = (audioSource: HTMLAudioElement, soundName: string) => {
 
 export const play: (audioSource: HTMLAudioElement, soundName?: string) => Promise<any> = (audioSource, soundName = "") => {
     const isPlaying = !audioSource.paused;
+    const currentSoundName = audioSource.src;
 
     if (!isPlaying && soundName === "") {
         return fadeIn(audioSource);
@@ -37,7 +38,7 @@ export const play: (audioSource: HTMLAudioElement, soundName?: string) => Promis
         return fadeIn(audioSource);
     }
 
-    if (isPlaying && soundName !== "") {
+    if (isPlaying && soundName !== "" && !currentSoundName.includes(soundName)) {
         fadeOut(audioSource);
         load(audioSource, soundName);
         return fadeIn(audioSource);

@@ -1,10 +1,12 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useContext, useEffect, useState} from 'react';
 import {Box, Heading, Image, Text} from "grommet";
 
 import {TCombinationDto} from "../../../../types/TCombination";
 
 import "./style.css";
 import {colors} from "../../../../styles/theme";
+
+import SoundContext from "../../../../contexts/SoundContext";
 
 import {random} from "../../../../services/UtilityService";
 import {changeColorBrightness} from "../../../../services/ColorService";
@@ -34,6 +36,7 @@ interface Props {
 }
 
 const CombinationPartial: FC<Props> = ({combination, onFinished}) => {
+    const {playEffect} = useContext(SoundContext);
     const [state, setState] = useState(-1);
 
     useEffect(() => {
@@ -57,6 +60,10 @@ const CombinationPartial: FC<Props> = ({combination, onFinished}) => {
 
     useEffect(() => {
         if (state === 1 && combination != null && combination.animation === "short") onFinished();
+        if (state === 0 && combination != null && combination.animation === "short") playEffect("success-short");
+
+        if (state === 1 && combination != null && combination.animation === "long") playEffect("boiling");
+        if (state === 3 && combination != null && combination.animation === "long") playEffect("success-long");
     }, [state])
 
     const isVisible = state > -1;

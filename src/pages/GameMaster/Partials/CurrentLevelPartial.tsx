@@ -8,15 +8,17 @@ import LEVELS from "../../../game/Levels";
 const CurrentLevelPartial: FC = () => {
     const {level, viewMode} = useContext(GameMasterContext);
 
+    const isVisible = viewMode !== "game";
+
     return (
-        <Box
-            width="100%"
-            justify="center"
-            align="center"
-            style={{
-                position: "absolute",
-                top: 75,
-            }}>
+        <Box animation={isVisible ? "fadeIn" : "fadeOut"}
+             width="100%"
+             justify="center"
+             align="center"
+             style={{
+                 position: "absolute",
+                 top: 75,
+             }}>
             <Heading margin="0">{viewMode === "world" ? "Weltkarte" : LEVELS[level].name}</Heading>
         </Box>
     )

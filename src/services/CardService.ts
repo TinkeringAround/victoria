@@ -1,7 +1,60 @@
-export const shuffle: (array: Array<any>) => Array<any> = (array) => {
+import {TItem, TItemDto} from "../types/TItem";
+import {TWeapon, TWeaponDto} from "../types/TWeapon";
+
+import ITEMS from "../game/Items";
+import WEAPONS from "../game/Weapons";
+
+export const shuffle: (array: Array<TItemDto | TWeaponDto>) => Array<TItemDto | TWeaponDto> = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
     }
     return array;
+}
+
+export const generateId: (name: string, index: number, round: number) => string = (name, index, round) => {
+    return '_' + name + index + round;
+}
+
+export const generateText: (itemOrWeapon: TItem | TWeapon) => string = (itemOrWeapon) => {
+    if (itemOrWeapon.hasOwnProperty("value")) {
+        return (itemOrWeapon.type === "weapon" ? "Schaden   " : "Verteidigung   ") + (itemOrWeapon as TWeapon).value
+    }
+
+    if (itemOrWeapon.hasOwnProperty("effect")) {
+        const item = itemOrWeapon as TItem;
+        if (item.effect != null) {
+            let prefix = "Schaden   ";
+            switch (item.effect.target) {
+                case "player":
+                    prefix = "Leben   ";
+                    break;
+                case "circle":
+                    prefix = "Kreis   "
+                    break;
+            }
+
+            return prefix + item.effect.value;
+        }
+    }
+
+    return "";
+}
+
+export const generateAction: (itemOrWeapon: TItemDto | TWeaponDto) => string = (itemOrWeapon) => {
+    const equipment = ITEMS.hasOwnProperty(itemOrWeapon.name) ? ITEMS[itemOrWeapon.name] : WEAPONS[itemOrWeapon.name];
+
+    if (equipment.hasOwnProperty("value")) {
+        const damageOrDefence = (equipment as TWeapon).value;
+        return equipment.type === "weapon" ?
+            `Füge dem Gegner ${damageOrDefence} Schaden zu.` :
+            `Steigere deine Verteidigung um ${damageOrDefence}.`;
+    }
+
+    if (equipment.hasOwnProperty("effect")) {
+        const item = equipment as TItem;
+        return item.effect != null ? item.effect.description : "";
+    }
+
+    return "";
 }

@@ -10,6 +10,7 @@ import {colors} from "../../styles/theme";
 
 import ItemOverlayPartial from "./Partials/ItemOverlayPartial";
 import ItemAmountPartial from "./Partials/ItemAmountPartial";
+import {generateText} from "../../services/CardService";
 
 const SToolTip = styled(ReactTooltip)`
   width: 150px;
@@ -41,6 +42,7 @@ const MenuCardComponent: FC<Props> = ({itemOrWeapon, amount, size = SIZE, mode =
 
     const margin = mode === 1 || mode === 3 ? "1rem" : "10px";
     const toolTipPlace = toolTipPosition ? toolTipPosition : (mode === 1 || mode === 3 ? "top" : "right");
+    const toolTipId = itemOrWeapon != null ? "Item-" + itemOrWeapon.name : "";
 
     return (
         <React.Fragment>
@@ -65,21 +67,19 @@ const MenuCardComponent: FC<Props> = ({itemOrWeapon, amount, size = SIZE, mode =
                      cursor: selectable ? "cursor" : "default"
                  }}
                  data-tip
-                 data-for={"Item-" + itemOrWeapon.name}
+                 data-for={toolTipId}
             >
                 {/* ToolTip */}
                 {enabledToolTip &&
                 isHovered &&
-                <SToolTip id={"Item-" + itemOrWeapon.name}
+                <SToolTip id={toolTipId}
                           place={toolTipPlace}
                           effect="solid"
                           backgroundColor={colors.dark}
                 >
                     <Box align="center"
                          justify="center"
-                         style={{
-                             textAlign: "center"
-                         }}>
+                         style={{textAlign: "center"}}>
                         {/* Name */}
                         <h1 style={{
                             margin: "0.5rem 0",
@@ -98,15 +98,15 @@ const MenuCardComponent: FC<Props> = ({itemOrWeapon, amount, size = SIZE, mode =
                             {itemOrWeapon.description}
                         </p>}
 
-                        {/* Damage / Defence */}
-                        {itemOrWeapon.hasOwnProperty("value") &&
+                        {/* Damage / Defence / Effect */}
+                        {generateText(itemOrWeapon) !== "" &&
                         <p style={{
                             margin: "0.5rem 0",
                             fontSize: "1.5rem",
                             fontWeight: "bold",
                             color: colors.gold
                         }}>
-                            {(itemOrWeapon.type === "weapon" ? "Schaden   " : "Verteidigung   ") + (itemOrWeapon as TWeapon).value}
+                            {generateText(itemOrWeapon)}
                         </p>}
                     </Box>
                 </SToolTip>}

@@ -1,4 +1,5 @@
 import React from "react";
+import TEffects from "../types/TEffects";
 
 interface Props {
     muted: boolean
@@ -7,7 +8,7 @@ interface Props {
     play: (soundName: string) => void
     pause: () => void
 
-    playEffect: (effectName: string) => void
+    playEffect: (effectName: TEffects) => void
 }
 
 const SoundContext = React.createContext<Props>({

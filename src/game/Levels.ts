@@ -23,25 +23,29 @@ const LEVELS: Array<TLevel> = [
                 name: "Baum des Lebens",
                 description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam",
                 enemies: ["Ratte"],
-                items: ["Stock"]
+                items: ["Stock"],
+                difficulty: 1
             },
             "Acker": {
                 name: "Ackerland",
                 description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam",
                 enemies: ["Ratte", "Schlange"],
-                items: ["Petersilie"]
+                items: ["Petersilie"],
+                difficulty: 1
             },
             "DeepForest": {
                 name: "Wolfshöhle",
                 description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam",
                 enemies: ["Wolf"],
-                items: []
+                items: [],
+                difficulty: 3
             },
             "Treasure": {
                 name: "Drei Steine",
                 description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam",
                 enemies: ["Schlange", "Wolf"],
-                items: []
+                items: [],
+                difficulty: 1
             }
         }
     }

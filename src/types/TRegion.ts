@@ -3,4 +3,5 @@ export type TRegion = {
     description: string
     enemies: Array<string>
     items: Array<string>
+    difficulty: number
 }

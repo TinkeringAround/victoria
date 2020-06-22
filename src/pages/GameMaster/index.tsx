@@ -93,7 +93,7 @@ const GameMasterPage: FC = () => {
             toggleViewMode();
         }
 
-        // if (viewMode === "detail") setViewMode("game");
+        if (viewMode === "detail") setViewMode("game");
     }, [viewMode, levelMaster, level, toggleViewMode]);
 
     const onExecuteCombination = useCallback((newCombination: string | null, materials: Array<string>, animation: TCombinationAnimation) =>

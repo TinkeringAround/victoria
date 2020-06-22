@@ -68,6 +68,10 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-close:before {
+    content: "\e904";
+}
+
 .icon-volume-mute:before {
     content: "\e902";
 }

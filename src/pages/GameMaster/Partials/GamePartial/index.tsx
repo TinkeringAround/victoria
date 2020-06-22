@@ -1,17 +1,22 @@
-import React, {FC, useContext, useEffect, useState} from 'react';
+import React, {FC, useCallback, useContext, useEffect, useState} from 'react';
 import {Box} from "grommet";
 
-import {TGame} from "../../../../types/TGame";
+import {TItemDto} from "../../../../types/TItem";
+import {TWeaponDto} from "../../../../types/TWeapon";
 
 import PlayerContext from "../../../../contexts/PlayerContext";
 import GameMasterContext from "../../../../contexts/GameMasterContext";
 
 import {shuffle} from "../../../../services/CardService";
+import {generateEnemies} from "../../../../services/EnemyService";
 
 import GameEquipmentsPartial from "./Partials/GameEquipmentsPartial";
 import GameRoundPartial from "./Partials/GameRoundPartial";
+import GameTurnActionsPartial from "./Partials/GameTurnActionsPartial";
+import GameEnemyCirclePartial from "./Partials/GameEnemyCirclePartial";
 
 import LEVELS from "../../../../game/Levels";
+import TEnemyDto from "../../../../types/TEnemyDto";
 
 const DELAY = 1000;
 
@@ -24,24 +29,28 @@ const GamePartial: FC<Props> = ({isPlaying}) => {
     const {level, region} = useContext(GameMasterContext);
 
     const [round, setRound] = useState<number>(-1);
-    const [gameState, setGameState] = useState<TGame | null>(null);
+    const [enemies, setEnemies] = useState<Array<TEnemyDto> | null>(null);
+    const [equipments, setEquipments] = useState<Array<TItemDto | TWeaponDto> | null>(null);
+    const [turnActions, setTurnActions] = useState<Array<TItemDto | TWeaponDto>>([]);
+
+    const onApplyAction = useCallback(() => {
+        console.error("TODO: ApplyActions")
+    }, []);
 
     useEffect(() => {
-        if (isPlaying && player != null && gameState == null) {
+        if (isPlaying && player != null && equipments == null) {
             console.log("Initialize Game");
             console.log("Settings:", {
                 level: LEVELS[level].name,
                 region: LEVELS[level].regions[region].name,
                 player: player.equipments
-            })
-
-            setGameState({
-                equipments: shuffle(player.equipments)
             });
 
+            setEnemies(generateEnemies(LEVELS[level].regions[region]));
+            setEquipments(shuffle(player.equipments));
             setRound(0);
         }
-    }, [isPlaying, gameState])
+    }, [isPlaying, equipments])
 
     return (
         <Box animation={isPlaying ? {type: "fadeIn", delay: DELAY} : "fadeOut"}
@@ -50,22 +59,24 @@ const GamePartial: FC<Props> = ({isPlaying}) => {
              background="dark"
              style={{position: "absolute", zIndex: isPlaying ? 600 : -1}}
         >
-            {/* Player Equipments Background */}
-            <GameEquipmentsPartial isVisible={isPlaying} delay={DELAY + 1000}/>
+            {/* Enemy Circle */}
+            {enemies != null && <GameEnemyCirclePartial isVisible={isPlaying} delay={DELAY + 2000} enemies={enemies}/>}
+
+            {/* Player Turn Actions */}
+            <GameTurnActionsPartial turnActions={turnActions} applyActions={onApplyAction}/>
+
+            {/* Player Equipments */}
+            {equipments != null &&
+            <GameEquipmentsPartial isVisible={isPlaying}
+                                   delay={DELAY + 1000}
+                                   round={round}
+                                   equipments={equipments}
+                                   onTurnEquipmentsChange={setTurnActions}
+                                   onTurnEquipmentsReset={() => setTurnActions([])}/>
+            }
 
             {/* Game Round */}
             <GameRoundPartial isVisible={isPlaying} delay={DELAY + 1500} round={round}/>
-
-            {/* Cards */}
-            <Box width="calc(50% - )" height="200px" style={{
-                position: "absolute",
-                bottom: 0,
-                left: 0,
-                zIndex: 3
-            }}>
-
-            </Box>
-
         </Box>
     );
 };

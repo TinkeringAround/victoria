@@ -18,49 +18,65 @@ const ITEMS: TItemCollection = {
         name: "Petersilie",
         description: "Lorem ipsum dolor sit amet, consetetur",
         type: "material",
-        image: pertersilie
+        image: pertersilie,
+        effect: null
     },
     "Morgenstunde": {
         name: "Morgenstunde",
         description: "Lorem ipsum dolor sit amet, consetetur",
         type: "material",
-        image: morgenstunde
+        image: morgenstunde,
+        effect: null
     },
     "Zweig": {
         name: "Zweig",
         description: "Lorem ipsum dolor sit amet, consetetur",
         type: "material",
-        image: zweig
+        image: zweig,
+        effect: null
     },
     "Wolfszahn": {
         name: "Wolfszahn",
         description: "Lorem ipsum dolor sit amet, consetetur",
         type: "material",
-        image: wolfszahn
+        image: wolfszahn,
+        effect: null
     },
     "Trank": {
         name: "Trank",
-        description: "Einfacher Trank mit erquicklichem Effekt",
+        description: "Einfacher Trank mit erquicklichem Effekt. Stellt zwei Lebenspunkte her.",
         type: "consumable",
-        image: potion
+        image: potion,
+        effect: {
+            target: "player",
+            value: 2,
+            description: "Stelle zwei Lebenspunkte bei Victoria her."
+        }
     },
     "Fleisch": {
         name: "Fleisch",
-        description: "Lorem ipsum dolor sit amet, consetetur",
+        description: "Ein Brocken Fleisch zum Anlocken von Monstern",
         type: "consumable",
-        image: fleisch
+        image: fleisch,
+        effect: {
+            target: "circle",
+            value: 1,
+            description: "Locke das nächste Monster an."
+        }
     },
     "Elixir": {
         name: "Elixir",
         description: "Lorem ipsum dolor sit amet, consetetur",
         type: "material",
-        image: elixir
+        image: elixir,
+        effect: null
     },
     "Stein": {
         name: "Stein",
         description: "Lorem ipsum dolor sit amet, consetetur",
         type: "material",
-        image: stein
+        image: stein,
+        effect: null
     }
 }
 

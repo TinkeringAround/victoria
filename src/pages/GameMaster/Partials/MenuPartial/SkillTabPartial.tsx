@@ -27,7 +27,7 @@ const SkillTabPartial: FC = () => {
 
     const playerSkillPoints = useCallback(() => {
         if (player) {
-            return player.level - (player.skills.Angriff + player.skills.Handwerk + player.skills.Verteidigung + player.skills.Agilität + player.skills.Alchemie - 4);
+            return player.level - (player.skills.Angriff + player.skills.Handwerk + player.skills.Verteidigung + player.skills.Ausdauer + player.skills.Alchemie - 4);
         }
         return 0;
     }, [player])

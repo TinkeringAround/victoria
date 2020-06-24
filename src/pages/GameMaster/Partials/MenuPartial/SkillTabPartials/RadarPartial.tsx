@@ -42,8 +42,8 @@ const RadarPartial: FC<Props> = ({setPosition, selectSkill}) => {
                     "Victoria": player.skills.Alchemie,
                 },
                 {
-                    "skill": "Agilität",
-                    "Victoria": player.skills.Agilität,
+                    "skill": "Ausdauer",
+                    "Victoria": player.skills.Ausdauer,
                 },
                 {
                     "skill": "Verteidigung",

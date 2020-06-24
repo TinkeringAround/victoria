@@ -1,3 +1,3 @@
-type TSkillTypes = "Angriff" | "Verteidigung" | "Agilität" | "Alchemie" | "Handwerk"
+type TSkillTypes = "Angriff" | "Verteidigung" | "Ausdauer" | "Alchemie" | "Handwerk"
 
 export default TSkillTypes;

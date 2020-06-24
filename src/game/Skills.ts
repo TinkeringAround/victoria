@@ -8,23 +8,23 @@ type TSkillCollection = {
 const SKILLS: TSkillCollection = {
     "Angriff": {
         description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam",
-        multiplier: 1
+        multiplier: 0.25
     },
     "Verteidigung": {
         description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam",
-        multiplier: 1.2
+        multiplier: 0.35
     },
-    "Agilität": {
+    "Ausdauer": {
         description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam",
-        multiplier: 1.25
+        multiplier: 1
     },
     "Alchemie": {
         description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam",
-        multiplier: 2
+        multiplier: 0.4
     },
     "Handwerk": {
         description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam",
-        multiplier: 1.95
+        multiplier: 0.5
     }
 }
 

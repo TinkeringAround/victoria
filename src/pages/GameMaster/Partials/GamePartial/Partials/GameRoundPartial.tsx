@@ -25,7 +25,7 @@ const GameRoundPartial: FC<Props> = ({round, isVisible, delay}) => (
               weight="bold"
               margin="0"
         >
-            {round + 1}
+            {round}
         </Text>
     </Box>
 );

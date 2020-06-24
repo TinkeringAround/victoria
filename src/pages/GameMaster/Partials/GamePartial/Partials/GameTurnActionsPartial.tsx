@@ -17,12 +17,13 @@ interface Props {
 }
 
 const GameTurnActionsPartial: FC<Props> = ({turnActions, applyActions}) =>
-    <Box style={{
-        position: "absolute",
-        left: "10%",
-        top: "50%",
-        transform: "translateY(-50%)"
-    }}>
+    <Box animation={turnActions.length > 0 ? "fadeIn" : "fadeOut"}
+         style={{
+             position: "absolute",
+             left: "10%",
+             top: "50%",
+             transform: "translateY(-50%)"
+         }}>
         {/* Actions */}
         {turnActions.map((action, index) =>
             <Text key={"Action" + action.name + index}

@@ -23,7 +23,6 @@ const STAT_NAMES: { [name: string]: string } = {
 
 interface Props {
     enemy: TEnemy
-
     size?: string
 }
 

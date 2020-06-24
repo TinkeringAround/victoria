@@ -28,11 +28,11 @@ const GameEquipmentsPartial: FC<Props> = ({isVisible, delay, round, equipments, 
     const [resetTrigger, setTrigger] = useState(false);
 
     const onSelectEquipment = useCallback((equipment: TItemDto | TWeaponDto, id: string) => {
-        const newTurnEquipments = Array.from(turnEquipments)
+        const newTurnEquipments = Array.from(turnEquipments);
         const index = getIndex(id);
 
         if (index >= 0) newTurnEquipments.splice(index, 1);
-        else newTurnEquipments.push({equipment: equipment, id: id})
+        else newTurnEquipments.push({equipment: equipment, id: id});
 
         onTurnEquipmentsChange(newTurnEquipments.map((turnItem) => turnItem.equipment));
         setTurnEquipments(newTurnEquipments);
@@ -46,6 +46,10 @@ const GameEquipmentsPartial: FC<Props> = ({isVisible, delay, round, equipments, 
             onTurnEquipmentsReset();
         }
     }, [turnEquipments])
+
+    useEffect(() => {
+        setTurnEquipments([]);
+    }, [equipments])
 
     return (
         <Box animation={isVisible ? {delay: delay, type: "slideUp", size: "xlarge"} : "fadeOut"}

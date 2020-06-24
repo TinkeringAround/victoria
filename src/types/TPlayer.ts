@@ -9,7 +9,7 @@ type TPlayer = {
         "Angriff": number
         "Verteidigung": number
         "Handwerk": number
-        "Agilität": number
+        "Ausdauer": number
         "Alchemie": number
     }
     items: Array<TItemDto>

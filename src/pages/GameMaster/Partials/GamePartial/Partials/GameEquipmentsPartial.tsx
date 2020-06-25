@@ -70,14 +70,12 @@ const GameEquipmentsPartial: FC<Props> = ({isVisible, delay, round, equipments, 
                 right: "2rem",
                 bottom: "2rem",
                 zIndex: 5
-            }}
-            >
+            }}>
                 <ButtonComponent color="light"
                                  background="medium"
                                  hoverColor="dark"
                                  padding="0.5rem 0.75rem"
-                                 onClick={() => setTurnEquipments([])}
-                >
+                                 onClick={() => setTurnEquipments([])}>
                     <IconComponent type="close"/>
                 </ButtonComponent>
             </Box>
@@ -106,7 +104,9 @@ const GameEquipmentsPartial: FC<Props> = ({isVisible, delay, round, equipments, 
                             <GameCardComponent itemOrWeapon={equipment}
                                                resetSelection={resetTrigger}
                                                index={getIndex(id)}
-                                               select={() => onSelectEquipment(equipment, id)}
+                                               select={() => {
+                                                   if (isVisible) onSelectEquipment(equipment, id)
+                                               }}
                                                size={size + "px"}/>
                         </Box>}
                     </React.Fragment>

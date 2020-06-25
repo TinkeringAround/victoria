@@ -14,10 +14,11 @@ import {generateEnemies} from "../../../../services/EnemyService";
 import {getPlayerHealth} from "../../../../services/PlayerService";
 import {gameIs, mutateGameState} from "../../../../services/GameService";
 
+import GameEnemyCirclePartial from "./Partials/GameEnemyCirclePartial";
+import GamePlayerPartial from "./Partials/GamePlayerPartial";
+import GameTurnActionsPartial from "./Partials/GameTurnActionsPartial";
 import GameEquipmentsPartial from "./Partials/GameEquipmentsPartial";
 import GameRoundPartial from "./Partials/GameRoundPartial";
-import GameTurnActionsPartial from "./Partials/GameTurnActionsPartial";
-import GameEnemyCirclePartial from "./Partials/GameEnemyCirclePartial";
 
 import LEVELS from "../../../../game/Levels";
 import ENEMIES from "../../../../game/Enemies";
@@ -40,6 +41,9 @@ const GamePartial: FC<Props> = ({isPlaying}) => {
     const [turnActions, setTurnActions] = useState<Array<TItemDto | TWeaponDto>>([]);
 
     const updateGameState = (newGameState: TGameState) => {
+        // Disable Equipments for Animation Start
+        if (!running) setRunning(true);
+
         setTurnActions([]);
         setGameState(newGameState);
     }
@@ -57,6 +61,8 @@ const GamePartial: FC<Props> = ({isPlaying}) => {
                 // TODO: Show Loose Screen
             } else {
                 console.log("Next Round");
+
+                // TODO: Roll Dice and update enemyIndex
 
                 setRound(round + 1);
                 setRunning(false);
@@ -79,10 +85,10 @@ const GamePartial: FC<Props> = ({isPlaying}) => {
                 if (!gameWon && !gameLost) {
                     const firstItem = index === 0;
                     const nextGameState = mutateGameState(player, {
-                        health: firstItem ? gameState.health : gameStates[index].health,
-                        equipments: firstItem ? gameState.equipments : gameStates[index].equipments,
-                        enemyIndex: firstItem ? gameState.enemyIndex : gameStates[index].enemyIndex,
-                        enemies: firstItem ? gameState.enemies : gameStates[index].enemies
+                        health: firstItem ? gameState.health : gameStates[index - 1].health,
+                        equipments: firstItem ? gameState.equipments : gameStates[index - 1].equipments,
+                        enemyIndex: firstItem ? gameState.enemyIndex : gameStates[index - 1].enemyIndex,
+                        enemies: firstItem ? gameState.enemies : gameStates[index - 1].enemies
                     }, action);
 
                     if (typeof nextGameState === "string") gameWon = gameIs(nextGameState, true);
@@ -90,26 +96,21 @@ const GamePartial: FC<Props> = ({isPlaying}) => {
                 }
             });
 
-            // Disable Equipments for Animation Start
-            setRunning(true);
-
             // Win oder Loose
             if (gameWon) startGameStateUpdateRoutine(gameStates, "win");
             else {
                 // Enemy Attack
                 const lastGameState = gameStates[gameStates.length - 1];
-                const nextGameState = mutateGameState(player, {
-                    health: lastGameState.health,
-                    equipments: lastGameState.equipments,
-                    enemyIndex: lastGameState.enemyIndex,
-                    enemies: lastGameState.enemies
-                }, ENEMIES[lastGameState.enemies[lastGameState.enemyIndex].name].stats.attack);
+                if (gameStates.length > 0 && lastGameState.enemies[lastGameState.enemyIndex].health > 0) {
+                    const nextGameState = mutateGameState(player, {
+                        health: lastGameState.health,
+                        equipments: lastGameState.equipments,
+                        enemyIndex: lastGameState.enemyIndex,
+                        enemies: lastGameState.enemies
+                    }, ENEMIES[lastGameState.enemies[lastGameState.enemyIndex].name].stats.attack);
 
-                if (typeof nextGameState === "string") gameLost = gameIs(nextGameState, false);
-                else gameStates.push(nextGameState);
-
-                if (!gameLost) {
-                    // TODO: Roll Dice and Mutate State
+                    if (typeof nextGameState === "string") gameLost = gameIs(nextGameState, false);
+                    else gameStates.push(nextGameState);
                 }
 
                 startGameStateUpdateRoutine(gameStates, gameLost ? "loose" : "round");
@@ -120,16 +121,21 @@ const GamePartial: FC<Props> = ({isPlaying}) => {
     useEffect(() => {
         if (isPlaying && player != null && gameState == null) {
             console.log("Initialize Game");
-
-            setRound(1);
-            setGameState({
+            const newGame = {
                 health: getPlayerHealth(player),
                 equipments: shuffle(player.equipments),
                 enemyIndex: 0,
                 enemies: generateEnemies(LEVELS[level].regions[region]),
-            });
+            }
+
+            setRound(1);
+            setGameState(newGame);
         }
     }, [isPlaying, gameState])
+
+    useEffect(() => {
+        console.log("Gamestate update")
+    }, [gameState])
 
     return (
         <Box animation={isPlaying ? {type: "fadeIn", delay: DELAY} : "fadeOut"}
@@ -139,23 +145,25 @@ const GamePartial: FC<Props> = ({isPlaying}) => {
              style={{position: "absolute", zIndex: isPlaying ? 600 : -1}}
         >
             {/* Enemy Circle */}
-            {gameState != null &&
-            <GameEnemyCirclePartial isVisible={isPlaying}
-                                    enemies={gameState.enemies}
-                                    activeEnemyIndex={gameState.enemyIndex}/>}
+            <GameEnemyCirclePartial gameState={gameState}/>
 
-            {/* Player Turn Actions */}
-            <GameTurnActionsPartial turnActions={turnActions}
-                                    applyActions={onApplyAction}/>
+            {/* Player */}
+            {gameState != null &&
+            <GamePlayerPartial health={gameState.health}/>}
 
             {/* Player Equipments */}
             {gameState != null &&
-            <GameEquipmentsPartial isVisible={isPlaying && !running}
+            <GameEquipmentsPartial key="GameEquipments"
+                                   isVisible={isPlaying && !running}
                                    delay={DELAY + 1000}
                                    round={round}
                                    equipments={gameState.equipments}
                                    onTurnEquipmentsChange={setTurnActions}
                                    onTurnEquipmentsReset={() => setTurnActions([])}/>}
+
+            {/* Player Turn Actions */}
+            <GameTurnActionsPartial turnActions={turnActions}
+                                    applyActions={onApplyAction}/>
 
             {/* Game Round */}
             <GameRoundPartial isVisible={isPlaying}

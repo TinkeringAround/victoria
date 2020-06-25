@@ -53,6 +53,7 @@ export const mutateGameState: (player: TPlayer, gameState: TGameState, action: T
 
     // Check Win Condition
     if (newHealth <= 0) return "loose";
+    if (newEquipments.length === 0 && newEnemies.some(enemy => enemy.health > 0)) return "loose";
     if (newEnemies.every((enemy) => enemy.health <= 0)) return "win";
 
     // Return new State
@@ -68,7 +69,7 @@ const isItem: (itemOrWeapon: TItemDto | TWeaponDto) => boolean = (itemOrWeapon) 
     return ITEMS.hasOwnProperty(itemOrWeapon.name);
 }
 
-const getSkillBonus: (player: TPlayer, multiplier: number) => number = (player, multiplier) => {
+export const getSkillBonus: (player: TPlayer, multiplier: number) => number = (player, multiplier) => {
     return Math.floor((player.level - 1) * multiplier);
 }
 

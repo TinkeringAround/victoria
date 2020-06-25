@@ -27,17 +27,21 @@ export const getCircleRotation: (index: number, maxEnemies: number) => number = 
     return (360 / maxEnemies) * index;
 }
 
+export const getInnerCircleRotation: (index: number, maxEnemies: number) => number = (index, maxEnemies) => {
+    return (-360 / maxEnemies) * index;
+}
+
 export const getEnemyRotation: (index: number, maxEnemies: number) => number = (index, maxEnemies) => {
     return index * (-360 / maxEnemies);
 }
 
 export const getEnemyPosition: (index: number, length: number, size: number, maxSize: number) => { top: number, left: number } = (index, length, size, maxSize) => {
-    const tolerance = 15;
+    const tolerance = 20;
 
     if (length === 4) {
-        if (index === 0) return generatePosition(maxSize - size - tolerance, maxSize / 2 - size / 2);
+        if (index === 0) return generatePosition(maxSize - size - 2 * tolerance, maxSize / 2 - size / 2);
         if (index === 1) return generatePosition(maxSize / 2 - size / 2, maxSize - size - tolerance);
-        if (index === 2) return generatePosition(tolerance, maxSize / 2 - size / 2);
+        if (index === 2) return generatePosition(2 * tolerance, maxSize / 2 - size / 2);
         if (index === 3) return generatePosition(maxSize / 2 - size / 2, tolerance)
     }
 

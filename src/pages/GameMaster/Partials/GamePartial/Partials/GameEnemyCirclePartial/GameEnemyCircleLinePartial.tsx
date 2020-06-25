@@ -8,10 +8,7 @@ interface Props {
 const GameEnemyCircleLinePartial: FC<Props> = ({size, color}) =>
     <svg height={size}
          width={size}
-         style={{
-             position: "absolute",
-             zIndex: -1
-         }}
+         style={{position: "absolute", zIndex: -1}}
     >
         {/* Middle */}
         <circle cx={size / 2} cy={size / 2} r={size * 0.025} style={{fill: color}}/>
@@ -21,7 +18,7 @@ const GameEnemyCircleLinePartial: FC<Props> = ({size, color}) =>
               x2={size / 2} y2={size}
               style={{
                   stroke: color,
-                  strokeWidth: 2,
+                  strokeWidth: 1,
                   strokeDasharray: 4
               }}/>
 
@@ -30,7 +27,7 @@ const GameEnemyCircleLinePartial: FC<Props> = ({size, color}) =>
               x2={size} y2={size / 2}
               style={{
                   stroke: color,
-                  strokeWidth: 2,
+                  strokeWidth: 1,
                   strokeDasharray: 4
               }}/>
     </svg>

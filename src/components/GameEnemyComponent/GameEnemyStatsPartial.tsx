@@ -18,10 +18,13 @@ interface Props {
 }
 
 const GameEnemyStatsPartial: FC<Props> = ({healthSize, statsHeight, health, enemy}) => {
+    const isHealthy = health > 0;
+
     return (
         <React.Fragment>
             {/* Health */}
-            <Box width={healthSize + "px"}
+            <Box animation={isHealthy ? "fadeIn" : "fadeOut"}
+                 width={healthSize + "px"}
                  height={healthSize + "px"}
                  align="center"
                  justify="center"
@@ -30,10 +33,10 @@ const GameEnemyStatsPartial: FC<Props> = ({healthSize, statsHeight, health, enem
                      top: healthSize * 0.25,
                      right: healthSize * 0.25,
                      fontSize: "2.5rem",
-                     color: colors.red,
+                     color: colors.light,
                      zIndex: 1
                  }}>
-                <Text color="light"
+                <Text color="dark"
                       style={{
                           position: "absolute",
                           left: "50%",

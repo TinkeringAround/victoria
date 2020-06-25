@@ -5,7 +5,7 @@ import TEnemyDto from "../../types/TEnemyDto";
 
 import {colors} from "../../styles/theme";
 
-import {changeColorBrightness} from "../../services/ColorService";
+import {changeColorBrightness, hexToRgbA} from "../../services/ColorService";
 
 import GameEnemyStatsPartial from "./GameEnemyStatsPartial";
 
@@ -21,7 +21,8 @@ interface Props {
 const GameEnemyComponent: FC<Props> = ({enemy, size}) => {
     const [isHovered, setHovered] = useState<boolean>(false);
 
-    const color = isHovered ? colors.gold : colors.dark;
+    const isHealthy = enemy.health > 0;
+    const color = isHovered && isHealthy ? colors.gold : colors.dark;
     const healthSize = 0.25 * size;
     const statsHeight = 0.15 * size;
 
@@ -40,6 +41,18 @@ const GameEnemyComponent: FC<Props> = ({enemy, size}) => {
                  borderRadius: "0.25rem"
              }}
         >
+            {/* Overlay */}
+            <Box animation={isHealthy ? "fadeOut" : "fadeIn"}
+                 width="100%"
+                 height="100%"
+                 background={hexToRgbA(colors.dark, "0.75")}
+                 style={{
+                     position: "absolute",
+                     top: 0,
+                     left: 0,
+                     zIndex: 10
+                 }}/>
+
             {/* Stats */}
             <GameEnemyStatsPartial healthSize={healthSize}
                                    statsHeight={statsHeight}
@@ -47,22 +60,19 @@ const GameEnemyComponent: FC<Props> = ({enemy, size}) => {
                                    enemy={ENEMIES[enemy.name]}/>
 
             {/* Image */}
-            <Box
-                width={INNER_SIZE}
-                height={INNER_SIZE}
-                align="center"
-                justify="center"
-                style={{
-                    position: "relative",
-                    borderRadius: "5px",
-                    color: "white",
-                    textAlign: "center"
-                }}
+            <Box width={INNER_SIZE}
+                 height={INNER_SIZE}
+                 align="center"
+                 justify="center"
+                 style={{
+                     position: "relative",
+                     borderRadius: "5px",
+                     color: "white",
+                     textAlign: "center"
+                 }}
             >
                 <Image src={ENEMIES[enemy.name].image}
                        style={{
-                           // width: `calc(${size} - 10px)`,
-                           // height: `calc(${size} - 10px)`,
                            width: "100%",
                            height: "100%",
                            borderRadius: 1

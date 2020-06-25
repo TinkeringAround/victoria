@@ -1,11 +1,16 @@
 import React, {FC} from 'react';
 import {Box} from "grommet";
 
-import TEnemyDto from "../../../../../../types/TEnemyDto";
+import TGameState from "../../../../../../types/TGameState";
 
 import {colors} from "../../../../../../styles/theme";
 
-import {getCircleRotation, getEnemyPosition, getEnemyRotation} from "../../../../../../services/EnemyService";
+import {
+    getCircleRotation,
+    getEnemyPosition,
+    getEnemyRotation,
+    getInnerCircleRotation
+} from "../../../../../../services/EnemyService";
 
 import GameEnemyComponent from "../../../../../../components/GameEnemyComponent";
 
@@ -18,13 +23,12 @@ const ENEMY_MULTIPLIER = 0.2;
 const CIRCLE_TOP_TOLERANCE = 25;
 
 interface Props {
-    isVisible: boolean
-
-    enemies: Array<TEnemyDto>
-    activeEnemyIndex: number
+    gameState: TGameState | null
 }
 
-const GameEnemyCirclePartial: FC<Props> = ({isVisible, enemies, activeEnemyIndex}) => {
+const GameEnemyCirclePartial: FC<Props> = ({gameState}) => {
+    const circleIndex = gameState ? gameState.enemyIndex : 0;
+    const circlePieces = gameState ? gameState.enemies.length : 0;
 
     const calculatedSize = window.innerWidth * MULTIPLIER;
     const size = calculatedSize >= MIN_SIZE ? (calculatedSize > MAX_SIZE ? MAX_SIZE : calculatedSize) : MIN_SIZE;
@@ -39,28 +43,42 @@ const GameEnemyCirclePartial: FC<Props> = ({isVisible, enemies, activeEnemyIndex
              background="medium"
              style={{
                  position: "absolute",
-                 top: isVisible ? `-${circleTop}px` : "-100%",
+                 top: `-${circleTop}px`,
                  left: `${circleLeft}px`,
-                 clipPath: "circle(50% at 50% 50%)",
+                 clipPath: "polygon(50% 0%, 80% 10%, 100% 35%, 100% 70%, 80% 90%, 50% 100%, 20% 90%, 0% 70%, 0% 35%, 20% 10%)",
                  zIndex: 5,
                  transition: `all 1s ease`,
-                 transform: `rotate(${getCircleRotation(activeEnemyIndex, enemies.length)}deg)`
+                 transform: `rotate(${getCircleRotation(circleIndex, circlePieces)}deg)`
              }}
         >
+            {/* Inner Circle */}
+            <Box width="80%"
+                 height="80%"
+                 background="light"
+                 style={{
+                     position: "absolute",
+                     top: "10%",
+                     left: "10%",
+                     zIndex: -1,
+                     clipPath: " polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)",
+                     transition: `all 0.5s ease`,
+                     transform: `rotate(${getInnerCircleRotation(circleIndex, circlePieces)}deg)`
+                 }}/>
+
             {/* Enemies */}
             <Box width={size + "px"}
                  height={size + "px"}
                  style={{position: "relative"}}
             >
-                {enemies.map((enemy, index) => {
-                    const {top, left} = getEnemyPosition(index, enemies.length, enemySize, size);
+                {gameState != null && gameState.enemies.map((enemy, index) => {
+                    const {top, left} = getEnemyPosition(index, circlePieces, enemySize, size);
 
                     return (
                         <Box key={"GameEnemy" + enemy.name + index}
                              style={{
                                  position: "absolute", top: top, left: left,
                                  transition: `all 1s ease`,
-                                 transform: `rotate(${getEnemyRotation(activeEnemyIndex, enemies.length)}deg)`
+                                 transform: `rotate(${getEnemyRotation(circleIndex, circlePieces)}deg)`
                              }}>
                             <GameEnemyComponent enemy={enemy} size={enemySize}/>
                         </Box>

@@ -35,7 +35,7 @@ const COMBINATION_EXPERIENCES = [10, 50];
 const GameMasterPage: FC = () => {
     const {toggleLoadingScreen} = useContext(LoadingContext);
     const {player, update} = useContext(PlayerContext);
-    const {playEffect} = useContext(SoundContext);
+    const {play, playEffect} = useContext(SoundContext);
 
     const [menuTab, setMenuTab] = useState<null | TMenuTabs>(null);
 
@@ -47,6 +47,8 @@ const GameMasterPage: FC = () => {
 
     const [combination, setCombination] = useState<TCombinationDto | null>(null);
 
+    useEffect(() => play("home"), [])
+    
     useEffect(() => {
         if (levelMaster == null && document.getElementById(CHAPTER_MASTER_ID)) {
             toggleLoadingScreen(true);

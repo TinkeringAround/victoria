@@ -5,6 +5,8 @@ import {Grommet} from "grommet";
 
 import TPlayer from "./types/TPlayer";
 import TAudios from "./types/TAudios";
+import TSounds from "./types/TSounds";
+import TEffects from "./types/TEffects";
 
 import './styles/index.css';
 import {theme} from "./styles/theme";
@@ -49,11 +51,11 @@ const App: FC = () => {
         setMuted(mute);
     }, [audio, muted])
     const pauseSound = useCallback(() => pause(audio.background), [audio]);
-    const playSound = useCallback((soundName: string) => {
+    const playSound = useCallback((soundName: TSounds) => {
         if (!muted) play(audio.background, soundName).catch(() => setMuted(true));
         else load(audio.background, soundName);
     }, [audio, muted]);
-    const playEffect = useCallback((effectName: string) => effect(audio.effect, effectName), [audio])
+    const playEffect = useCallback((effectName: TEffects) => effect(audio.effect, effectName), [audio])
 
     useEffect(() => {
         firebase.auth().onAuthStateChanged(async (user: User | null) => {

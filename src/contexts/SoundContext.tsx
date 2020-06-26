@@ -1,11 +1,12 @@
 import React from "react";
 import TEffects from "../types/TEffects";
+import TSounds from "../types/TSounds";
 
 interface Props {
     muted: boolean
     mute: (mute: boolean) => void
 
-    play: (soundName: string) => void
+    play: (soundName: TSounds) => void
     pause: () => void
 
     playEffect: (effectName: TEffects) => void

@@ -8,6 +8,7 @@ import TGameCondition from "../../../../types/TGameCondition";
 
 import PlayerContext from "../../../../contexts/PlayerContext";
 import GameMasterContext from "../../../../contexts/GameMasterContext";
+import SoundContext from "../../../../contexts/SoundContext";
 
 import {shuffle} from "../../../../services/CardService";
 import {generateEnemies} from "../../../../services/EnemyService";
@@ -34,6 +35,7 @@ interface Props {
 const GamePartial: FC<Props> = ({isPlaying}) => {
     const {player} = useContext(PlayerContext);
     const {level, region} = useContext(GameMasterContext);
+    const {play} = useContext(SoundContext);
 
     const [running, setRunning] = useState<boolean>(false);
     const [round, setRound] = useState<number>(-1);
@@ -132,6 +134,10 @@ const GamePartial: FC<Props> = ({isPlaying}) => {
             setGameState(newGame);
         }
     }, [isPlaying, gameState])
+
+    useEffect(() => {
+        if (isPlaying) play("game")
+    }, [isPlaying])
 
     useEffect(() => {
         console.log("Gamestate update")

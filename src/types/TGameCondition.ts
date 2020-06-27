@@ -1,3 +1,3 @@
-type TGameCondition = "win" | "loose" | "round";
+type TGameCondition = "win" | "loose" | "round" | "roundEnd";
 
 export default TGameCondition;

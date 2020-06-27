@@ -50,7 +50,7 @@ const ITEMS: TItemCollection = {
         effect: {
             target: "player",
             value: 2,
-            description: "Stelle zwei Lebenspunkte bei Victoria her."
+            description: "Victoria heilt ihre Wunden (2 Lebenspunkte)"
         }
     },
     "Fleisch": {
@@ -61,7 +61,7 @@ const ITEMS: TItemCollection = {
         effect: {
             target: "circle",
             value: 1,
-            description: "Locke das nächste Monster an."
+            description: "Victoria lockt das nächste Monster an"
         }
     },
     "Elixir": {

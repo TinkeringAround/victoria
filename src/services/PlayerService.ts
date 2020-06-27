@@ -1,13 +1,9 @@
 import TPlayer from "../types/TPlayer";
+import TExperience from "../types/TExperience";
 
 import SKILLS from "../game/Skills";
 
 const BASE_HEALTH = 5;
-
-type TExperience = {
-    newLevel: number
-    newExperience: number
-}
 
 export const gainExperience: (player: TPlayer, experience: number) => TExperience = (player, experience) => {
     const experienceAndLevel: TExperience = {

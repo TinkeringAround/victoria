@@ -52,7 +52,7 @@ const App: FC = () => {
     }, [audio, muted])
     const pauseSound = useCallback(() => pause(audio.background), [audio]);
     const playSound = useCallback((soundName: TSounds) => {
-        if (!muted) play(audio.background, soundName).catch(() => setMuted(true));
+        if (!muted) play(audio.background, soundName).catch(() => play(audio.background, soundName).catch(() => setMuted(true)));
         else load(audio.background, soundName);
     }, [audio, muted]);
     const playEffect = useCallback((effectName: TEffects) => effect(audio.effect, effectName), [audio])

@@ -1,6 +1,8 @@
 import TEnemyDto from "../types/TEnemyDto";
 import {TRegion} from "../types/TRegion";
 
+import {pickRandomElement} from "./UtilityService";
+
 import ENEMIES from "../game/Enemies";
 
 export const generateEnemies: (region: TRegion) => Array<TEnemyDto> = (region) => {
@@ -13,10 +15,6 @@ export const generateEnemies: (region: TRegion) => Array<TEnemyDto> = (region) =
     }
 
     return enemies;
-}
-
-export const pickRandomElement: (array: Array<any>) => any = (array) => {
-    return array[Math.floor(Math.random() * array.length)];
 }
 
 const getEnemyCountByDifficulty: (difficulty: number) => number = (difficulty) => {

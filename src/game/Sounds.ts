@@ -6,6 +6,8 @@ import successLong from "../assets/sounds/success-long.mp3";
 import boiling from "../assets/sounds/boiling.mp3";
 import home from "../assets/sounds/home.mp3";
 import game from "../assets/sounds/game.mp3";
+import fail from "../assets/sounds/fail.mp3";
+import dice from "../assets/sounds/dice.mp3";
 
 type TSoundCollection = {
     [name: string]: any
@@ -19,7 +21,9 @@ const SOUNDS: TSoundCollection = {
     "success-long": successLong,
     "boiling": boiling,
     "home": home,
-    "game": game
+    "game": game,
+    "fail": fail,
+    "dice": dice
 }
 
 export default SOUNDS;

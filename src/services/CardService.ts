@@ -2,9 +2,10 @@ import {TItem, TItemDto} from "../types/TItem";
 import {TWeapon, TWeaponDto} from "../types/TWeapon";
 import TPlayer from "../types/TPlayer";
 
+import {getSkillBonus} from "./GameService";
+
 import ITEMS from "../game/Items";
 import WEAPONS from "../game/Weapons";
-import {getSkillBonus} from "./GameService";
 import SKILLS from "../game/Skills";
 
 export const shuffle: (array: Array<TItemDto | TWeaponDto>) => Array<TItemDto | TWeaponDto> = (array) => {
@@ -50,8 +51,8 @@ export const generateAction: (itemOrWeapon: TItemDto | TWeaponDto) => string = (
     if (equipment.hasOwnProperty("value")) {
         const damageOrDefence = (equipment as TWeapon).value;
         return equipment.type === "weapon" ?
-            `Füge dem Gegner ${damageOrDefence} Schaden zu.` :
-            `Steigere deine Verteidigung um ${damageOrDefence}.`;
+            `Victoria greift an (${damageOrDefence} Schadenspunkt) ` :
+            `Victoria verteidigt sich (${damageOrDefence} Lebenspunkt) `;
     }
 
     if (equipment.hasOwnProperty("effect")) {
@@ -69,13 +70,13 @@ export const generateSkillBonus: (itemOrWeapon: TItem | TWeapon | TItemDto | TWe
 
         if (isItem) {
             bonus = ITEMS[itemOrWeapon.name].effect?.target !== "circle" ?
-                getSkillBonus(player, SKILLS["Alchemie"].multiplier) :
+                getSkillBonus(player.skills.Alchemie, SKILLS["Alchemie"].multiplier) :
                 0;
         } else {
             const weapon = WEAPONS[itemOrWeapon.name];
             bonus = weapon.type === "weapon" ?
-                getSkillBonus(player, SKILLS["Angriff"].multiplier) :
-                getSkillBonus(player, SKILLS["Verteidigung"].multiplier)
+                getSkillBonus(player.skills.Angriff, SKILLS["Angriff"].multiplier) :
+                getSkillBonus(player.skills.Verteidigung, SKILLS["Verteidigung"].multiplier)
         }
 
         return bonus === 0 ? "" : ` (+${bonus})`;

@@ -3,9 +3,10 @@ import {Box, Text} from "grommet";
 
 interface Props {
     amount: number
+    noX?: boolean
 }
 
-const ItemAmountPartial: FC<Props> = ({amount}) =>
+const ItemAmountPartial: FC<Props> = ({amount, noX = false}) =>
     <Box style={{
         position: "absolute",
         bottom: 0,
@@ -13,7 +14,8 @@ const ItemAmountPartial: FC<Props> = ({amount}) =>
         zIndex: 3
     }}>
         <Text size="1rem" color="white">
-            <small>x </small>{amount}
+            {!noX && <React.Fragment><small>x </small>{amount}</React.Fragment>}
+            {noX && <React.Fragment>{amount}</React.Fragment>}
         </Text>
     </Box>
 

@@ -25,6 +25,7 @@ import CombinationPartial from "./Partials/CombinationPartial";
 
 import ITEMS from "../../game/Items";
 import GamePartial from "./Partials/GamePartial";
+import TPlayer from "../../types/TPlayer";
 
 const CHAPTER_MASTER_ID = "levelMaster";
 const DURATION = 1500;
@@ -48,7 +49,7 @@ const GameMasterPage: FC = () => {
     const [combination, setCombination] = useState<TCombinationDto | null>(null);
 
     useEffect(() => play("home"), [])
-    
+
     useEffect(() => {
         if (levelMaster == null && document.getElementById(CHAPTER_MASTER_ID)) {
             toggleLoadingScreen(true);
@@ -156,6 +157,12 @@ const GameMasterPage: FC = () => {
         }
     }
 
+    const onFinishedGame = (playerUpdate: TPlayer) => {
+        setViewMode("detail");
+        update(playerUpdate);
+        play("home");
+    }
+
     return (
         <GameMasterContext.Provider value={{
             id: CHAPTER_MASTER_ID,
@@ -208,7 +215,7 @@ const GameMasterPage: FC = () => {
                 <CombinationPartial combination={combination} onFinished={onFinishedCombination}/>
 
                 {/* GamePartial*/}
-                <GamePartial isPlaying={viewMode === "game"}/>
+                <GamePartial isPlaying={viewMode === "game"} onFinished={onFinishedGame}/>
             </Box>
         </GameMasterContext.Provider>
     );

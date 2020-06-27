@@ -23,28 +23,44 @@ const LEVELS: Array<TLevel> = [
                 name: "Baum des Lebens",
                 description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam",
                 enemies: ["Ratte"],
-                items: ["Stock"],
+                rewards: {
+                    items: ["Zweig", "Petersilie", "Stein", "Zweig", "Petersilie"],
+                    count: 2,
+                    gold: 0
+                },
                 difficulty: 1
             },
             "Acker": {
                 name: "Ackerland",
                 description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam",
                 enemies: ["Schlange"],
-                items: ["Petersilie"],
+                rewards: {
+                    items: ["Petersilie", "Morgenstunde", "Zweig", "Petersilie", "Morgenstunde"],
+                    count: 4,
+                    gold: 0
+                },
                 difficulty: 1
             },
             "DeepForest": {
                 name: "Wolfshöhle",
                 description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam",
                 enemies: ["Wolf"],
-                items: [],
+                rewards: {
+                    items: ["Wolfszahn"],
+                    count: 2,
+                    gold: 0
+                },
                 difficulty: 1
             },
             "Treasure": {
                 name: "Drei Steine",
                 description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam",
                 enemies: ["Schlange", "Ratte"],
-                items: [],
+                rewards: {
+                    items: ["Stein", "Zweig"],
+                    count: 3,
+                    gold: 3
+                },
                 difficulty: 1
             }
         }

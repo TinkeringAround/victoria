@@ -7,6 +7,7 @@ type TEnemy = {
         armor: number
         experience: number
     }
+    rewards: Array<string>
 }
 
 export default TEnemy;

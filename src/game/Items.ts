@@ -4,7 +4,7 @@ import potion from "../assets/images/items/potion.png";
 import pertersilie from "../assets/images/items/petersilie.png";
 import zweig from "../assets/images/items/zweig.png";
 import morgenstunde from "../assets/images/items/morgenstund.png";
-import wolfszahn from "../assets/images/items/wolfszahn.png";
+import knochen from "../assets/images/items/knochen.png";
 import fleisch from "../assets/images/items/fleisch.png";
 import elixir from "../assets/images/items/elixir.png";
 import stein from "../assets/images/items/stein.png";
@@ -16,35 +16,35 @@ type TItemCollection = {
 const ITEMS: TItemCollection = {
     "Petersilie": {
         name: "Petersilie",
-        description: "Lorem ipsum dolor sit amet, consetetur",
+        description: "Pflanze mit heilender Wirkung",
         type: "material",
         image: pertersilie,
         effect: null
     },
     "Morgenstunde": {
         name: "Morgenstunde",
-        description: "Lorem ipsum dolor sit amet, consetetur",
+        description: "Seltene Pflanze, die nur an bestimmten Orten wächst",
         type: "material",
         image: morgenstunde,
         effect: null
     },
     "Zweig": {
         name: "Zweig",
-        description: "Lorem ipsum dolor sit amet, consetetur",
+        description: "Ein einfacher Zweig",
         type: "material",
         image: zweig,
         effect: null
     },
-    "Wolfszahn": {
-        name: "Wolfszahn",
-        description: "Lorem ipsum dolor sit amet, consetetur",
+    "Knochen": {
+        name: "Knochen",
+        description: "Stabiler Knochen",
         type: "material",
-        image: wolfszahn,
+        image: knochen,
         effect: null
     },
     "Trank": {
         name: "Trank",
-        description: "Einfacher Trank mit erquicklichem Effekt. Stellt zwei Lebenspunkte her.",
+        description: "Einfacher Trank mit erquicklichem Effekt",
         type: "consumable",
         image: potion,
         effect: {
@@ -66,14 +66,14 @@ const ITEMS: TItemCollection = {
     },
     "Elixir": {
         name: "Elixir",
-        description: "Lorem ipsum dolor sit amet, consetetur",
+        description: "Seltenes Material zum Herstellen mächtiger Tränke",
         type: "material",
         image: elixir,
         effect: null
     },
     "Stein": {
         name: "Stein",
-        description: "Lorem ipsum dolor sit amet, consetetur",
+        description: "Ein einfacher Stein",
         type: "material",
         image: stein,
         effect: null

@@ -1,7 +1,6 @@
 import React, {FC, useCallback, useContext, useState} from 'react';
 
 import TSkillTypes from "../../../../types/TSkillTypes";
-import TPosition from "../../../../types/TPosition";
 
 import PlayerContext from "../../../../contexts/PlayerContext";
 
@@ -13,7 +12,6 @@ const SkillTabPartial: FC = () => {
     const {player, update} = useContext(PlayerContext);
 
     const [selectedSkill, selectSkill] = useState<TSkillTypes | null>(null);
-    const [position, setPosition] = useState<TPosition>({x: 0, y: 0});
 
     const improveSkill = () => {
         if (player && selectedSkill) {
@@ -38,13 +36,11 @@ const SkillTabPartial: FC = () => {
             <SkillPointsPartial skillPoints={playerSkillPoints()}/>
 
             {/* Radar */}
-            <RadarPartial setPosition={setPosition}
-                          selectSkill={selectSkill}/>
+            <RadarPartial selectSkill={selectSkill}/>
 
 
             {/* Info Dialog */}
             {selectedSkill && <InfoDialogPartial skill={selectedSkill}
-                                                 position={position}
                                                  cancel={() => selectSkill(null)}
                                                  improveSkill={improveSkill}
                                                  disabled={playerSkillPoints() === 0}/>}

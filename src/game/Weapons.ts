@@ -1,6 +1,6 @@
 import {TWeapon} from "../types/TWeapon";
 
-import holzbogen from "../assets/images/items/holzbogen.png";
+import knochenbogen from "../assets/images/items/knochenbogen.png";
 import holzstab from "../assets/images/items/holzstab.png";
 import holzschild from "../assets/images/items/holzschild.png";
 
@@ -9,23 +9,23 @@ type TWeaponCollection = {
 }
 
 const WEAPONS: TWeaponCollection = {
-    "Holzbogen": {
-        name: "Holzbogen",
-        description: "Lorem ipsum dolor sit amet, consetetur",
-        image: holzbogen,
+    "Knochenbogen": {
+        name: "Knochenbogen",
+        description: "Ein aus Knochen hergestellter Bogen",
+        image: knochenbogen,
         type: "weapon",
         value: 2
     },
     "Holzstab": {
         name: "Holzstab",
-        description: "Lorem ipsum dolor sit amet, consetetur",
+        description: "Einfacher Stab hergestellt aus einem kräftigen Zweig",
         image: holzstab,
         type: "weapon",
         value: 1
     },
     "Holzschild": {
         name: "Holzschild",
-        description: "Lorem ipsum dolor sit amet, consetetur",
+        description: "Stabile unbehandelte Holzplatte",
         image: holzschild,
         type: "shield",
         value: 1

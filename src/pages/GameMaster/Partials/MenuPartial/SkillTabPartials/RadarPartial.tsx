@@ -4,7 +4,6 @@ import {ResponsiveRadar} from "@nivo/radar";
 import {Box} from "grommet";
 
 import TSkillTypes from "../../../../../types/TSkillTypes";
-import TPosition from "../../../../../types/TPosition";
 
 import {colors} from "../../../../../styles/theme";
 
@@ -23,14 +22,11 @@ const SText = styled.text`
     }
 `
 
-const CLASSNAME = "RadarParial";
-
 interface Props {
-    setPosition: (position: TPosition) => void
     selectSkill: (skill: TSkillTypes) => void
 }
 
-const RadarPartial: FC<Props> = ({setPosition, selectSkill}) => {
+const RadarPartial: FC<Props> = ({selectSkill}) => {
     const {player} = useContext(PlayerContext);
     const [data, setData] = useState<Array<any>>([]);
 
@@ -65,23 +61,13 @@ const RadarPartial: FC<Props> = ({setPosition, selectSkill}) => {
     // @ts-ignore
     const GridLabel = ({id, anchor}) =>
         <g transform={`translate(${anchor === 'end' ? -70 : anchor === 'middle' ? -25 : 0}, 0)`}>
-            <SText onClick={() => {
-                const radar = document.getElementsByClassName(CLASSNAME);
-                //@ts-ignore
-                const boundingRect = radar.item(0).getBoundingClientRect();
-                setPosition({
-                    x: boundingRect.x + (boundingRect.width / 2),
-                    y: boundingRect.y + (boundingRect.height / 2)
-                });
-                selectSkill(id as TSkillTypes)
-            }}>
+            <SText onClick={() => selectSkill(id as TSkillTypes)}>
                 {id}
             </SText>
         </g>
 
     return (
-        <Box className={CLASSNAME}
-             width="80%"
+        <Box width="80%"
              height="90%"
              pad="1rem"
         >

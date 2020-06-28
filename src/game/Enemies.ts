@@ -39,7 +39,7 @@ const ENEMIES: TEnemyCollection = {
             armor: 0,
             experience: 5
         },
-        rewards: ["Wolfszahn", "Fleisch", "Fleisch", "Fleisch"],
+        rewards: ["Wolfszahn", "Fleisch", "Fleisch"],
         image: wolf
     }
 }

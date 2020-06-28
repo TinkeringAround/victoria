@@ -181,7 +181,7 @@ const GamePartial: FC<Props> = ({isPlaying, onFinished}) => {
             {/* Game Dice */}
             <Box style={{
                 position: "absolute",
-                right: "7.5%",
+                right: "10%",
                 top: "50%",
                 transform: "translateY(-50%)",
                 transition: "all 1s ease"

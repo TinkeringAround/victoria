@@ -19,7 +19,7 @@ const GameRoundPartial: FC<Props> = ({round, isVisible, delay}) => (
              cursor: "default"
          }}>
         <Text size="2rem" margin="0 1rem 0 0">
-            Welle
+            Runde
         </Text>
         <Text size="3rem"
               weight="bold"

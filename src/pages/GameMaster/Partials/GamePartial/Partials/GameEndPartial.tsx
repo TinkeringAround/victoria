@@ -22,8 +22,9 @@ import ITEMS from "../../../../../game/Items";
 import WEAPONS from "../../../../../game/Weapons";
 import LEVELS from "../../../../../game/Levels";
 
-const DURATION = 1000;
 const ANIMATIONS = [1, 2, 3, 4];
+const SUCCESS = [1000, 2000, 3000, 4000];
+const FAILURE = [1000, 2000, 3000, 4000];
 
 interface Props {
     result: TGameResult
@@ -42,8 +43,8 @@ const GameEndPartial: FC<Props> = ({result, gameState, onFinish}) => {
     const [experienceGain, setExperienceGain] = useState<number>(0);
 
     const startAnimation = () => {
-        ANIMATIONS.forEach(animationStep =>
-            setTimeout(() => setState(animationStep), animationStep * DURATION));
+        ANIMATIONS.forEach((animationStep, index) =>
+            setTimeout(() => setState(animationStep), isWin ? SUCCESS[index] : FAILURE[index]));
     }
 
     const onLeaveGameEndScreen = () => {
@@ -78,10 +79,7 @@ const GameEndPartial: FC<Props> = ({result, gameState, onFinish}) => {
              style={{position: "absolute", zIndex: isPlaying ? 700 : -1}}>
 
             {/* Win-Star / Loose-Poop */}
-            <Box animation={state >= 2 ? {
-                type: isWin ? "pulse" : "slideUp",
-                size: isWin ? "medium" : "xlarge"
-            } : "fadeOut"}
+            <Box animation={state >= 2 ? (isWin ? ["fadeIn", "pulse"] : "fadeIn") : "fadeOut"}
                  width="100%" height="100%" align="center" justify="center" style={{zIndex: 699}}>
                 {isWin ?
                     <svg width="100%" height="100%" viewBox="0 0 1920 1080">

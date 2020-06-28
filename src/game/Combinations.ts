@@ -11,6 +11,13 @@ const COMBINATIONS: TCombinationCollection = {
             name: "Trank",
             amount: 1
         }
+    },
+    "Knochenbogen": {
+        requirements: ["Knochen", "Seil"],
+        result: {
+            name: "Knochenbogen",
+            amount: 1
+        }
     }
 }
 

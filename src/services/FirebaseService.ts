@@ -57,7 +57,7 @@ export const registerUserWithEmailAndPassword: (email: string, password: string)
                 .catch((error: FirebaseError) => {
                     console.error(error);
                     return createResponse(TResponseCode.REGISTRATION_ERROR, [error.message], null);
-                })
+                });
         });
 };
 

@@ -2,7 +2,6 @@ import React, {FC} from 'react';
 import {Box, Heading, Paragraph} from "grommet";
 
 import TSkillTypes from "../../../../../types/TSkillTypes";
-import TPosition from "../../../../../types/TPosition";
 
 import {colors} from "../../../../../styles/theme";
 
@@ -13,28 +12,27 @@ import ButtonComponent from "../../../../../components/ButtonComponent";
 import SKILLS from "../../../../../game/Skills";
 
 const INFO_DIALOG_WIDTH = 300;
-const INFO_DIALOG_HEIGHT = 350;
 
 interface Props {
     skill: TSkillTypes
-    position: TPosition
     cancel: () => void
     improveSkill: () => void
     disabled: boolean
 }
 
-const InfoDialogPartial: FC<Props> = ({skill, position, cancel, improveSkill, disabled}) =>
+const InfoDialogPartial: FC<Props> = ({skill, cancel, improveSkill, disabled}) =>
     <Box width={`${INFO_DIALOG_WIDTH}px`}
          background="beige"
          align="center"
          pad="2rem 1rem 2.25rem"
          margin={{bottom: "15%"}}
          style={{
-             position: "fixed",
+             position: "absolute",
              transition: " all 0.25s ease",
              opacity: skill ? 1 : 0,
-             left: position.x - (INFO_DIALOG_WIDTH / 2),
-             top: position.y - (INFO_DIALOG_HEIGHT / 2),
+             left: "50%",
+             top: "50%",
+             transform: "translate(-50%, -50%)",
              borderRadius: "0.5rem",
              zIndex: skill ? 2 : -1
          }}

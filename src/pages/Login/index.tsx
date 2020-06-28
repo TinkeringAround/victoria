@@ -2,6 +2,8 @@ import React, {FC, useContext, useEffect, useState} from 'react';
 import {Box, Heading} from "grommet";
 import styled from "styled-components";
 
+import {TLoginMode} from "../../types/TLoginMode";
+
 import {colors} from "../../styles/theme";
 
 import SoundContext from "../../contexts/SoundContext";
@@ -9,8 +11,6 @@ import SoundContext from "../../contexts/SoundContext";
 import LogoComponent from "../../components/LogoComponent";
 
 import FormularPartial from "./Partials/formular";
-
-import {TLoginMode} from "../../types/TLoginMode";
 
 const SBox = styled(Box)`
     width: 50%;

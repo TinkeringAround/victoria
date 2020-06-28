@@ -63,7 +63,8 @@ const CombinationPartial: FC<Props> = ({combination, onFinished}) => {
         if (state === 0 && combination != null && combination.animation === "short") playEffect("success-short");
 
         if (state === 1 && combination != null && combination.animation === "long") playEffect("boiling");
-        if (state === 3 && combination != null && combination.animation === "long") playEffect("success-long");
+        if (state === 3 && combination != null && combination.name != null && combination.animation === "long") playEffect("success-long");
+        if (state === 4 && combination != null && combination.name == null && combination.animation === "long") playEffect("fail");
     }, [state])
 
     const isVisible = state > -1;

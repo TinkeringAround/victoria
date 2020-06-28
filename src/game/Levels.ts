@@ -1,7 +1,11 @@
 import {TLevel} from "../types/TLevel";
 
-import level0Single from "../assets/meshes/level0_Single.babylon";
-import level0Multi from "../assets/meshes/level0_Multi.babylon";
+// LOCAL TEST
+// import level0Single from "../assets/meshes/level0_Single.babylon";
+// import level0Multi from "../assets/meshes/level0_Multi.babylon";
+
+const level0Single = "https://assets.ctfassets.net/df3z1ez0ud42/1Cs06ApThG8nInKgCk3F5m/06cb7a5f3fdf3df1ae03c7493aaa56b9/level0_Single.babylon";
+const level0Multi = "https://assets.ctfassets.net/df3z1ez0ud42/39YWBPNVJUrqRdqqtDZUcH/85a93621d469e86b714cea0b01ba6605/level0_Multi.babylon";
 
 const LEVELS: Array<TLevel> = [
     {

@@ -1,0 +1,13 @@
+.scrollable::-webkit-scrollbar-track {
+    -webkit-box-shadow: none;
+    background-color: white;
+}
+
+.scrollable::-webkit-scrollbar {
+    width: 5px;
+    background-color: #B69D60;
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+    background-color: #B69D60;
+}

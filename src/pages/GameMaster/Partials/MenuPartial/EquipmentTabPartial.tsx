@@ -5,6 +5,8 @@ import {DragDropContext, Draggable, Droppable, DropResult} from "react-beautiful
 import {TWeaponDto} from "../../../../types/TWeapon";
 import {TItemDto} from "../../../../types/TItem";
 
+import "./EquipmentTabPartials/styles.css";
+
 import {colors} from "../../../../styles/theme";
 
 import PlayerContext from "../../../../contexts/PlayerContext";
@@ -101,7 +103,8 @@ const EquipmentTabPartial: FC = () => {
             <DragDropContext onDragEnd={onDragEnd}>
                 <Droppable droppableId={LISTS[0]}>
                     {(provided) => (
-                        <Box width={ITEMS_WIDTH}
+                        <Box className="scrollable"
+                             width={ITEMS_WIDTH}
                              height={WRAPPER_HEIGHT}
                              pad="1rem"
                              background="beige"
@@ -152,7 +155,8 @@ const EquipmentTabPartial: FC = () => {
                 {/* Equipments */}
                 <Droppable droppableId={LISTS[1]} direction="horizontal">
                     {provided => (
-                        <Box width={`calc(90% - ${ITEMS_WIDTH} - 2rem)`}
+                        <Box className="scrollable"
+                             width={`calc(90% - ${ITEMS_WIDTH} - 2rem)`}
                              height={WRAPPER_HEIGHT}
                              pad="2rem"
                              direction="row"

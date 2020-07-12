@@ -11,6 +11,7 @@ import {
     getEnemyRotation,
     getInnerCircleRotation
 } from "../../../../../../services/EnemyService";
+import {hexToRgbA} from "../../../../../../services/ColorService";
 
 import GameEnemyComponent from "../../../../../../components/GameEnemyComponent";
 
@@ -35,7 +36,7 @@ const GameEnemyCirclePartial: FC<Props> = ({gameState}) => {
     const enemySize = size * ENEMY_MULTIPLIER;
     const circleTop = size - (size / 2 + enemySize / 2 + CIRCLE_TOP_TOLERANCE);
     const circleLeft = (window.innerWidth - size) / 2;
-    const color = colors.dark;
+    const color = hexToRgbA(colors.gold, "0.2");
 
     return (
         <Box width={size + "px"}

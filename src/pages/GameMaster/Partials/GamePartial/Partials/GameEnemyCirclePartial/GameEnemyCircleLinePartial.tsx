@@ -18,8 +18,7 @@ const GameEnemyCircleLinePartial: FC<Props> = ({size, color}) =>
               x2={size / 2} y2={size}
               style={{
                   stroke: color,
-                  strokeWidth: 1,
-                  strokeDasharray: 4
+                  strokeWidth: 1
               }}/>
 
         {/* Second Line */}
@@ -27,8 +26,7 @@ const GameEnemyCircleLinePartial: FC<Props> = ({size, color}) =>
               x2={size} y2={size / 2}
               style={{
                   stroke: color,
-                  strokeWidth: 1,
-                  strokeDasharray: 4
+                  strokeWidth: 1
               }}/>
     </svg>
 

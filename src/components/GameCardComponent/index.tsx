@@ -75,8 +75,8 @@ const GameCardComponent: FC<Props> = ({itemOrWeapon, index, size = SIZE, select,
             {/* Image */}
             <Image src={equipment.image}
                    style={{
-                       width: `calc(${size} - 10px)`,
-                       height: `calc(${size} - 10px)`,
+                       width: `calc(${size} - 9px)`,
+                       height: `calc(${size} - 9px)`,
                        borderRadius: 1
                    }}/>
         </Box>

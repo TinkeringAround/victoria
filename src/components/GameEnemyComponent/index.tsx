@@ -73,8 +73,8 @@ const GameEnemyComponent: FC<Props> = ({enemy, size}) => {
             >
                 <Image src={ENEMIES[enemy.name].image}
                        style={{
-                           width: "100%",
-                           height: "100%",
+                           width: "101%",
+                           height: "101%",
                            borderRadius: 1
                        }}/>
             </Box>

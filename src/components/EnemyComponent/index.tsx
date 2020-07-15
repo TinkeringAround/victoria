@@ -100,8 +100,8 @@ const EnemyComponent: FC<Props> = ({enemy, size = SIZE}) => {
             >
                 <Image src={enemy.image}
                        style={{
-                           width: `calc(${size} - 10px)`,
-                           height: `calc(${size} - 10px)`,
+                           width: `calc(${size} - 9px)`,
+                           height: `calc(${size} - 9px)`,
                            borderRadius: 1
                        }}/>
             </Box>
